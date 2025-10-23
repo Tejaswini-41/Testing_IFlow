@@ -1,11 +1,16 @@
 name: CPI Response Compare
 
 on:
-  workflow_dispatch:
-
-env:
-  IFLOW_BASE_URL: "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest"
-  IFLOW_NEW_URL: "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationMappingChange"
+  workflow_dispatch:          # Manual trigger from GitHub UI
+    inputs:
+      payload_file_base:
+        description: 'Base payload file name'
+        required: false
+        default: 'payload.json'
+      payload_file_actual:
+        description: 'Actual payload file name'
+        required: false
+        default: 'payload_current.json'
 
 jobs:
   fetch_and_compare:
@@ -14,20 +19,17 @@ jobs:
       CPI_USER: ${{ secrets.CPI_USER }}
       CPI_PASS: ${{ secrets.CPI_PASS }}
     steps:
-      # -------------------- Checkout using PAT --------------------
       - name: Checkout repository with PAT
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
-      # -------------------- Install dependencies --------------------
       - name: Install dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip jq
           pip install simplejson
 
-      # -------------------- Create results folder --------------------
       - name: Create results folder
         run: mkdir -p results
 
@@ -38,7 +40,7 @@ jobs:
           curl -s -X POST "${IFLOW_BASE_URL}" \
             -u "${CPI_USER}:${CPI_PASS}" \
             -H "Content-Type: application/json" \
-            --data-binary @payload.json \
+            --data-binary @${{ github.event.inputs.payload_file_base }} \
             -o results/response_base.json
           echo "✅ Response 1 saved to results/response_base.json"
 
@@ -49,7 +51,7 @@ jobs:
           curl -s -X POST "${IFLOW_NEW_URL}" \
             -u "${CPI_USER}:${CPI_PASS}" \
             -H "Content-Type: application/json" \
-            --data-binary @payload_current.json \
+            --data-binary @${{ github.event.inputs.payload_file_actual }} \
             -o results/response_actual.json
           echo "✅ Response 2 saved to results/response_actual.json"
 
@@ -88,6 +90,13 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          git add results/
+          git add -A results/
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
+
+      # -------------------- Optional: Upload results as artifact --------------------
+      - name: Upload results as artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: cpi-results
+          path: results/
