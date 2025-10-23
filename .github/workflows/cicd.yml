@@ -49,7 +49,7 @@ jobs:
           curl -s -X POST "${IFLOW_NEW_URL}" \
             -u "${CPI_USER}:${CPI_PASS}" \
             -H "Content-Type: application/json" \
-            --data-binary @payload.json \
+            --data-binary @payload_current.json \
             -o results/response_actual.json
           echo "✅ Response 2 saved to results/response_actual.json"
 
