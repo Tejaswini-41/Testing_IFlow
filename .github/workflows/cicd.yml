@@ -2,11 +2,6 @@ name: CPI Response Compare
 
 on:
   workflow_dispatch:
-    inputs:
-      triggerType:
-        description: "Run type (manual)"
-        required: false
-        default: "manual"
 
 env:
   IFLOW_BASE_URL: "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest"
@@ -16,7 +11,8 @@ jobs:
   fetch_and_compare:
     runs-on: ubuntu-latest
     env:
-      AUTH_HEADER: "Authorization: Basic ${{ secrets.CPI_AUTH }}"  # store CPI_AUTH in repo secrets
+      CPI_USER: ${{ secrets.CPI_USER }}
+      CPI_PASS: ${{ secrets.CPI_PASS }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -35,9 +31,9 @@ jobs:
         run: |
           echo "Fetching Response 1 from ${IFLOW_BASE_URL}"
           curl -s -X POST "${IFLOW_BASE_URL}" \
-            -H "${AUTH_HEADER}" \
+            -u "${CPI_USER}:${CPI_PASS}" \
             -H "Content-Type: application/json" \
-            -d @payload.json \
+            --data-binary @payload.json \
             -o results/response_base.json
           echo "✅ Response 1 saved to results/response_base.json"
 
@@ -46,13 +42,13 @@ jobs:
         run: |
           echo "Fetching Response 2 from ${IFLOW_NEW_URL}"
           curl -s -X POST "${IFLOW_NEW_URL}" \
-            -H "${AUTH_HEADER}" \
+            -u "${CPI_USER}:${CPI_PASS}" \
             -H "Content-Type: application/json" \
-            -d @payload.json \
+            --data-binary @payload.json \
             -o results/response_actual.json
           echo "✅ Response 2 saved to results/response_actual.json"
 
-      # -------------------- Compare and highlight differences --------------------
+      # -------------------- Compare responses --------------------
       - name: Compare responses
         run: |
           echo "Comparing JSON responses..."
@@ -82,7 +78,7 @@ jobs:
           print("✅ Differences saved to results/diff.txt")
           EOF
 
-      # -------------------- Commit and push results --------------------
+      # -------------------- Commit & push results --------------------
       - name: Commit & push results
         run: |
           git config user.name "github-actions[bot]"
