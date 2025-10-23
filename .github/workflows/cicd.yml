@@ -94,9 +94,3 @@ jobs:
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
 
-      # -------------------- Optional: Upload results as artifact --------------------
-      - name: Upload results as artifact
-        uses: actions/upload-artifact@v3
-        with:
-          name: cpi-results
-          path: results/
