@@ -1,36 +1,92 @@
-# This is a basic workflow to help you get started with Actions
+name: CPI Response Compare
 
-name: CI
-
-# Controls when the workflow will run
 on:
-  # Triggers the workflow on push or pull request events but only for the "main" branch
-  push:
-    branches: [ "main" ]
-  pull_request:
-    branches: [ "main" ]
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
+    inputs:
+      triggerType:
+        description: "Run type (manual)"
+        required: false
+        default: "manual"
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+env:
+  IFLOW_BASE_URL: "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest"
+  IFLOW_NEW_URL:  "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationMappingChange"
+
 jobs:
-  # This workflow contains a single job called "build"
-  build:
-    # The type of runner that the job will run on
+  fetch_and_compare:
     runs-on: ubuntu-latest
-
-    # Steps represent a sequence of tasks that will be executed as part of the job
+    env:
+      AUTH_HEADER: "Authorization: Basic ${{ secrets.CPI_AUTH }}"  # store CPI_AUTH in repo secrets
     steps:
-      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: actions/checkout@v4
+      - name: Checkout repository
+        uses: actions/checkout@v4
 
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Install dependencies
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+          sudo apt-get update
+          sudo apt-get install -y python3-pip jq
+          pip install simplejson
+
+      - name: Create results folder
+        run: mkdir -p results
+
+      # -------------------- Task 1: Fetch from old mapping --------------------
+      - name: Hit CPI iFlow (old mapping)
+        run: |
+          echo "Fetching Response 1 from ${IFLOW_BASE_URL}"
+          curl -s -X POST "${IFLOW_BASE_URL}" \
+            -H "${AUTH_HEADER}" \
+            -H "Content-Type: application/json" \
+            -d @payload.json \
+            -o results/response_base.json
+          echo "✅ Response 1 saved to results/response_base.json"
+
+      # -------------------- Task 2: Fetch from new mapping --------------------
+      - name: Hit CPI iFlow (new mapping)
+        run: |
+          echo "Fetching Response 2 from ${IFLOW_NEW_URL}"
+          curl -s -X POST "${IFLOW_NEW_URL}" \
+            -H "${AUTH_HEADER}" \
+            -H "Content-Type: application/json" \
+            -d @payload.json \
+            -o results/response_actual.json
+          echo "✅ Response 2 saved to results/response_actual.json"
+
+      # -------------------- Compare and highlight differences --------------------
+      - name: Compare responses
+        run: |
+          echo "Comparing JSON responses..."
+          python3 - <<'EOF'
+          import json, difflib, os
+
+          base_path = "results/response_base.json"
+          actual_path = "results/response_actual.json"
+          diff_path = "results/diff.txt"
+
+          with open(base_path) as f1, open(actual_path) as f2:
+              base_json = json.dumps(json.load(f1), indent=2, sort_keys=True)
+              actual_json = json.dumps(json.load(f2), indent=2, sort_keys=True)
+
+          diff = difflib.unified_diff(
+              base_json.splitlines(),
+              actual_json.splitlines(),
+              fromfile="Response_1 (Old Mapping)",
+              tofile="Response_2 (New Mapping)",
+              lineterm=""
+          )
+
+          os.makedirs("results", exist_ok=True)
+          with open(diff_path, "w") as f:
+              f.write("\n".join(diff))
+
+          print("✅ Differences saved to results/diff.txt")
+          EOF
+
+      # -------------------- Commit and push results --------------------
+      - name: Commit & push results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/
+          git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+          git push
