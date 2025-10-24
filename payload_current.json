@@ -9,8 +9,8 @@
             },
             {
                 "partn_role": "WE",
-                "partn_numb": "1234",
-                "country": "US",
+                "partn_numb": "4717357",
+                "country": "UK",
                 "city": "London"
             }
         ]
@@ -32,8 +32,8 @@
         ]
     },
     "order_header": {
-        "currency": "GBP",
-        "cd_value_promo": "0",
+        "currency": "ABC",
+        "cd_value_promo": "123",
         "cd_type_promo": "ZDR3",
         "cd_value_freight": "0",
         "cd_type_freight": "",
