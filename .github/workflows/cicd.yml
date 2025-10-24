@@ -7,10 +7,10 @@ on:
         description: 'Base payload file name'
         required: false
         default: 'payload.json'
-      payload_file_actual:
-        description: 'Actual payload file name'
+      payload_file_current:           # changed from payload_file_actual
+        description: 'Current payload file name'
         required: false
-        default: 'payload.json'
+        default: 'payload_current.json'
       auth_type:
         description: 'Authorization type (Basic or Bearer)'
         required: true
@@ -21,8 +21,8 @@ on:
       iflow_base_url:
         description: 'CPI Old Mapping Endpoint'
         required: true
-      iflow_new_url:
-        description: 'CPI New Mapping Endpoint'
+      iflow_current_url:              # changed from iflow_new_url
+        description: 'CPI Current Mapping Endpoint'
         required: true
 
 jobs:
@@ -58,52 +58,52 @@ jobs:
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_base }} \
-            -o results/response_base.json
-          echo "✅ Response 1 saved to results/response_base.json"
+            -o results/response_base.txt
+          echo "✅ Response 1 saved to results/response_base.txt"
 
-      # -------------------- Fetch from new mapping --------------------
-      - name: Hit CPI iFlow (new mapping)
+      # -------------------- Fetch from current mapping --------------------
+      - name: Hit CPI iFlow (current mapping)
         run: |
-          echo "Fetching Response 2 from ${{ github.event.inputs.iflow_new_url }}"
+          echo "Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
           if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
             AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
           else
             AUTH_HEADER="Authorization: Bearer ${{ github.event.inputs.auth_value }}"
           fi
 
-          curl -s -X POST "${{ github.event.inputs.iflow_new_url }}" \
+          curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file_actual }} \
-            -o results/response_actual.json
-          echo "✅ Response 2 saved to results/response_actual.json"
+            --data-binary @${{ github.event.inputs.payload_file_current }} \
+            -o results/response_current.txt
+          echo "✅ Response 2 saved to results/response_current.txt"
 
       # -------------------- Compare responses --------------------
       - name: Compare responses
         run: |
-          echo "Comparing JSON responses..."
+          echo "Comparing responses..."
           python3 - <<'EOF'
-          import json, difflib, os
+          import difflib, os
 
-          base_path = "results/response_base.json"
-          actual_path = "results/response_actual.json"
+          base_path = "results/response_base.txt"
+          current_path = "results/response_current.txt"
           diff_path = "results/diff.txt"
 
-          with open(base_path) as f1, open(actual_path) as f2:
-              base_json = json.dumps(json.load(f1), indent=2, sort_keys=True)
-              actual_json = json.dumps(json.load(f2), indent=2, sort_keys=True)
+          with open(base_path, 'r') as f1, open(current_path, 'r') as f2:
+              base_lines = f1.readlines()
+              current_lines = f2.readlines()
 
           diff = difflib.unified_diff(
-              base_json.splitlines(),
-              actual_json.splitlines(),
-              fromfile="Response_1 (Old Mapping)",
-              tofile="Response_2 (New Mapping)",
+              base_lines,
+              current_lines,
+              fromfile="Response_Base",
+              tofile="Response_Current",
               lineterm=""
           )
 
           os.makedirs("results", exist_ok=True)
-          with open(diff_path, "w") as f:
-              f.write("\n".join(diff))
+          with open(diff_path, 'w') as f:
+              f.writelines(diff)
 
           print("✅ Differences saved to results/diff.txt")
           EOF
