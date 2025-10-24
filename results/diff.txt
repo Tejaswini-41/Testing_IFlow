@@ -1,0 +1,17 @@
+--- Response_1 (Old Mapping)
++++ Response_2 (New Mapping)
+@@ -24,12 +24,12 @@
+       "TAXK1": "1"
+     },
+     "I_ORDER_HEADER_IN": {
+-      "CD_CU_ISO1": "GBP",
++      "CD_CU_ISO1": "ABC",
+       "CD_CU_ISO2": "",
+       "CD_TYPE1": "",
+       "CD_TYPE2": "ZDR3",
+       "CD_VALUE1": "0",
+-      "CD_VALUE2": "0",
++      "CD_VALUE2": "123",
+       "DISTR_CHAN": "02",
+       "DIVISION": "02",
+       "DOC_TYPE": "ZDPP",
