@@ -1,0 +1,41 @@
+--- Response_1 (Old Mapping)
++++ Response_2 (Current Mapping)
+@@ -2,19 +2,27 @@
+   "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
+     "C_ORDER_ITEMS_IN": {
+       "item": {
++        "BILL_DATE": "2025-10-24 08:32:21",
+         "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+         "MATERIAL": "230952",
++        "PLANT": "Santa Monica",
++        "REASON_REJ": "Order is Rejected due to customer being blocked",
++        "REQ_DATE": "20251024140221",
+         "REQ_QTY": "3000",
+         "SALES_UNIT": "IGB",
++        "SHORT_TEXT": "Order to be placed once customer is unblocked",
++        "STORE_LOC": "Basel, Switzerland",
+         "TARGET_QTY": "3000"
+       }
+     },
+     "C_ORDER_PARTNERS": {
+       "item": {
+-        "CITY": "London",
+-        "COUNTRY": "UK",
++        "CITY": "London(UK)",
++        "COUNTRY": "United Kingdom",
++        "LANGU": "EN",
+         "PARTN_NUMB": "4717357",
+-        "PARTN_ROLE": "WE"
++        "PARTN_ROLE": "WE",
++        "POSTL_CODE": "PO:411789"
+       }
+     },
+     "I_CUSTOM_HEADER_IN": {
+@@ -32,6 +40,7 @@
+       "CD_VALUE2": "0",
+       "DISTR_CHAN": "02",
+       "DIVISION": "02",
++      "DOC_NUMBER": "20251024",
+       "DOC_TYPE": "ZDPP",
+       "PMNTTRMS": "0600",
+       "PURCH_NO": "UK Cart",
