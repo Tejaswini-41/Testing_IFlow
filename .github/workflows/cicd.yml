@@ -1,7 +1,7 @@
 name: CPI Response Compare
 
 on:
-  workflow_dispatch:          # Manual trigger or from Postman
+  workflow_dispatch:
     inputs:
       payload_file_base:
         description: 'Base payload file name'
@@ -11,21 +11,23 @@ on:
         description: 'Actual payload file name'
         required: false
         default: 'payload.json'
-      auth_type:               # (Basic/Bearer/etc.)
-        description: 'Authorization type'
-        required: false
+      auth_type:
+        description: 'Authorization type (Basic or Bearer)'
+        required: true
         default: 'Basic'
-      auth_value:              # token or encoded credentials
-        description: 'Authorization value (Base64 or token)'
-        required: false
-        default: ''
+      auth_value:
+        description: 'Authorization value (Base64 or Bearer Token)'
+        required: true
+      iflow_base_url:
+        description: 'CPI Old Mapping Endpoint'
+        required: true
+      iflow_new_url:
+        description: 'CPI New Mapping Endpoint'
+        required: true
 
 jobs:
   fetch_and_compare:
     runs-on: ubuntu-latest
-    env:
-      IFLOW_BASE_URL: https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest
-      IFLOW_NEW_URL: https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationMappingChange
 
     steps:
       - name: Checkout repository with PAT
@@ -45,9 +47,15 @@ jobs:
       # -------------------- Fetch from old mapping --------------------
       - name: Hit CPI iFlow (old mapping)
         run: |
-          echo "Fetching Response 1 from ${IFLOW_BASE_URL}"
-          curl -s -X POST "${IFLOW_BASE_URL}" \
-            -H "Authorization: ${{ github.event.inputs.auth_type }} ${{ github.event.inputs.auth_value }}" \
+          echo "Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
+          if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
+            AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
+          else
+            AUTH_HEADER="Authorization: Bearer ${{ github.event.inputs.auth_value }}"
+          fi
+
+          curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
+            -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_base }} \
             -o results/response_base.json
@@ -56,9 +64,15 @@ jobs:
       # -------------------- Fetch from new mapping --------------------
       - name: Hit CPI iFlow (new mapping)
         run: |
-          echo "Fetching Response 2 from ${IFLOW_NEW_URL}"
-          curl -s -X POST "${IFLOW_NEW_URL}" \
-            -H "Authorization: ${{ github.event.inputs.auth_type }} ${{ github.event.inputs.auth_value }}" \
+          echo "Fetching Response 2 from ${{ github.event.inputs.iflow_new_url }}"
+          if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
+            AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
+          else
+            AUTH_HEADER="Authorization: Bearer ${{ github.event.inputs.auth_value }}"
+          fi
+
+          curl -s -X POST "${{ github.event.inputs.iflow_new_url }}" \
+            -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_actual }} \
             -o results/response_actual.json
