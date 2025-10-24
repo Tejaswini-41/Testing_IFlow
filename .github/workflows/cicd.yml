@@ -1,7 +1,7 @@
 name: CPI Response Compare
 
 on:
-  workflow_dispatch:          
+  workflow_dispatch:          # Manual trigger or from Postman
     inputs:
       payload_file_base:
         description: 'Base payload file name'
@@ -11,13 +11,19 @@ on:
         description: 'Actual payload file name'
         required: false
         default: 'payload.json'
+      auth_type:               # (Basic/Bearer/etc.)
+        description: 'Authorization type'
+        required: false
+        default: 'Basic'
+      auth_value:              # token or encoded credentials
+        description: 'Authorization value (Base64 or token)'
+        required: false
+        default: ''
 
 jobs:
   fetch_and_compare:
     runs-on: ubuntu-latest
     env:
-      CPI_USER: ${{ secrets.CPI_USER }}
-      CPI_PASS: ${{ secrets.CPI_PASS }}
       IFLOW_BASE_URL: https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest
       IFLOW_NEW_URL: https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationMappingChange
 
@@ -41,7 +47,7 @@ jobs:
         run: |
           echo "Fetching Response 1 from ${IFLOW_BASE_URL}"
           curl -s -X POST "${IFLOW_BASE_URL}" \
-            -u "${CPI_USER}:${CPI_PASS}" \
+            -H "Authorization: ${{ github.event.inputs.auth_type }} ${{ github.event.inputs.auth_value }}" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_base }} \
             -o results/response_base.json
@@ -52,7 +58,7 @@ jobs:
         run: |
           echo "Fetching Response 2 from ${IFLOW_NEW_URL}"
           curl -s -X POST "${IFLOW_NEW_URL}" \
-            -u "${CPI_USER}:${CPI_PASS}" \
+            -H "Authorization: ${{ github.event.inputs.auth_type }} ${{ github.event.inputs.auth_value }}" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_actual }} \
             -o results/response_actual.json
@@ -96,4 +102,3 @@ jobs:
           git add -A results/
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
-
