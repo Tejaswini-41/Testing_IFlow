@@ -81,29 +81,29 @@ jobs:
       # -------------------- Compare responses --------------------
       - name: Compare responses
         run: |
-          echo "Comparing JSON responses..."
+          echo "Comparing responses as text..."
           python3 - <<'EOF'
-          import json, difflib, os
+          import difflib, os
 
           base_path = "results/response_base.txt"
           current_path = "results/response_current.txt"
           diff_path = "results/diff.txt"
 
-          with open(base_path) as f1, open(current_path) as f2:
-              base_json = json.dumps(json.load(f1), indent=2, sort_keys=True)
-              current_json = json.dumps(json.load(f2), indent=2, sort_keys=True)
+          with open(base_path, 'r') as f1, open(current_path, 'r') as f2:
+              base_lines = f1.readlines()
+              current_lines = f2.readlines()
 
           diff = difflib.unified_diff(
-              base_json.splitlines(),
-              current_json.splitlines(),
-              fromfile="Response_1 (Old Mapping)",
-              tofile="Response_2 (Current Mapping)",
+              base_lines,
+              current_lines,
+              fromfile="Response_Base",
+              tofile="Response_Current",
               lineterm=""
           )
 
           os.makedirs("results", exist_ok=True)
           with open(diff_path, "w") as f:
-              f.write("\n".join(diff))
+              f.writelines(diff)
 
           print("✅ Differences saved to results/diff.txt")
           EOF
