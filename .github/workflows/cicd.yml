@@ -3,22 +3,10 @@ name: CPI Response Compare
 on:
   workflow_dispatch:
     inputs:
-      payload_file_base:
-        description: 'Base payload file name'
+      payload_file:
+        description: 'Payload file name (used for both iFlows)'
         required: false
         default: 'payload.json'
-      payload_file_current:
-        description: 'Current payload file name'
-        required: false
-        default: 'payload_current.json'
-      auth_type:
-        description: 'Authorization type (Basic or Bearer)'
-        required: true
-        default: 'Bearer'
-      auth_value:
-        description: 'Authorization value (only for Basic auth, Base64 encoded username:password)'
-        required: false
-        default: ''
       iflow_base_url:
         description: 'CPI Old Mapping Endpoint'
         required: true
@@ -47,9 +35,8 @@ jobs:
       - name: Create results folder
         run: mkdir -p results
 
-      # -------------------- ✅ Fetch OAuth Token (only for Bearer Auth) --------------------
-      - name: Fetch OAuth Token (if Bearer)
-        if: ${{ github.event.inputs.auth_type == 'Bearer' }}
+      # -------------------- 🔐 Fetch OAuth Token --------------------
+      - name: Fetch OAuth Token
         env:
           TOKEN_URL: ${{ secrets.TOKEN_URL }}
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
@@ -64,10 +51,9 @@ jobs:
           client_secret = os.getenv("CLIENT_SECRET")
 
           if not all([token_url, client_id, client_secret]):
-              print("❌ Missing one or more secrets (TOKEN_URL, CLIENT_ID, CLIENT_SECRET).")
+              print("❌ Missing secrets (TOKEN_URL, CLIENT_ID, CLIENT_SECRET).")
               exit(1)
 
-          # ✅ SAP CPI expects Basic Auth format for client credentials
           try:
               resp = requests.post(
                   token_url,
@@ -75,7 +61,7 @@ jobs:
                   auth=(client_id, client_secret)
               )
           except Exception as e:
-              print("❌ Request failed:", e)
+              print("❌ Token request failed:", e)
               exit(1)
 
           if resp.status_code != 200:
@@ -84,7 +70,7 @@ jobs:
 
           token = resp.json().get("access_token")
           if not token:
-              print("❌ No access_token in response:", resp.text)
+              print("❌ No access_token found:", resp.text)
               exit(1)
 
           os.makedirs("results", exist_ok=True)
@@ -94,43 +80,35 @@ jobs:
           print("✅ Token fetched and saved to results/oauth_token.txt")
           EOF
 
-      # -------------------- Old iFlow --------------------
-      - name: Hit CPI iFlow (old mapping)
+      # -------------------- 🌐 Hit Old CPI iFlow --------------------
+      - name: Hit CPI iFlow (Old Mapping)
         run: |
           echo "📡 Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
-          if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
-            AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
-          else
-            TOKEN=$(cat results/oauth_token.txt)
-            AUTH_HEADER="Authorization: Bearer $TOKEN"
-          fi
+          TOKEN=$(cat results/oauth_token.txt)
+          AUTH_HEADER="Authorization: Bearer $TOKEN"
 
           curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file_base }} \
+            --data-binary @${{ github.event.inputs.payload_file }} \
             -o results/response_base.txt
           echo "✅ Response 1 saved to results/response_base.txt"
 
-      # -------------------- New iFlow --------------------
-      - name: Hit CPI iFlow (current mapping)
+      # -------------------- 🌐 Hit Current CPI iFlow --------------------
+      - name: Hit CPI iFlow (Current Mapping)
         run: |
           echo "📡 Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
-          if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
-            AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
-          else
-            TOKEN=$(cat results/oauth_token.txt)
-            AUTH_HEADER="Authorization: Bearer $TOKEN"
-          fi
+          TOKEN=$(cat results/oauth_token.txt)
+          AUTH_HEADER="Authorization: Bearer $TOKEN"
 
           curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file_current }} \
+            --data-binary @${{ github.event.inputs.payload_file }} \
             -o results/response_current.txt
           echo "✅ Response 2 saved to results/response_current.txt"
 
-      # -------------------- Compare JSON/XML Responses --------------------
+      # -------------------- 🔍 Compare JSON/XML Responses --------------------
       - name: Compare responses (prettified)
         run: |
           echo "🔍 Comparing responses..."
@@ -147,7 +125,7 @@ jobs:
               try:
                   with open(input_path, 'r') as f:
                       content = f.read().strip()
-                      if content.startswith("<"):  # Handle XML case
+                      if content.startswith("<"):
                           open(output_path, "w").write(content)
                           return False
                       data = json.loads(content)
@@ -179,14 +157,13 @@ jobs:
           print("✅ Diff saved to results/diff.txt")
           EOF
 
-      # -------------------- Pretty Print Diff --------------------
-      # -------------------- Beautify diff dashboard --------------------
+      # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
         run: |
           pip install pandas plotly kaleido
           python3 dashboard.py results/diff.txt
 
-      # -------------------- Commit Results --------------------
+      # -------------------- 🧾 Commit Results --------------------
       - name: Commit & push results
         run: |
           git config user.name "github-actions[bot]"
