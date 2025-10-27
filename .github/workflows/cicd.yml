@@ -145,7 +145,11 @@ jobs:
 
           print("✅ Human-readable diff saved to results/diff.txt")
           EOF
-
+      # -------------------- Pretty Print Diff --------------------
+      - name: Pretty Print Diff
+        run: |
+          echo "🪷 Generating Pretty Output..."
+          python3 pretty_diff.py
       # -------------------- Commit & push results --------------------
       - name: Commit & push results
         run: |
