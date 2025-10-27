@@ -31,11 +31,13 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # -------------------- Checkout --------------------
       - name: Checkout repository with PAT
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_TOKEN }}
 
+      # -------------------- Dependencies --------------------
       - name: Install dependencies
         run: |
           sudo apt-get update
@@ -45,7 +47,7 @@ jobs:
       - name: Create results folder
         run: mkdir -p results
 
-      # -------------------- Fetch OAuth Token (only for Bearer) --------------------
+      # -------------------- ✅ Fetch OAuth Token (only for Bearer Auth) --------------------
       - name: Fetch OAuth Token (if Bearer)
         if: ${{ github.event.inputs.auth_type == 'Bearer' }}
         env:
@@ -53,9 +55,9 @@ jobs:
           CLIENT_ID: ${{ secrets.CLIENT_ID }}
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
-          echo "Fetching OAuth token from $TOKEN_URL ..."
+          echo "🔐 Fetching OAuth token from $TOKEN_URL ..."
           python3 - <<'EOF'
-          import os, requests, json
+          import os, requests
 
           token_url = os.getenv("TOKEN_URL")
           client_id = os.getenv("CLIENT_ID")
@@ -65,14 +67,13 @@ jobs:
               print("❌ Missing one or more secrets (TOKEN_URL, CLIENT_ID, CLIENT_SECRET).")
               exit(1)
 
-          data = {
-              "grant_type": "client_credentials",
-              "client_id": client_id,
-              "client_secret": client_secret
-          }
-
+          # ✅ SAP CPI expects Basic Auth format for client credentials
           try:
-              resp = requests.post(token_url, data=data)
+              resp = requests.post(
+                  token_url,
+                  data={"grant_type": "client_credentials"},
+                  auth=(client_id, client_secret)
+              )
           except Exception as e:
               print("❌ Request failed:", e)
               exit(1)
@@ -93,10 +94,10 @@ jobs:
           print("✅ Token fetched and saved to results/oauth_token.txt")
           EOF
 
-      # -------------------- Fetch from old mapping --------------------
+      # -------------------- Old iFlow --------------------
       - name: Hit CPI iFlow (old mapping)
         run: |
-          echo "Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
+          echo "📡 Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
           if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
             AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
           else
@@ -111,10 +112,10 @@ jobs:
             -o results/response_base.txt
           echo "✅ Response 1 saved to results/response_base.txt"
 
-      # -------------------- Fetch from current mapping --------------------
+      # -------------------- New iFlow --------------------
       - name: Hit CPI iFlow (current mapping)
         run: |
-          echo "Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
+          echo "📡 Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
           if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
             AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
           else
@@ -129,10 +130,10 @@ jobs:
             -o results/response_current.txt
           echo "✅ Response 2 saved to results/response_current.txt"
 
-      # -------------------- Compare responses --------------------
+      # -------------------- Compare JSON/XML Responses --------------------
       - name: Compare responses (prettified)
         run: |
-          echo "Comparing responses in readable format..."
+          echo "🔍 Comparing responses..."
           python3 - <<'EOF'
           import json, difflib, os
 
@@ -146,7 +147,7 @@ jobs:
               try:
                   with open(input_path, 'r') as f:
                       content = f.read().strip()
-                      if content.startswith("<"):  # Handle XML responses
+                      if content.startswith("<"):  # Handle XML case
                           open(output_path, "w").write(content)
                           return False
                       data = json.loads(content)
@@ -158,18 +159,14 @@ jobs:
                   print(f"⚠️ Warning: Could not parse {input_path} as JSON ({e})")
                   return False
 
-          # Prettify both responses
           prettify_json(base_path, pretty_base)
           prettify_json(current_path, pretty_current)
 
-          # Generate diff
-          with open(pretty_base, 'r') as f1, open(pretty_current, 'r') as f2:
-              base_lines = f1.readlines()
-              current_lines = f2.readlines()
+          with open(pretty_base) as f1, open(pretty_current) as f2:
+              base_lines, current_lines = f1.readlines(), f2.readlines()
 
           diff = difflib.unified_diff(
-              base_lines,
-              current_lines,
+              base_lines, current_lines,
               fromfile="Response_Base",
               tofile="Response_Current",
               lineterm=""
@@ -179,14 +176,16 @@ jobs:
           with open(diff_path, "w") as f:
               f.writelines(diff)
 
-          print("✅ Human-readable diff saved to results/diff.txt")
+          print("✅ Diff saved to results/diff.txt")
           EOF
-  # -------------------- Pretty Print Diff --------------------
+
+      # -------------------- Pretty Print Diff --------------------
       - name: Pretty Print Diff
         run: |
           echo "🪷 Generating Pretty Output..."
           python3 pretty_diff.py
-      # -------------------- Commit & push results --------------------
+
+      # -------------------- Commit Results --------------------
       - name: Commit & push results
         run: |
           git config user.name "github-actions[bot]"
