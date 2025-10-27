@@ -7,14 +7,14 @@ on:
         description: 'Base payload file name'
         required: false
         default: 'payload.json'
-      payload_file_current:
+      payload_file_current:          
         description: 'Current payload file name'
         required: false
         default: 'payload_current.json'
       iflow_base_url:
         description: 'CPI Old Mapping Endpoint'
         required: true
-      iflow_current_url:
+      iflow_current_url:              
         description: 'CPI Current Mapping Endpoint'
         required: true
 
@@ -32,40 +32,52 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip jq
-          pip install simplejson
+          pip install simplejson requests
 
       - name: Create results folder
         run: mkdir -p results
 
-      # -------------------- Fetch OAuth Token --------------------
+      # -------------------- Fetch OAuth token --------------------
       - name: Fetch OAuth Token
         id: fetch_token
         run: |
-          echo "Fetching OAuth token..."
-          RESPONSE=$(curl -s -X POST "https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token" \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            --data-urlencode "grant_type=client_credentials" \
-            --data-urlencode "client_id=${{ secrets.CLIENT_ID }}" \
-            --data-urlencode "client_secret=${{ secrets.CLIENT_SECRET }}")
+          echo "🔐 Requesting OAuth token..."
+          python3 - <<'EOF'
+          import requests, json
 
-          echo "Raw response: $RESPONSE"
-          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          TOKEN_URL = "<TOKEN_URL>"  # Example: https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token
+          CLIENT_ID = "<CLIENT_ID>"
+          CLIENT_SECRET = "<CLIENT_SECRET>"
 
-          if [ "$ACCESS_TOKEN" = "null" ] || [ -z "$ACCESS_TOKEN" ]; then
-            echo "❌ Failed to fetch access token."
-            echo "Response: $RESPONSE"
-            exit 1
-          fi
+          data = {
+              "grant_type": "client_credentials",
+              "client_id": CLIENT_ID,
+              "client_secret": CLIENT_SECRET
+          }
 
-          echo "✅ Access token successfully fetched."
-          echo "token=$ACCESS_TOKEN" >> $GITHUB_OUTPUT
+          resp = requests.post(TOKEN_URL, data=data)
+          if resp.status_code != 200:
+              print(f"❌ Token fetch failed ({resp.status_code}): {resp.text}")
+              exit(1)
+
+          token = resp.json().get("access_token")
+          if not token:
+              print("❌ No access_token in response:", resp.text)
+              exit(1)
+
+          with open("results/oauth_token.txt", "w") as f:
+              f.write(token)
+
+          print("✅ Token fetched successfully.")
+          EOF
 
       # -------------------- Fetch from old mapping --------------------
       - name: Hit CPI iFlow (old mapping)
         run: |
+          TOKEN=$(cat results/oauth_token.txt)
           echo "Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
           curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
-            -H "Authorization: Bearer ${{ steps.fetch_token.outputs.token }}" \
+            -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_base }} \
             -o results/response_base.txt
@@ -74,9 +86,10 @@ jobs:
       # -------------------- Fetch from current mapping --------------------
       - name: Hit CPI iFlow (current mapping)
         run: |
+          TOKEN=$(cat results/oauth_token.txt)
           echo "Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
           curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
-            -H "Authorization: Bearer ${{ steps.fetch_token.outputs.token }}" \
+            -H "Authorization: Bearer $TOKEN" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file_current }} \
             -o results/response_current.txt
@@ -99,7 +112,7 @@ jobs:
               try:
                   with open(input_path, 'r') as f:
                       content = f.read().strip()
-                      if content.startswith("<"):  # If XML accidentally returned
+                      if content.startswith("<"):
                           open(output_path, "w").write(content)
                           return False
                       data = json.loads(content)
