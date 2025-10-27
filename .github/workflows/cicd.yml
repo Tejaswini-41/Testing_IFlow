@@ -14,7 +14,7 @@ on:
       auth_type:
         description: 'Authorization type (Basic or Bearer)'
         required: true
-        default: 'Basic'
+        default: 'Bearer'
       auth_value:
         description: 'Authorization value (only for Basic auth, Base64 encoded username:password)'
         required: false
@@ -181,8 +181,13 @@ jobs:
 
       # -------------------- Pretty Print Diff --------------------
       - name: Pretty Print Diff
+      
         run: |
+      
           echo "🪷 Generating Pretty Output..."
+  
+          pip install termcolor >/dev/null 2>&1
+      
           python3 pretty_diff.py
 
       # -------------------- Commit Results --------------------
