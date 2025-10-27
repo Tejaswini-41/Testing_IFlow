@@ -1,144 +1,241 @@
 name: CPI Response Compare
-
+ 
 on:
+
   workflow_dispatch:
+
     inputs:
-      payload_file_base:
-        description: 'Base payload file name'
+
+      payload_file:
+
+        description: 'Payload file name'
+
         required: false
+
         default: 'payload.json'
-      payload_file_current:           # changed from payload_file_actual
-        description: 'Current payload file name'
-        required: false
-        default: 'payload_current.json'
-      auth_type:
-        description: 'Authorization type (Basic or Bearer)'
-        required: true
-        default: 'Basic'
-      auth_value:
-        description: 'Authorization value (Base64 or Bearer Token)'
-        required: true
+
       iflow_base_url:
+
         description: 'CPI Old Mapping Endpoint'
+
         required: true
-      iflow_current_url:              # changed from iflow_new_url
+
+      iflow_current_url:
+
         description: 'CPI Current Mapping Endpoint'
+
         required: true
-
+ 
 jobs:
+
   fetch_and_compare:
+
     runs-on: ubuntu-latest
-
+ 
     steps:
+
       - name: Checkout repository with PAT
+
         uses: actions/checkout@v4
+
         with:
+
           token: ${{ secrets.PAT_TOKEN }}
-
+ 
       - name: Install dependencies
+
         run: |
+
           sudo apt-get update
+
           sudo apt-get install -y python3-pip jq
+
           pip install simplejson
-
+ 
       - name: Create results folder
+
         run: mkdir -p results
+ 
+      # -------------------- Get Bearer Token Securely --------------------
 
-      # -------------------- Fetch from old mapping --------------------
+      - name: Get Bearer Token
+
+        id: get_token
+
+        run: |
+
+          echo "🔐 Requesting OAuth token using client credentials..."
+
+          RESPONSE=$(curl -s --request POST \
+
+            --url 'https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token' \
+
+            --header 'Content-Type: application/x-www-form-urlencoded' \
+
+            --data-urlencode 'grant_type=client_credentials' \
+
+            --data-urlencode "client_id=${{ secrets.CLIENT_ID }}" \
+
+            --data-urlencode "client_secret=${{ secrets.CLIENT_SECRET }}")
+ 
+          TOKEN=$(echo $RESPONSE | jq -r '.access_token')
+ 
+          if [ "$TOKEN" = "null" ] || [ -z "$TOKEN" ]; then
+
+            echo "❌ Failed to retrieve token. Response:"
+
+            echo "$RESPONSE"
+
+            exit 1
+
+          fi
+ 
+          echo "✅ Access token retrieved successfully."
+
+          echo "token=$TOKEN" >> $GITHUB_OUTPUT
+ 
+      # -------------------- Hit CPI iFlow (old mapping) --------------------
+
       - name: Hit CPI iFlow (old mapping)
+
         run: |
+
           echo "Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
-          if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
-            AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
-          else
-            AUTH_HEADER="Authorization: Bearer ${{ github.event.inputs.auth_value }}"
-          fi
 
+          AUTH_HEADER="Authorization: Bearer ${{ steps.get_token.outputs.token }}"
+ 
           curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
+
             -H "$AUTH_HEADER" \
+
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file_base }} \
+
+            --data-binary @${{ github.event.inputs.payload_file }} \
+
             -o results/response_base.txt
+ 
           echo "✅ Response 1 saved to results/response_base.txt"
+ 
+      # -------------------- Hit CPI iFlow (current mapping) --------------------
 
-      # -------------------- Fetch from current mapping --------------------
       - name: Hit CPI iFlow (current mapping)
+
         run: |
+
           echo "Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
-          if [ "${{ github.event.inputs.auth_type }}" = "Basic" ]; then
-            AUTH_HEADER="Authorization: Basic ${{ github.event.inputs.auth_value }}"
-          else
-            AUTH_HEADER="Authorization: Bearer ${{ github.event.inputs.auth_value }}"
-          fi
 
+          AUTH_HEADER="Authorization: Bearer ${{ steps.get_token.outputs.token }}"
+ 
           curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
+
             -H "$AUTH_HEADER" \
+
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file_current }} \
+
+            --data-binary @${{ github.event.inputs.payload_file }} \
+
             -o results/response_current.txt
+ 
           echo "✅ Response 2 saved to results/response_current.txt"
+ 
+      # -------------------- Compare responses (prettified) --------------------
 
-      # -------------------- Compare responses --------------------
       - name: Compare responses (prettified)
+
         run: |
+
           echo "Comparing responses in readable format..."
+
           python3 - <<'EOF'
+
           import json, difflib, os
-
+ 
           base_path = "results/response_base.txt"
+
           current_path = "results/response_current.txt"
+
           pretty_base = "results/response_base_pretty.json"
+
           pretty_current = "results/response_current_pretty.json"
+
           diff_path = "results/diff.txt"
-
+ 
           def prettify_json(input_path, output_path):
+
               try:
+
                   with open(input_path, 'r') as f:
+
                       content = f.read().strip()
-                      if content.startswith("<"):  # If XML accidentally returned
-                          # just save raw text (do not parse)
+
+                      if content.startswith("<"):  # in case CPI returns XML
+
                           open(output_path, "w").write(content)
+
                           return False
+
                       data = json.loads(content)
+
                   with open(output_path, 'w') as f:
+
                       json.dump(data, f, indent=2, sort_keys=True)
+
                   return True
+
               except Exception as e:
-                  # Save raw in case not JSON
+
                   open(output_path, "w").write(open(input_path).read())
+
                   print(f"⚠️ Warning: Could not parse {input_path} as JSON ({e})")
+
                   return False
-
-          # Prettify both responses
+ 
           prettify_json(base_path, pretty_base)
+
           prettify_json(current_path, pretty_current)
-
-          # Read and diff line by line
+ 
           with open(pretty_base, 'r') as f1, open(pretty_current, 'r') as f2:
+
               base_lines = f1.readlines()
+
               current_lines = f2.readlines()
-
+ 
           diff = difflib.unified_diff(
+
               base_lines,
+
               current_lines,
+
               fromfile="Response_Base",
+
               tofile="Response_Current",
+
               lineterm=""
+
           )
-
+ 
           os.makedirs("results", exist_ok=True)
+
           with open(diff_path, "w") as f:
+
               f.writelines(diff)
-
+ 
           print("✅ Human-readable diff saved to results/diff.txt")
+
           EOF
-
-
+ 
       # -------------------- Commit & push results --------------------
+
       - name: Commit & push results
+
         run: |
+
           git config user.name "github-actions[bot]"
+
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           git add -A results/
+
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
+
           git push
