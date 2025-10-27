@@ -45,7 +45,8 @@ jobs:
           RESPONSE=$(curl -s -X POST "https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token" \
             -H "Content-Type: application/x-www-form-urlencoded" \
             -d "grant_type=client_credentials" \
-            -u "${{ secrets.CLIENT_ID }}:${{ secrets.CLIENT_SECRET }}")
+            -d "client_id=${{ secrets.CLIENT_ID }}" \
+            -d "client_secret=${{ secrets.CLIENT_SECRET }}")
 
           ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
 
