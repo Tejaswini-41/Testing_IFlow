@@ -2,7 +2,7 @@
      "C_ORDER_ITEMS_IN": {
        "item": {
 +        "BATCH": "102527",
-+        "BILL_DATE": "20251027132419",
++        "BILL_DATE": "20251027161515",
          "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
 +        "ITEM_CATEG": "Fertilizers",
          "MATERIAL": "230952",
