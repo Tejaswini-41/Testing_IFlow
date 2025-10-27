@@ -1,0 +1,42 @@
+--- Response_Base+++ Response_Current@@ -2,19 +2,32 @@   "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
+     "C_ORDER_ITEMS_IN": {
+       "item": {
++        "BATCH": "102527",
++        "BILL_DATE": "20251027112540",
+         "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
++        "ITEM_CATEG": "Fertilizers",
+         "MATERIAL": "230952",
++        "PLANT": "Santa Monica",
++        "PO_ITM_NO": "27",
++        "REASON_REJ": "Order is Rejected due to customer being blocked",
++        "REQ_DATE": "2025-10-27",
+         "REQ_QTY": "3000",
+         "SALES_UNIT": "IGB",
++        "SHORT_TEXT": "Order to be placed once customer is unblocked",
++        "STORE_LOC": "Basel, Switzerland",
+         "TARGET_QTY": "3000"
+       }
+     },
+     "C_ORDER_PARTNERS": {
+       "item": {
+-        "CITY": "Pune",
+-        "COUNTRY": "PL",
++        "ADDR_TYPE": "Commercial",
++        "CITY": "Pune(IN)",
++        "COUNTRY": "Poland",
++        "LANGU": "EN",
+         "PARTN_NUMB": "4717357",
+-        "PARTN_ROLE": "WE"
++        "PARTN_ROLE": "WE",
++        "POSTL_CODE": "PO:411789",
++        "TELEPHONE": "0124-24356823"
+       }
+     },
+     "I_CUSTOM_HEADER_IN": {
+@@ -32,6 +45,7 @@       "CD_VALUE2": "0",
+       "DISTR_CHAN": "02",
+       "DIVISION": "02",
++      "DOC_NUMBER": "20251027",
+       "DOC_TYPE": "ZDPP",
+       "PMNTTRMS": "0600",
+       "PURCH_NO": "UK Cart",
