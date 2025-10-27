@@ -180,15 +180,11 @@ jobs:
           EOF
 
       # -------------------- Pretty Print Diff --------------------
-      - name: Pretty Print Diff
-      
+      # -------------------- Beautify diff dashboard --------------------
+      - name: Generate Diff Dashboard
         run: |
-      
-          echo "🪷 Generating Pretty Output..."
-  
-          pip install termcolor >/dev/null 2>&1
-      
-          python3 pretty_diff.py
+          pip install pandas plotly kaleido
+          python3 dashboard.py results/diff.txt
 
       # -------------------- Commit Results --------------------
       - name: Commit & push results
