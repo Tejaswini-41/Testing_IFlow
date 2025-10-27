@@ -58,42 +58,28 @@ jobs:
  
       # -------------------- Get Bearer Token Securely --------------------
 
-      - name: Get Bearer Token
-
+            - name: Get Bearer Token
         id: get_token
-
         run: |
-
           echo "🔐 Requesting OAuth token using client credentials..."
-
-          RESPONSE=$(curl -s --request POST \
-
-            --url 'https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token' \
-
-            --header 'Content-Type: application/x-www-form-urlencoded' \
-
-            --data-urlencode 'grant_type=client_credentials' \
-
+          RESPONSE=$(curl -s --request POST "https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token" \
+            --header "Content-Type: application/x-www-form-urlencoded" \
+            --data-urlencode "grant_type=client_credentials" \
             --data-urlencode "client_id=${{ secrets.CLIENT_ID }}" \
-
             --data-urlencode "client_secret=${{ secrets.CLIENT_SECRET }}")
- 
-          TOKEN=$(echo $RESPONSE | jq -r '.access_token')
- 
+          
+          echo "Response: $RESPONSE"
+          TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          
           if [ "$TOKEN" = "null" ] || [ -z "$TOKEN" ]; then
-
             echo "❌ Failed to retrieve token. Response:"
-
             echo "$RESPONSE"
-
             exit 1
-
           fi
- 
+          
           echo "✅ Access token retrieved successfully."
-
           echo "token=$TOKEN" >> $GITHUB_OUTPUT
- 
+
       # -------------------- Hit CPI iFlow (old mapping) --------------------
 
       - name: Hit CPI iFlow (old mapping)
