@@ -14,6 +14,11 @@ on:
         description: 'CPI Current Mapping Endpoint'
         required: true
 
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
 jobs:
   fetch_and_compare:
     runs-on: ubuntu-latest
