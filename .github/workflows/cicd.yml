@@ -154,7 +154,7 @@ jobs:
                   base_lines, current_lines,
                   fromfile="Response_Base",
                   tofile="Response_Current",
-                  lineterm=""
+                  lineterm="",
                   n=0
               )
               with open(diff_path, "w") as f:
