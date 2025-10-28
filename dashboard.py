@@ -41,6 +41,7 @@ for line in diff_lines:
             field_value = content.split('":')[1].strip(' ",')
             field_changes[field_name]["removed"].append(field_value)
             field_changes[field_name]["section"] = current_section
+    # ✅ IGNORE lines without +/- prefix (context lines)
 
 # Categorize changes
 new_fields = []
