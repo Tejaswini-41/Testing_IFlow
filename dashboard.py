@@ -569,15 +569,15 @@ html_content = f"""<!DOCTYPE html>
                 </a>
                 <a class="nav-item" href="#new">
                     <i class="fa-solid fa-plus"></i>
-                    <span>New</span>
+                    <span>New Fields</span>
                 </a>
                 <a class="nav-item" href="#modified">
                     <i class="fa-solid fa-pen-to-square"></i>
-                    <span>Modified</span>
+                    <span>Modified Fields</span>
                 </a>
                 <a class="nav-item" href="#removed">
                     <i class="fa-solid fa-eraser"></i>
-                    <span>Removed</span>
+                    <span>Removed Fields</span>
                 </a>
                 <a class="nav-item" href="#payload">
                     <i class="fa-solid fa-file-code"></i>
