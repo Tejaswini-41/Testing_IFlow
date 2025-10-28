@@ -632,10 +632,16 @@ html_content = f"""<!DOCTYPE html>
                             {round(len(modified_fields) / total_changes * 100) if total_changes > 0 else 0}% Modified
                         </div>
                     </div>
-                    <div>
+                    <div style="margin-bottom: 20px;">
                         <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">DATA QUALITY</div>
                         <div style="font-size: 1.5em; font-weight: 700; color: #4CAF50;">
                             {round((len(new_fields) + len(modified_fields)) / total_changes * 100) if total_changes > 0 else 0}% Additions
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">REMOVED FIELDS</div>
+                        <div style="font-size: 1.5em; font-weight: 700; color: #F44336;">
+                            {len(removed_fields)}
                         </div>
                     </div>
                 </div>
