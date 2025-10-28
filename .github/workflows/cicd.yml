@@ -155,7 +155,8 @@ jobs:
               base_lines, current_lines,
               fromfile="Response_Base",
               tofile="Response_Current",
-              lineterm=""
+              lineterm="",
+              n=0
           )
  
           os.makedirs("results", exist_ok=True)
