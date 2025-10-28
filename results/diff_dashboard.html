@@ -29,6 +29,10 @@ tr.deletion td {
   background-color: #fde8e8;
   color: #b00000;
 }
+tr.value td {
+  background-color: #fff7e6;
+  color: #b36b00;
+}
 pre {
   margin: 0;
   white-space: pre-wrap;
@@ -42,27 +46,23 @@ pre {
 <img src="change_counts.png" alt="Change Chart" width="400"/>
 </div>
 <table>
-<tr><th>Type</th><th>Section</th><th>Line</th></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"BATCH": "102528",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"BILL_DATE": "20251028141835",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"ITEM_CATEG": "Fertilizers",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"PLANT": "Santa Monica",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"PO_ITM_NO": "28",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"REASON_REJ": "Order is Rejected due to customer being blocked",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"REQ_DATE": "2025-10-28",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"SHORT_TEXT": "Order to be placed once customer is unblocked",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"STORE_LOC": "Basel, Switzerland",</pre></td></tr>
-<tr class='deletion'><td>Deletion</td><td></td><td><pre>"CITY": "Pune",</pre></td></tr>
-<tr class='deletion'><td>Deletion</td><td></td><td><pre>"COUNTRY": "PL",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"ADDR_TYPE": "Commercial",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"CITY": "Pune(IN)",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"COUNTRY": "Poland",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"LANGU": "EN",</pre></td></tr>
-<tr class='deletion'><td>Deletion</td><td></td><td><pre>"PARTN_ROLE": "TEJ"</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"PARTN_ROLE": "TEJ",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"POSTL_CODE": "PO:411789",</pre></td></tr>
-<tr class='addition'><td>Addition</td><td></td><td><pre>"TELEPHONE": "0124-24356823"</pre></td></tr>
-<tr class='addition'><td>Addition</td><td>@@ -32,6 +45,7 @@       "CD_VALUE2": "0",</td><td><pre>"DOC_NUMBER": "20251028",</pre></td></tr>
+<tr><th>Type</th><th>Section</th><th>Details</th></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PO_ITM_NO']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BATCH']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REASON_REJ']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BILL_DATE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PLANT']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['STORE_LOC']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['ITEM_CATEG']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['SHORT_TEXT']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REQ_DATE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']</td><td><pre></pre></td></tr>
 
 </table>
 </body>
