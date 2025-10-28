@@ -1,5 +1,5 @@
 --- Response_Base+++ Response_Current@@ -4,0 +5,2 @@+        "BATCH": "102528",
-+        "BILL_DATE": "20251028174732",
++        "BILL_DATE": "20251028180258",
 @@ -5,0 +8 @@+        "ITEM_CATEG": "Fertilizers",
 @@ -6,0 +10,4 @@+        "PLANT": "Santa Monica",
 +        "PO_ITM_NO": "28",
