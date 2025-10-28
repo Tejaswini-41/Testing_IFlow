@@ -627,12 +627,6 @@ html_content = f"""<!DOCTYPE html>
                 </div>
                 <div style="padding: 20px 0;">
                     <div style="margin-bottom: 20px;">
-                        <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">MOST COMMON CHANGE TYPE</div>
-                        <div style="font-size: 1.5em; font-weight: 700; color: #667eea;">
-                            {max(change_types, key=change_types.get) if change_types else 'N/A'}
-                        </div>
-                    </div>
-                    <div style="margin-bottom: 20px;">
                         <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">CHANGE RATE</div>
                         <div style="font-size: 1.5em; font-weight: 700; color: #FF9800;">
                             {round(len(modified_fields) / total_changes * 100) if total_changes > 0 else 0}% Modified
