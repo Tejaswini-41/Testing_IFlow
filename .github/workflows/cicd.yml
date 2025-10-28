@@ -14,11 +14,6 @@ on:
         description: 'CPI Current Mapping Endpoint'
         required: true
 
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
 jobs:
   fetch_and_compare:
     runs-on: ubuntu-latest
@@ -35,31 +30,55 @@ jobs:
         run: |
           sudo apt-get update
           sudo apt-get install -y python3-pip jq
-          pip install simplejson requests pandas plotly kaleido
+          pip install simplejson requests
 
       - name: Create results folder
         run: mkdir -p results
 
       # -------------------- 🔐 Fetch OAuth Token --------------------
       - name: Fetch OAuth Token
+        env:
+          TOKEN_URL: ${{ secrets.TOKEN_URL }}
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: |
-          echo "🔐 Fetching OAuth token..."
-          RESPONSE=$(curl -s -X POST "https://syn-int-suite-ent-qgjsk2hi.authentication.eu10.hana.ondemand.com/oauth/token" \
-            -H "Content-Type: application/x-www-form-urlencoded" \
-            -d "grant_type=client_credentials" \
-            -d "client_id=sb-369e182722" \
-            -d "client_secret=fddd335f-2b50-48b5-848d-8be95d87c47b$VA=")
+          echo "🔐 Fetching OAuth token from $TOKEN_URL ..."
+          python3 - <<'EOF'
+          import os, requests
 
-          ACCESS_TOKEN=$(echo "$RESPONSE" | jq -r '.access_token')
+          token_url = os.getenv("TOKEN_URL")
+          client_id = os.getenv("CLIENT_ID")
+          client_secret = os.getenv("CLIENT_SECRET")
 
-          if [ "$ACCESS_TOKEN" = "null" ] || [ -z "$ACCESS_TOKEN" ]; then
-            echo "❌ Failed to fetch access token."
-            echo "Response: $RESPONSE"
-            exit 1
-          fi
+          if not all([token_url, client_id, client_secret]):
+              print("❌ Missing secrets (TOKEN_URL, CLIENT_ID, CLIENT_SECRET).")
+              exit(1)
 
-          echo "$ACCESS_TOKEN" > results/oauth_token.txt
-          echo "✅ Access token saved."
+          try:
+              resp = requests.post(
+                  token_url,
+                  data={"grant_type": "client_credentials"},
+                  auth=(client_id, client_secret)
+              )
+          except Exception as e:
+              print("❌ Token request failed:", e)
+              exit(1)
+
+          if resp.status_code != 200:
+              print(f"❌ Token request failed ({resp.status_code}):", resp.text)
+              exit(1)
+
+          token = resp.json().get("access_token")
+          if not token:
+              print("❌ No access_token found:", resp.text)
+              exit(1)
+
+          os.makedirs("results", exist_ok=True)
+          with open("results/oauth_token.txt", "w") as f:
+              f.write(token)
+
+          print("✅ Token fetched and saved to results/oauth_token.txt")
+          EOF
 
       # -------------------- 🌐 Hit Old CPI iFlow --------------------
       - name: Hit CPI iFlow (Old Mapping)
@@ -73,7 +92,7 @@ jobs:
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file }} \
             -o results/response_base.txt
-          echo "✅ Response 1 saved."
+          echo "✅ Response 1 saved to results/response_base.txt"
 
       # -------------------- 🌐 Hit Current CPI iFlow --------------------
       - name: Hit CPI iFlow (Current Mapping)
@@ -87,7 +106,7 @@ jobs:
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file }} \
             -o results/response_current.txt
-          echo "✅ Response 2 saved."
+          echo "✅ Response 2 saved to results/response_current.txt"
 
       # -------------------- 🔍 Compare JSON/XML Responses --------------------
       - name: Compare responses (prettified)
@@ -122,8 +141,7 @@ jobs:
           prettify_json(current_path, pretty_current)
 
           with open(pretty_base) as f1, open(pretty_current) as f2:
-              base_lines = f1.readlines()
-              current_lines = f2.readlines()
+              base_lines, current_lines = f1.readlines(), f2.readlines()
 
           diff = difflib.unified_diff(
               base_lines, current_lines,
@@ -141,7 +159,9 @@ jobs:
 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
-        run: python3 dashboard.py results/diff.txt
+        run: |
+          pip install pandas plotly kaleido
+          python3 dashboard.py results/diff.txt
 
       # -------------------- 🧾 Commit Results --------------------
       - name: Commit & push results
