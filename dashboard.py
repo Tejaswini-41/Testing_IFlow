@@ -32,6 +32,18 @@ field_changes = defaultdict(lambda: {"added": [], "removed": [], "section": ""})
 current_section = ""
 
 if is_json_format:
+    # Helper function to format field path for better readability
+    def format_field_path(path):
+        """Convert 'root[\'a\'][\'b\'][\'c\']' to 'a > b > c'"""
+        if path.startswith("root"):
+            path = path[4:]  # Remove "root"
+        # Extract all keys in path
+        parts = []
+        for part in path.split("'")[1::2]:  # Get every other element (the keys)
+            if part.strip():
+                parts.append(part)
+        return " > ".join(parts[:-1]) if len(parts) > 1 else parts[0] if parts else "root"
+    
     # Handle DeepDiff JSON format
     for key, value in diff_data.items():
         if key == "dictionary_item_added":
@@ -39,12 +51,12 @@ if is_json_format:
                 # Extract field name from path like "root['a']['b']['c']"
                 field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
                 field_changes[field_name]["added"].append(str(val))
-                field_changes[field_name]["section"] = field_path
+                field_changes[field_name]["section"] = format_field_path(field_path)
         elif key == "dictionary_item_removed":
             for field_path, val in value.items():
                 field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
                 field_changes[field_name]["removed"].append(str(val))
-                field_changes[field_name]["section"] = field_path
+                field_changes[field_name]["section"] = format_field_path(field_path)
         elif key == "values_changed":
             for field_path, change_data in value.items():
                 field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
@@ -52,7 +64,7 @@ if is_json_format:
                     field_changes[field_name]["removed"].append(str(change_data["old_value"]))
                 if "new_value" in change_data:
                     field_changes[field_name]["added"].append(str(change_data["new_value"]))
-                field_changes[field_name]["section"] = field_path
+                field_changes[field_name]["section"] = format_field_path(field_path)
 else:
     # Handle unified diff format
     diff_lines = diff_content.splitlines()
@@ -582,8 +594,11 @@ html_content = f"""<!DOCTYPE html>
                     <p class="header-subtitle">Comprehensive comparison of configuration changes</p>
                 </div>
                 <div class="timestamp">
-                    Generated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}
-                </div>
+                  <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 24px; font-weight: 600; font-size: 0.9em; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); transition: transform 0.2s;">
+                      <i class="fa-solid fa-chart-line"></i>
+                      Live Analysis
+                  </span>
+              </div>
             </div>
         </div>
 
