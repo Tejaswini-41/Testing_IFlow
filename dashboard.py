@@ -661,7 +661,7 @@ else:
             </div>
 """
 
-html_content += """
+html_content += f"""
         </div>
         </section>
 
@@ -713,7 +713,7 @@ else:
             </div>
 """
 
-html_content += """
+html_content += f"""
         </div>
         </section>
 
