@@ -641,7 +641,7 @@ html_content = f"""<!DOCTYPE html>
                     <div>
                         <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">REMOVED FIELDS</div>
                         <div style="font-size: 1.5em; font-weight: 700; color: #F44336;">
-                            {len(removed_fields)}
+                            {round(len(removed_fields) / total_changes * 100) if total_changes > 0 else 0}% Removed
                         </div>
                     </div>
                 </div>
