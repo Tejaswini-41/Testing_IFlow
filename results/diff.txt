@@ -1,42 +1,28 @@
---- Response_Base+++ Response_Current@@ -2,19 +2,32 @@   "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
-     "C_ORDER_ITEMS_IN": {
-       "item": {
-+        "BATCH": "102528",
-+        "BILL_DATE": "20251028141835",
-         "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
-+        "ITEM_CATEG": "Fertilizers",
-         "MATERIAL": "230952",
-+        "PLANT": "Santa Monica",
-+        "PO_ITM_NO": "28",
-+        "REASON_REJ": "Order is Rejected due to customer being blocked",
-+        "REQ_DATE": "2025-10-28",
-         "REQ_QTY": "3000",
-         "SALES_UNIT": "IGB",
-+        "SHORT_TEXT": "Order to be placed once customer is unblocked",
-+        "STORE_LOC": "Basel, Switzerland",
-         "TARGET_QTY": "3000"
-       }
-     },
-     "C_ORDER_PARTNERS": {
-       "item": {
--        "CITY": "Pune",
--        "COUNTRY": "PL",
-+        "ADDR_TYPE": "Commercial",
-+        "CITY": "Pune(IN)",
-+        "COUNTRY": "Poland",
-+        "LANGU": "EN",
-         "PARTN_NUMB": "4717357",
--        "PARTN_ROLE": "TEJ"
-+        "PARTN_ROLE": "TEJ",
-+        "POSTL_CODE": "PO:411789",
-+        "TELEPHONE": "0124-24356823"
-       }
-     },
-     "I_CUSTOM_HEADER_IN": {
-@@ -32,6 +45,7 @@       "CD_VALUE2": "0",
-       "DISTR_CHAN": "02",
-       "DIVISION": "02",
-+      "DOC_NUMBER": "20251028",
-       "DOC_TYPE": "ZDPP",
-       "PMNTTRMS": "0600",
-       "PURCH_NO": "UK Cart",
+{
+  "dictionary_item_added": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PO_ITM_NO']": "28",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BATCH']": "102528",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REASON_REJ']": "Order is Rejected due to customer being blocked",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BILL_DATE']": "20251028164444",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PLANT']": "Santa Monica",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['STORE_LOC']": "Basel, Switzerland",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['ITEM_CATEG']": "Fertilizers",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['SHORT_TEXT']": "Order to be placed once customer is unblocked",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REQ_DATE']": "2025-10-28",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']": "PO:411789",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']": "0124-24356823",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']": "EN",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']": "Commercial",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251028"
+  },
+  "values_changed": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
+      "new_value": "Poland",
+      "old_value": "PL"
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
+      "new_value": "Pune(IN)",
+      "old_value": "Pune"
+    }
+  }
+}
