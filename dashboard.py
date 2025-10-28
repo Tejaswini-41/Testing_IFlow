@@ -9,7 +9,6 @@ output_dir = Path("results")
 output_dir.mkdir(exist_ok=True)
  
 dashboard_html = output_dir / "diff_dashboard.html"
-chart_file = output_dir / "change_counts.png"
  
 if not os.path.exists(diff_file):
     print(f"❌ Diff file not found: {diff_file}")
@@ -43,7 +42,7 @@ fig = go.Figure(data=[go.Bar(
     marker_color=["#28a745" if t == "Addition" else "#dc3545" for t in counts.index]
 )])
 fig.update_layout(title="Change Summary", xaxis_title="Type", yaxis_title="Count", template="plotly_white")
-fig.write_image(str(chart_file))
+chart_html = fig.to_html(full_html=False, include_plotlyjs='cdn')
  
 # Build HTML
 html = f"""
@@ -87,7 +86,7 @@ pre {{
 <body>
 <h1>📊 CPI Response Diff Dashboard</h1>
 <div style="text-align:center;">
-<img src="{chart_file.name}" alt="Change Chart" width="400"/>
+{chart_html}
 </div>
 <table>
 <tr><th>Type</th><th>Section</th><th>Line</th></tr>

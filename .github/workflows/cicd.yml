@@ -17,6 +17,14 @@ on:
 jobs:
   fetch_and_compare:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    concurrency:
+      group: "pages"
+      cancel-in-progress: false
+    environment: github-pages
 
     steps:
       # -------------------- Checkout --------------------
@@ -160,7 +168,7 @@ jobs:
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
         run: |
-          pip install pandas plotly kaleido
+          pip install pandas plotly
           python3 dashboard.py results/diff.txt
 
       # -------------------- 🧾 Commit Results --------------------
@@ -171,3 +179,16 @@ jobs:
           git add -A results/
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
+
+      # -------------------- 🌐 Deploy GitHub Pages --------------------
+      - name: Setup Pages
+        uses: actions/configure-pages@v4
+
+      - name: Upload artifact (results)
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: results
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
