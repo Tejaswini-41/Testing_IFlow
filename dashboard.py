@@ -17,31 +17,63 @@ if not os.path.exists(diff_file):
     sys.exit(1)
 
 with open(diff_file, "r", encoding="utf-8") as f:
-    diff_lines = f.readlines()
+    diff_content = f.read()
 
-# Parse diff more intelligently
+# Check if it's JSON format (DeepDiff) or unified diff format
+is_json_format = False
+try:
+    diff_data = json.loads(diff_content)
+    is_json_format = True
+except json.JSONDecodeError:
+    pass
+
+# Parse diff intelligently
 field_changes = defaultdict(lambda: {"added": [], "removed": [], "section": ""})
 current_section = ""
 
-for line in diff_lines:
-    line = line.rstrip("\n")
-    if line.startswith("@@"):
-        current_section = line
-    elif line.startswith("+") and not line.startswith("+++"):
-        content = line[1:].strip()
-        if '":' in content:
-            field_name = content.split('":')[0].strip('" ')
-            field_value = content.split('":')[1].strip(' ",')
-            field_changes[field_name]["added"].append(field_value)
-            field_changes[field_name]["section"] = current_section
-    elif line.startswith("-") and not line.startswith("---"):
-        content = line[1:].strip()
-        if '":' in content:
-            field_name = content.split('":')[0].strip('" ')
-            field_value = content.split('":')[1].strip(' ",')
-            field_changes[field_name]["removed"].append(field_value)
-            field_changes[field_name]["section"] = current_section
-    # ✅ IGNORE lines without +/- prefix (context lines)
+if is_json_format:
+    # Handle DeepDiff JSON format
+    for key, value in diff_data.items():
+        if key == "dictionary_item_added":
+            for field_path, val in value.items():
+                # Extract field name from path like "root['a']['b']['c']"
+                field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
+                field_changes[field_name]["added"].append(str(val))
+                field_changes[field_name]["section"] = field_path
+        elif key == "dictionary_item_removed":
+            for field_path, val in value.items():
+                field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
+                field_changes[field_name]["removed"].append(str(val))
+                field_changes[field_name]["section"] = field_path
+        elif key == "values_changed":
+            for field_path, change_data in value.items():
+                field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
+                if "old_value" in change_data:
+                    field_changes[field_name]["removed"].append(str(change_data["old_value"]))
+                if "new_value" in change_data:
+                    field_changes[field_name]["added"].append(str(change_data["new_value"]))
+                field_changes[field_name]["section"] = field_path
+else:
+    # Handle unified diff format
+    diff_lines = diff_content.splitlines()
+    for line in diff_lines:
+        line = line.rstrip("\n")
+        if line.startswith("@@"):
+            current_section = line
+        elif line.startswith("+") and not line.startswith("+++"):
+            content = line[1:].strip()
+            if '":' in content:
+                field_name = content.split('":')[0].strip('" ')
+                field_value = content.split('":')[1].strip(' ",')
+                field_changes[field_name]["added"].append(field_value)
+                field_changes[field_name]["section"] = current_section
+        elif line.startswith("-") and not line.startswith("---"):
+            content = line[1:].strip()
+            if '":' in content:
+                field_name = content.split('":')[0].strip('" ')
+                field_value = content.split('":')[1].strip(' ",')
+                field_changes[field_name]["removed"].append(field_value)
+                field_changes[field_name]["section"] = current_section
 
 # Categorize changes
 new_fields = []
