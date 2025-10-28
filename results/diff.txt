@@ -1,20 +1,32 @@
---- Response_Base+++ Response_Current@@ -4,0 +5,2 @@+        "BATCH": "102528",
-+        "BILL_DATE": "20251028192109",
-@@ -5,0 +8 @@+        "ITEM_CATEG": "Fertilizers",
-@@ -6,0 +10,4 @@+        "PLANT": "Santa Monica",
-+        "PO_ITM_NO": "28",
-+        "REASON_REJ": "Order is Rejected due to customer being blocked",
-+        "REQ_DATE": "2025-10-28",
-@@ -8,0 +16,2 @@+        "SHORT_TEXT": "Order to be placed once customer is unblocked",
-+        "STORE_LOC": "Basel, Switzerland",
-@@ -14,2 +23,4 @@-        "CITY": "Pune",
--        "COUNTRY": "PL",
-+        "ADDR_TYPE": "Commercial",
-+        "CITY": "Pune(IN)",
-+        "COUNTRY": "Poland",
-+        "LANGU": "EN",
-@@ -17 +28,3 @@-        "PARTN_ROLE": "TEJ"
-+        "PARTN_ROLE": "TEJ",
-+        "POSTL_CODE": "PO:411789",
-+        "TELEPHONE": "0124-24356823"
-@@ -34,0 +48 @@+      "DOC_NUMBER": "20251028",
+{
+  "dictionary_item_added": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PO_ITM_NO']": "28",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BATCH']": "102528",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REASON_REJ']": "Order is Rejected due to customer being blocked",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BILL_DATE']": "20251029014752",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PLANT']": "Santa Monica",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['STORE_LOC']": "Basel, Switzerland",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['ITEM_CATEG']": "Fertilizers",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['SHORT_TEXT']": "Order to be placed once customer is unblocked",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REQ_DATE']": "2025-10-28",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']": "PO:411789",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']": "0124-24356823",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']": "EN",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']": "Commercial",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251028"
+  },
+  "dictionary_item_removed": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']": "0135",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['CD_CU_ISO1']": "GBP"
+  },
+  "values_changed": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
+      "new_value": "Poland",
+      "old_value": "PL"
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
+      "new_value": "Pune(IN)",
+      "old_value": "Pune"
+    }
+  }
+}
