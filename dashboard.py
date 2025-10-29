@@ -1,6 +1,8 @@
 import os
 import sys
 import json
+import html
+import re
 import plotly.graph_objects as go
 from pathlib import Path
 from collections import defaultdict
@@ -18,6 +20,37 @@ if not os.path.exists(diff_file):
 
 with open(diff_file, "r", encoding="utf-8") as f:
     diff_content = f.read()
+
+# Load payload files
+base_payload_file = "results/response_base.txt"
+current_payload_file = "results/response_current.txt"
+
+base_payload = ""
+current_payload = ""
+
+try:
+    with open(base_payload_file, "r", encoding="utf-8") as f:
+        base_payload_raw = f.read()
+        try:
+            # Try to pretty print JSON
+            base_payload_obj = json.loads(base_payload_raw)
+            base_payload = json.dumps(base_payload_obj, indent=2)
+        except json.JSONDecodeError:
+            base_payload = base_payload_raw
+except FileNotFoundError:
+    base_payload = "# Base payload file not found\n# Expected location: results/response_base.txt"
+
+try:
+    with open(current_payload_file, "r", encoding="utf-8") as f:
+        current_payload_raw = f.read()
+        try:
+            # Try to pretty print JSON
+            current_payload_obj = json.loads(current_payload_raw)
+            current_payload = json.dumps(current_payload_obj, indent=2)
+        except json.JSONDecodeError:
+            current_payload = current_payload_raw
+except FileNotFoundError:
+    current_payload = "# Current payload file not found\n# Expected location: results/response_current.txt"
 
 # Check if it's JSON format (DeepDiff) or unified diff format
 is_json_format = False
@@ -43,23 +76,50 @@ if is_json_format:
             if part.strip():
                 parts.append(part)
         return " > ".join(parts[:-1]) if len(parts) > 1 else parts[0] if parts else "root"
-    
+
+    def extract_field_name(field_path: str) -> str:
+        """Extract the last key from a DeepDiff path, fallback to full path."""
+        try:
+            parts = [p for p in field_path.split("'")[1::2] if p.strip()]
+            if not parts:
+                parts = [p for p in field_path.split('"')[1::2] if p.strip()]
+            return parts[-1] if parts else field_path
+        except Exception:
+            return field_path
+
+    def iter_path_items(value):
+        """Yield (field_path, val_or_None) from DeepDiff values which may be dict or iterable of paths."""
+        if isinstance(value, dict):
+            for k, v in value.items():
+                yield k, v
+        else:
+            try:
+                for k in value:
+                    yield k, None
+            except TypeError:
+                return
+
     # Handle DeepDiff JSON format
     for key, value in diff_data.items():
         if key == "dictionary_item_added":
-            for field_path, val in value.items():
-                # Extract field name from path like "root['a']['b']['c']"
-                field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
-                field_changes[field_name]["added"].append(str(val))
+            for field_path, val in iter_path_items(value):
+                field_name = extract_field_name(field_path)
+                if val is not None:
+                    field_changes[field_name]["added"].append(str(val))
+                else:
+                    field_changes[field_name]["added"].append("<added>")
                 field_changes[field_name]["section"] = format_field_path(field_path)
         elif key == "dictionary_item_removed":
-            for field_path, val in value.items():
-                field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
-                field_changes[field_name]["removed"].append(str(val))
+            for field_path, val in iter_path_items(value):
+                field_name = extract_field_name(field_path)
+                if val is not None:
+                    field_changes[field_name]["removed"].append(str(val))
+                else:
+                    field_changes[field_name]["removed"].append("<removed>")
                 field_changes[field_name]["section"] = format_field_path(field_path)
         elif key == "values_changed":
             for field_path, change_data in value.items():
-                field_name = field_path.split("'")[-2] if "'" in field_path else field_path.split('"')[-2]
+                field_name = extract_field_name(field_path)
                 if "old_value" in change_data:
                     field_changes[field_name]["removed"].append(str(change_data["old_value"]))
                 if "new_value" in change_data:
@@ -74,16 +134,19 @@ else:
             current_section = line
         elif line.startswith("+") and not line.startswith("+++"):
             content = line[1:].strip()
-            if '":' in content:
-                field_name = content.split('":')[0].strip('" ')
-                field_value = content.split('":')[1].strip(' ",')
+            # Try robust extraction of key and value (handles nested colons)
+            m = re.match(r'"([^"]+)"\s*:\s*(.*)', content)
+            if m:
+                field_name = m.group(1)
+                field_value = m.group(2).rstrip(',').strip()
                 field_changes[field_name]["added"].append(field_value)
                 field_changes[field_name]["section"] = current_section
         elif line.startswith("-") and not line.startswith("---"):
             content = line[1:].strip()
-            if '":' in content:
-                field_name = content.split('":')[0].strip('" ')
-                field_value = content.split('":')[1].strip(' ",')
+            m = re.match(r'"([^"]+)"\s*:\s*(.*)', content)
+            if m:
+                field_name = m.group(1)
+                field_value = m.group(2).rstrip(',').strip()
                 field_changes[field_name]["removed"].append(field_value)
                 field_changes[field_name]["section"] = current_section
 
@@ -144,21 +207,6 @@ fig.update_layout(
 )
 chart_html = fig.to_html(full_html=False, include_plotlyjs='cdn', config={'displayModeBar': False})
 
-# Read the second JSON payload (the one being compared)
-json_file_2 = "results/payload_2.json"  # Adjust this path to your actual file
-payload_2_content = ""
-
-if os.path.exists(json_file_2):
-    with open(json_file_2, "r", encoding="utf-8") as f:
-        payload_2_raw = f.read()
-        try:
-            # Pretty print JSON
-            payload_2_obj = json.loads(payload_2_raw)
-            payload_2_content = json.dumps(payload_2_obj, indent=2)
-        except:
-            payload_2_content = payload_2_raw
-else:
-    payload_2_content = "# Payload file not found\n# Expected location: results/payload_2.json"
 
 # Create CSS file
 css_content = """* {
@@ -538,6 +586,80 @@ tr:hover {
   }
 }
 
+/* Payload Viewer Styles */
+/* merged into single .payload-box rule below */
+
+/* Payload Toggle Buttons */
+.payload-toggle {
+  display: flex;
+  gap: 10px;
+}
+
+.toggle-btn {
+  padding: 8px 16px;
+  border: 2px solid #667eea;
+  background: transparent;
+  color: #667eea;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9em;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.toggle-btn:hover {
+  background: rgba(102, 126, 234, 0.1);
+  transform: translateY(-2px);
+}
+
+.toggle-btn.active {
+  background: #667eea;
+  color: white;
+}
+
+.toggle-btn i {
+  font-size: 1em;
+}
+
+/* Payload Box Updates */
+.payload-box {
+  background: #1e1e1e;
+  border-radius: 12px;
+  padding: 20px;
+  max-height: 600px;
+  overflow: auto;
+  border: 1px solid #333;
+  transition: opacity 0.3s ease;
+  position: relative;
+}
+
+.payload-box.active {
+  display: block;
+}
+
+.payload-content {
+  font-family: 'Courier New', Consolas, monospace;
+  font-size: 0.85em;
+  color: #d4d4d4;
+  white-space: pre-wrap;
+  word-break: break-word;
+  line-height: 1.6;
+  margin: 0;
+}
+
+@media (max-width: 1024px) {
+  .payload-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .payload-box {
+    max-height: 400px;
+  }
+}
+
 
 """
 
@@ -546,7 +668,6 @@ with open(dashboard_css, "w", encoding="utf-8") as f:
     f.write(css_content)
 
 # Generate HTML
-from datetime import datetime
 
 html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -579,9 +700,9 @@ html_content = f"""<!DOCTYPE html>
                     <i class="fa-solid fa-eraser"></i>
                     <span>Removed Fields</span>
                 </a>
-                <a class="nav-item" href="#payload">
-                    <i class="fa-solid fa-file-code"></i>
-                    <span>View Payload</span>
+                <a class="nav-item" href="#payloads">
+                    <i class="fa-solid fa-code-compare"></i>
+                    <span>View Payloads</span>
                 </a>
             </nav>
         </aside>
@@ -686,10 +807,11 @@ if new_fields:
                 <tbody>
 """
     for item in new_fields:
-        field_path = item.get("Field", "")
-        section = item.get("Section", "root") or "root"
+        field_path = html.escape(item.get("Field", ""), quote=True)
+        section = html.escape(item.get("Section", "root") or "root", quote=True)
         value = str(item.get("Value", "N/A"))
         display_value = (value[:100] + '...') if len(value) > 100 else value
+        display_value = html.escape(display_value, quote=True)
         html_content += f"""
                     <tr>
                         <td class=\"field-name\">{field_path}</td>
@@ -735,12 +857,14 @@ if modified_fields:
                 <tbody>
 """
     for item in modified_fields:
-        field_path = item.get("Field", "")
-        section = item.get("Section", "root") or "root"
+        field_path = html.escape(item.get("Field", ""), quote=True)
+        section = html.escape(item.get("Section", "root") or "root", quote=True)
         old_val = str(item.get("Old Value", "N/A"))
         new_val = str(item.get("New Value", "N/A"))
         old_display = (old_val[:80] + '...') if len(old_val) > 80 else old_val
         new_display = (new_val[:80] + '...') if len(new_val) > 80 else new_val
+        old_display = html.escape(old_display, quote=True)
+        new_display = html.escape(new_display, quote=True)
         html_content += f"""
                     <tr>
                         <td class=\"field-name\">{field_path}</td>
@@ -787,10 +911,11 @@ if removed_fields:
                 <tbody>
 """
     for item in removed_fields:
-        field_path = item.get("Field", "")
-        section = item.get("Section", "root") or "root"
+        field_path = html.escape(item.get("Field", ""), quote=True)
+        section = html.escape(item.get("Section", "root") or "root", quote=True)
         value = str(item.get("Value", "N/A"))
         display_value = (value[:100] + '...') if len(value) > 100 else value
+        display_value = html.escape(display_value, quote=True)
         html_content += f"""
                     <tr>
                         <td class=\"field-name\">{field_path}</td>
@@ -812,25 +937,48 @@ else:
 html_content += """
         </div>
         </section>
-
-        <!-- View Payload Section -->
-        <section id="payload" class="section">
+"""
+html_content += """
+        <!-- View Payloads Section -->
+        <section id="payloads" class="section">
             <div class="card full-width">
                 <div class="card-header">
-                    <h2 class="card-title">Second Payload (New Version)</h2>
-                    <span class="badge badge-modified">JSON</span>
+                    <h2 class="card-title">Payload Viewer</h2>
+                    <div class="payload-toggle">
+                        <button class="toggle-btn active" data-payload="current">
+                            <i class="fa-solid fa-file-code"></i> Current Payload
+                        </button>
+                        <button class="toggle-btn" data-payload="base">
+                            <i class="fa-solid fa-file-lines"></i> Base Payload
+                        </button>
+                    </div>
                 </div>
-                <div style="position: relative;">
-                    <button id="copyBtn" style="position: absolute; top: 10px; right: 10px; padding: 8px 16px; background: #4f46e5; color: white; border: none; border-radius: 6px; cursor: pointer; font-size: 0.85em; font-weight: 600; transition: all 0.2s; z-index: 10;">
-                        <i class="fa-solid fa-copy"></i> Copy
-                    </button>
-                    <pre style="background: #1e1e1e; color: #d4d4d4; padding: 24px; border-radius: 12px; overflow-x: auto; max-height: 600px; font-family: 'Courier New', monospace; font-size: 0.9em; line-height: 1.6; margin: 0;"><code id="payloadCode">{payload_2_content}</code></pre>
+                
+                <!-- Current Payload (shown by default) -->
+                <div class="payload-box active" id="currentPayloadBox">
+                    <pre class="payload-content">"""
+
+escaped_current_payload = html.escape(current_payload, quote=True)
+html_content += escaped_current_payload
+
+html_content += """</pre>
+                </div>
+                
+                <!-- Base Payload (hidden by default) -->
+                <div class="payload-box" id="basePayloadBox" style="display: none;">
+                    <pre class="payload-content">"""
+
+escaped_base_payload = html.escape(base_payload, quote=True)
+html_content += escaped_base_payload
+
+html_content += """</pre>
                 </div>
             </div>
         </section>
 
         <!-- Footer -->
 """
+
 html_content += f"""
         <footer class="footer">
             <p>Generated by Diff Analysis Tool | Data processed: {total_changes} changes across {len(change_types)} categories</p>
@@ -840,84 +988,87 @@ html_content += """
         </main>
     </div>
     <script>
-      (function() {{
+      (function() {
         const navItems = document.querySelectorAll('.nav .nav-item');
         const sections = document.querySelectorAll('.section');
         
         // Function to show only the selected section
-        function showSection(targetId) {{
+        function showSection(targetId) {
           // Hide all sections
-          sections.forEach(section => {{
+          sections.forEach(section => {
             section.classList.remove('active');
-          }});
+          });
           
           // Show only the target section
           const targetSection = document.getElementById(targetId);
-          if (targetSection) {{
+          if (targetSection) {
             targetSection.classList.add('active');
-          }}
+          }
           
           // Update active nav item
-          navItems.forEach(nav => {{
+          navItems.forEach(nav => {
             nav.classList.remove('active');
             const href = nav.getAttribute('href');
             if ((targetId === 'dashboard' && href === '#') || 
-                (href === '#' + targetId)) {{
+                (href === '#' + targetId)) {
               nav.classList.add('active');
-            }}
-          }});
-        }}
+            }
+          });
+        }
         
         // Add click handlers to navigation items
-        navItems.forEach(navItem => {{
-          navItem.addEventListener('click', function(e) {{
+        navItems.forEach(navItem => {
+          navItem.addEventListener('click', function(e) {
             e.preventDefault();
             const href = this.getAttribute('href');
             
             // Determine which section to show
             let sectionId = 'dashboard';
-            if (href && href !== '#') {{
+            if (href && href !== '#') {
               sectionId = href.substring(1); // Remove the '#'
-            }}
+            }
             
             showSection(sectionId);
             
             // Update URL hash
             history.replaceState(null, '', href || '#dashboard');
-          }});
-        }});
+          });
+        });
         
         // Handle initial page load with hash
         const initialHash = window.location.hash;
-        if (initialHash && initialHash.length > 1) {{
+        if (initialHash && initialHash.length > 1) {
           const initialSection = initialHash.substring(1);
           showSection(initialSection);
-        }} else {{
+        } else {
           // Show dashboard by default
           showSection('dashboard');
-        }}
+        }
+        
+        // Payload Toggle Functionality
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        const currentPayloadBox = document.getElementById('currentPayloadBox');
+        const basePayloadBox = document.getElementById('basePayloadBox');
 
-        // Copy button functionality for payload section
-        const copyBtn = document.getElementById('copyBtn');
-        if (copyBtn) {{
-          copyBtn.addEventListener('click', function() {{
-            const code = document.getElementById('payloadCode').textContent;
-            navigator.clipboard.writeText(code).then(() => {{
-              const btn = this;
-              const originalText = btn.innerHTML;
-              btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied!';
-              btn.style.background = '#10b981';
-              setTimeout(() => {{
-                btn.innerHTML = originalText;
-                btn.style.background = '#4f46e5';
-              }}, 2000);
-            }}).catch(err => {{
-              console.error('Failed to copy:', err);
-              alert('Failed to copy to clipboard');
-            }});
-          }});
-        }}
-      }})();
+        toggleBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const payloadType = this.getAttribute('data-payload');
+            
+            // Update button states
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Show/hide payload boxes
+            if (payloadType === 'current') {
+              currentPayloadBox.style.display = 'block';
+              basePayloadBox.style.display = 'none';
+            } else {
+              currentPayloadBox.style.display = 'none';
+              basePayloadBox.style.display = 'block';
+            }
+          });
+        });
+      })();
     </script>
  </body>
 </html>
