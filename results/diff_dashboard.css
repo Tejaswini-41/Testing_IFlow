@@ -301,6 +301,12 @@ tr:hover {
   font-family: monospace;
 }
 
+/* Breadcrumb styling for field paths */
+.section-tag .crumb { color: #64748b; }
+.section-tag .crumb-leaf { color: #0f172a; font-weight: 600; }
+.section-tag .crumb-sep { color: #cbd5e1; padding: 0 6px; }
+.section-tag { white-space: nowrap; display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+
 .chart-container {
   display: flex;
   justify-content: center;
