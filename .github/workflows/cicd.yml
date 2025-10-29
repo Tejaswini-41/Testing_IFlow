@@ -13,6 +13,9 @@ on:
       iflow_current_url:
         description: 'CPI Current Mapping Endpoint'
         required: true
+      dashboard_url:
+        description: 'Webhook or Dashboard URL to send the final published dashboard link'
+        required: true
 
 permissions:
   contents: write
@@ -154,10 +157,8 @@ jobs:
                   f.write("\n".join(diff))
               print(f"✅ Text diff (with +/-) saved to {out_path}")
 
-          # --- Compare Headers ---
           compare_text("results/headers_base.txt", "results/headers_current.txt", "results/diff_headers.txt")
 
-          # --- Compare Response Body ---
           base_body = "results/response_base.txt"
           current_body = "results/response_current.txt"
 
@@ -170,10 +171,6 @@ jobs:
           except Exception:
               compare_text(base_body, current_body, "results/diff.txt")
           EOF
-
-          echo "✅ Generated:"
-          echo " - results/diff.txt (Response body diff)"
-          echo " - results/diff_headers.txt (Headers diff)"
 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
@@ -189,23 +186,32 @@ jobs:
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
 
-      # -------------------- 🌐 Upload artifact for GitHub Pages --------------------
+      # -------------------- 🌐 Upload to GitHub Pages --------------------
       - name: Upload dashboard to GitHub Pages
         uses: actions/upload-pages-artifact@v3
         with:
           path: results
 
-      # -------------------- 🚀 Deploy Dashboard --------------------
+      # -------------------- 🚀 Deploy to GitHub Pages --------------------
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v4
 
-      # -------------------- 🔗 Print Dashboard URL --------------------
-      - name: Dashboard URL
+      # -------------------- 🔗 Send Dashboard URL to Webhook --------------------
+      - name: Send Dashboard URL to Webhook
         run: |
           BASE_URL="${{ steps.deploy.outputs.page_url }}"
-          BASE_URL="${BASE_URL%/}"  # Remove trailing slash if any
-          URL="$BASE_URL/diff_dashboard.html"
-          echo "✅ Dashboard published at: $URL"
-          echo "::notice title=Dashboard URL::$URL"
-          echo "🎉 All done!"
+          BASE_URL="${BASE_URL%/}"
+          FINAL_URL="$BASE_URL/diff_dashboard.html"
+
+          echo "✅ Dashboard published at: $FINAL_URL"
+          echo "::notice title=Dashboard URL::$FINAL_URL"
+
+          WEBHOOK="${{ github.event.inputs.dashboard_url }}"
+          echo "📤 Sending dashboard URL to webhook: $WEBHOOK"
+
+          curl -X POST "$WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d "{\"dashboard_link\": \"$FINAL_URL\"}"
+
+          echo "🎉 Dashboard link sent successfully!"
