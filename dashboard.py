@@ -196,8 +196,10 @@ fig = go.Figure(data=[go.Pie(
     marker=dict(colors=['#4CAF50', '#FF9800', '#F44336']),
     hole=0.6,
     textinfo='label+percent',
-    textposition='outside'
+    textposition='outside',
+    hovertemplate='<b>%{label}</b><br>Count: %{value}<br>Percentage: %{percent}<extra></extra>'
 )])
+
 fig.update_layout(
     title="",
     template="plotly_white",
@@ -205,7 +207,14 @@ fig.update_layout(
     showlegend=False,
     margin=dict(l=20, r=20, t=20, b=20)
 )
-chart_html = fig.to_html(full_html=False, include_plotlyjs='cdn', config={'displayModeBar': False})
+
+# Generate chart with unique div ID for click handling
+chart_html = fig.to_html(
+    full_html=False, 
+    include_plotlyjs='cdn', 
+    config={'displayModeBar': False},
+    div_id='pieChart'
+)
 
 
 # Create CSS file
@@ -522,6 +531,20 @@ tr:hover {
   min-height: 300px;
 }
 
+/* Make chart clickable */
+#pieChart {
+  cursor: pointer;
+}
+
+#pieChart .slice {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#pieChart .slice:hover {
+  opacity: 0.85;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;
@@ -710,11 +733,8 @@ html_content = f"""<!DOCTYPE html>
                     <p class="header-subtitle">Comprehensive comparison of configuration changes</p>
                 </div>
                 <div class="timestamp">
-                  <span style="display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); color: white; border-radius: 24px; font-weight: 600; font-size: 0.9em; box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4); transition: transform 0.2s;">
-                      <i class="fa-solid fa-chart-line"></i>
-                      Live Analysis
-                  </span>
-              </div>
+                  
+               </div>
             </div>
         </div>
 
@@ -794,8 +814,8 @@ if new_fields:
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30%;">Field Path</th>
-                        <th style="width: 15%;">Section</th>
+                        <th style="width: 30%;">Field</th>
+                        <th style="width: 15%;">Field Path</th>
                         <th style="width: 55%;">New Value</th>
                     </tr>
                 </thead>
@@ -843,8 +863,8 @@ if modified_fields:
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 25%;">Field Path</th>
-                        <th style="width: 12%;">Section</th>
+                        <th style="width: 25%;">Field</th>
+                        <th style="width: 12%;">Field Path</th>
                         <th style="width: 31%;">Old Value</th>
                         <th style="width: 31%;">New Value</th>
                     </tr>
@@ -898,9 +918,9 @@ if removed_fields:
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30%;">Field Path</th>
-                        <th style="width: 15%;">Section</th>
-                        <th style="width: 55%;">Old Value</th>
+                        <th style="width: 30%;">Field</th>
+                        <th style="width: 15%;">Field Path</th>
+                        <th style="width: 55%;">Removed Value</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -941,10 +961,10 @@ html_content += """
                     <h2 class="card-title">Payload Viewer</h2>
                     <div class="payload-toggle">
                         <button class="toggle-btn active" data-payload="current">
-                            <i class="fa-solid fa-file-code"></i> Current Payload
+                            <i class="fa-solid fa-file-code"></i> New Response
                         </button>
                         <button class="toggle-btn" data-payload="base">
-                            <i class="fa-solid fa-file-lines"></i> Base Payload
+                            <i class="fa-solid fa-file-lines"></i> Old Response 
                         </button>
                     </div>
                 </div>
@@ -982,7 +1002,7 @@ html_content += f"""
 html_content += """
         </main>
     </div>
-    <script>
+        <script>
       (function() {
         const navItems = document.querySelectorAll('.nav .nav-item');
         const sections = document.querySelectorAll('.section');
@@ -1009,6 +1029,9 @@ html_content += """
               nav.classList.add('active');
             }
           });
+          
+          // Smooth scroll to top
+          window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
         // Add click handlers to navigation items
@@ -1029,6 +1052,27 @@ html_content += """
             history.replaceState(null, '', href || '#dashboard');
           });
         });
+        
+        // Chart click navigation
+        const chartDiv = document.getElementById('pieChart');
+        if (chartDiv) {
+          chartDiv.on('plotly_click', function(data) {
+            const label = data.points[0].label;
+            let targetSection = 'dashboard';
+            
+            // Map chart labels to section IDs
+            if (label === 'New Fields') {
+              targetSection = 'new';
+            } else if (label === 'Modified Fields') {
+              targetSection = 'modified';
+            } else if (label === 'Removed Fields') {
+              targetSection = 'removed';
+            }
+            
+            showSection(targetSection);
+            history.replaceState(null, '', '#' + targetSection);
+          });
+        }
         
         // Handle initial page load with hash
         const initialHash = window.location.hash;
