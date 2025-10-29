@@ -91,53 +91,52 @@ jobs:
       # -------------------- 🌐 Hit Old CPI iFlow --------------------
       - name: Hit CPI iFlow (Old Mapping)
         run: |
-          echo "📡 Fetching Response 1 from ${{ github.event.inputs.iflow_base_url }}"
+          echo "📡 Fetching Response 1 (headers + body) from ${{ github.event.inputs.iflow_base_url }}"
           TOKEN=$(cat results/oauth_token.txt)
           AUTH_HEADER="Authorization: Bearer $TOKEN"
 
-          curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
+          curl -s -i -X POST "${{ github.event.inputs.iflow_base_url }}" \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file }} \
             -o results/response_base.txt
-          echo "✅ Response 1 saved to results/response_base.txt"
+          echo "✅ Response 1 (headers + body) saved to results/response_base.txt"
 
       # -------------------- 🌐 Hit Current CPI iFlow --------------------
       - name: Hit CPI iFlow (Current Mapping)
         run: |
-          echo "📡 Fetching Response 2 from ${{ github.event.inputs.iflow_current_url }}"
+          echo "📡 Fetching Response 2 (headers + body) from ${{ github.event.inputs.iflow_current_url }}"
           TOKEN=$(cat results/oauth_token.txt)
           AUTH_HEADER="Authorization: Bearer $TOKEN"
-
-          curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
+      
+          curl -s -i -X POST "${{ github.event.inputs.iflow_current_url }}" \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
             --data-binary @${{ github.event.inputs.payload_file }} \
             -o results/response_current.txt
-          echo "✅ Response 2 saved to results/response_current.txt"
+          echo "✅ Response 2 (headers + body) saved to results/response_current.txt"
 
       # -------------------- 🔍 Compare JSON/XML Responses --------------------
-      - name: Compare responses (smart JSON/XML diff)
+      - name: Compare responses (headers + body)
         run: |
-          echo "🔍 Comparing responses..."
+          echo "🔍 Comparing responses (headers + body)..."
           pip install deepdiff
           python3 - <<'EOF'
           import os, json, difflib
           from deepdiff import DeepDiff
-
+      
           base_path = "results/response_base.txt"
           current_path = "results/response_current.txt"
           diff_path = "results/diff.txt"
-
+      
           def is_json_file(path):
-              """Check if file is JSON by trying to load it."""
               try:
                   with open(path, 'r') as f:
                       json.load(f)
                   return True
               except Exception:
                   return False
-
+      
           def compare_json(base_path, current_path):
               with open(base_path, 'r') as f1, open(current_path, 'r') as f2:
                   base_data = json.load(f1)
@@ -146,7 +145,7 @@ jobs:
               with open(diff_path, 'w') as f:
                   json.dump(diff, f, indent=2, ensure_ascii=False)
               print("✅ JSON diff saved to results/diff.txt")
-
+      
           def compare_text(base_path, current_path):
               with open(base_path) as f1, open(current_path) as f2:
                   base_lines, current_lines = f1.readlines(), f2.readlines()
@@ -159,9 +158,9 @@ jobs:
               )
               with open(diff_path, "w") as f:
                   f.writelines(diff)
-              print("✅ Text diff saved to results/diff.txt")
-
-          # --- Logic switch ---
+              print("✅ Text diff (headers + body) saved to results/diff.txt")
+      
+          # Logic switch: JSON if both parse, else fallback to text diff (works for XML + headers)
           if is_json_file(base_path) and is_json_file(current_path):
               compare_json(base_path, current_path)
           else:
