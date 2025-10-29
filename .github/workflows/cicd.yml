@@ -25,7 +25,6 @@ jobs:
     environment:
       name: github-pages
 
-
     steps:
       # -------------------- Checkout --------------------
       - name: Checkout repository with PAT
@@ -95,12 +94,14 @@ jobs:
           TOKEN=$(cat results/oauth_token.txt)
           AUTH_HEADER="Authorization: Bearer $TOKEN"
 
-          curl -s -i -X POST "${{ github.event.inputs.iflow_base_url }}" \
+          curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
+            -D results/headers_base.txt \
+            -o results/body_base.txt \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file }} \
-            -o results/response_base.txt
-          echo "✅ Response 1 (headers + body) saved to results/response_base.txt"
+            --data-binary @${{ github.event.inputs.payload_file }}
+
+          echo "✅ Response 1 saved (headers_base.txt + body_base.txt)"
 
       # -------------------- 🌐 Hit Current CPI iFlow --------------------
       - name: Hit CPI iFlow (Current Mapping)
@@ -108,71 +109,67 @@ jobs:
           echo "📡 Fetching Response 2 (headers + body) from ${{ github.event.inputs.iflow_current_url }}"
           TOKEN=$(cat results/oauth_token.txt)
           AUTH_HEADER="Authorization: Bearer $TOKEN"
-      
-          curl -s -i -X POST "${{ github.event.inputs.iflow_current_url }}" \
+
+          curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
+            -D results/headers_current.txt \
+            -o results/body_current.txt \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file }} \
-            -o results/response_current.txt
-          echo "✅ Response 2 (headers + body) saved to results/response_current.txt"
+            --data-binary @${{ github.event.inputs.payload_file }}
 
-      # -------------------- 🔍 Compare JSON/XML Responses --------------------
-      # -------------------- 🔍 Compare responses (smart JSON/XML diff) --------------------
-      - name: Compare responses (smart JSON/XML diff)
+          echo "✅ Response 2 saved (headers_current.txt + body_current.txt)"
+
+      # -------------------- 🔍 Compare Headers & Body --------------------
+      - name: Compare headers and body separately
         run: |
-          echo "🔍 Comparing responses (headers + body)..."
-          pip install deepdiff xmltodict
+          echo "🔍 Splitting responses and comparing headers/body..."
+
+          # Split base response
+          awk 'BEGIN{body=0} /^$/{body=1;next} {if(body){print > "results/response_base_body.txt"} else {print > "results/response_base_headers.txt"}}' results/response_base.txt
+
+          # Split current response
+          awk 'BEGIN{body=0} /^$/{body=1;next} {if(body){print > "results/response_current_body.txt"} else {print > "results/response_current_headers.txt"}}' results/response_current.txt
+
+          pip install deepdiff
           python3 - <<'EOF'
-          import os, json, difflib, xmltodict
+          import os, json, difflib
           from deepdiff import DeepDiff
 
-          base_path = "results/response_base.txt"
-          current_path = "results/response_current.txt"
-          diff_path = "results/diff.txt"
+          def compare_json(base_path, current_path, out_path):
+              try:
+                  with open(base_path) as f1, open(current_path) as f2:
+                      base_data = json.load(f1)
+                      current_data = json.load(f2)
+                  diff = DeepDiff(base_data, current_data, ignore_order=True, verbose_level=2)
+                  with open(out_path, 'w') as f:
+                      json.dump(diff, f, indent=2, ensure_ascii=False)
+                  print(f"✅ JSON diff saved to {out_path}")
+              except Exception:
+                  compare_text(base_path, current_path, out_path)
 
-          def try_pretty_format(content):
-              """Detect and pretty format JSON or XML."""
-              content = content.strip()
-              if content.startswith("{") or content.startswith("["):
-                  try:
-                      parsed = json.loads(content)
-                      return json.dumps(parsed, indent=2, ensure_ascii=False)
-                  except Exception:
-                      return content
-              elif content.startswith("<"):
-                  try:
-                      parsed = xmltodict.parse(content)
-                      return json.dumps(parsed, indent=2, ensure_ascii=False)
-                  except Exception:
-                      return content
-              else:
-                  return content
+          def compare_text(base_path, current_path, out_path):
+              with open(base_path) as f1, open(current_path) as f2:
+                  base_lines, current_lines = f1.readlines(), f2.readlines()
+              diff = difflib.unified_diff(
+                  base_lines, current_lines,
+                  fromfile=base_path,
+                  tofile=current_path,
+                  lineterm=""
+              )
+              with open(out_path, "w") as f:
+                  f.writelines(diff)
+              print(f"✅ Text diff saved to {out_path}")
 
-          with open(base_path) as f1, open(current_path) as f2:
-              base_lines = f1.readlines()
-              current_lines = f2.readlines()
+          # --- Compare headers ---
+          compare_text("results/response_base_headers.txt", "results/response_current_headers.txt", "results/diff_headers.txt")
 
-          # --- Pretty-print if last part is XML or JSON ---
-          if base_lines and base_lines[-1].strip().startswith(("{", "<")):
-              base_lines[-1] = try_pretty_format(base_lines[-1])
-          if current_lines and current_lines[-1].strip().startswith(("{", "<")):
-              current_lines[-1] = try_pretty_format(current_lines[-1])
-
-          # --- Generate unified diff ---
-          diff = difflib.unified_diff(
-              base_lines,
-              current_lines,
-              fromfile="Response_Base",
-              tofile="Response_Current",
-              lineterm=""
-          )
-
-          with open(diff_path, "w", encoding="utf-8") as f:
-              f.write("\n".join(diff))
-
-          print("✅ Combined header + body diff saved to results/diff.txt")
+          # --- Compare body ---
+          compare_json("results/response_base_body.txt", "results/response_current_body.txt", "results/diff_body.txt")
           EOF
 
+          echo "✅ Two diff files generated:"
+          echo " - results/diff_headers.txt"
+          echo " - results/diff_body.txt"
 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
@@ -207,4 +204,3 @@ jobs:
           echo "✅ Dashboard published at: $URL"
           echo "::notice title=Dashboard URL::$URL"
           echo "🎉 All done!"
-
