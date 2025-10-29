@@ -198,31 +198,31 @@ jobs:
         uses: actions/deploy-pages@v4
 
      # -------------------- 🔗 Send Dashboard URL to Webhook --------------------
-- name: Send Dashboard URL to Webhook
-  run: |
-    # Get the deployed GitHub Pages base URL (if available)
-    BASE_URL="${{ steps.deploy.outputs.page_url }}"
-    BASE_URL="${BASE_URL%/}"
- 
-    # Construct the final dashboard link
-    FINAL_URL="$BASE_URL/diff_dashboard.html"
- 
-    echo "✅ Dashboard published at: $FINAL_URL"
-    echo "::notice title=Dashboard URL::$FINAL_URL"
- 
-    # Webhook URL (sent from Postman or fixed)
-    WEBHOOK="${{ github.event.inputs.dashboard_url }}"
- 
-    # If no webhook input is provided, use a fallback (optional)
-    if [ -z "$WEBHOOK" ]; then
-      WEBHOOK="https://postman-echo.com/post"   # Replace with your default webhook or remove this line
-      echo "⚠️ No webhook provided; using default: $WEBHOOK"
-    fi
- 
-    # Log the webhook destination
-    echo "📤 Sending dashboard URL to webhook: $WEBHOOK"
- 
-    # Send JSON payload to webhook (e.g. Postman)
-    curl -X POST "$WEBHOOK" \
-      -H "Content-Type: application/json" \
-      -d "{\"dashboard_link\": \"${FINAL_URL}\"}"
+      - name: Send Dashboard URL to Webhook
+        run: |
+          # Get the deployed GitHub Pages base URL (if available)
+          BASE_URL="${{ steps.deploy.outputs.page_url }}"
+          BASE_URL="${BASE_URL%/}"
+       
+          # Construct the final dashboard link
+          FINAL_URL="$BASE_URL/diff_dashboard.html"
+       
+          echo "✅ Dashboard published at: $FINAL_URL"
+          echo "::notice title=Dashboard URL::$FINAL_URL"
+       
+          # Webhook URL (sent from Postman or fixed)
+          WEBHOOK="${{ github.event.inputs.dashboard_url }}"
+       
+          # If no webhook input is provided, use a fallback (optional)
+          if [ -z "$WEBHOOK" ]; then
+            WEBHOOK="https://postman-echo.com/post"   # Replace with your default webhook or remove this line
+            echo "⚠️ No webhook provided; using default: $WEBHOOK"
+          fi
+       
+          # Log the webhook destination
+          echo "📤 Sending dashboard URL to webhook: $WEBHOOK"
+       
+          # Send JSON payload to webhook (e.g. Postman)
+          curl -X POST "$WEBHOOK" \
+            -H "Content-Type: application/json" \
+            -d "{\"dashboard_link\": \"${FINAL_URL}\"}"
