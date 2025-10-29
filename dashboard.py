@@ -67,7 +67,7 @@ current_section = ""
 if is_json_format:
     # Helper function to format field path for better readability
     def format_field_path(path):
-        """Convert 'root[\'a\'][\'b\'][\'c\']' to 'a > b > c'"""
+        """Convert deepdiff path like root['a']['b']['c'] to 'a > b > c' (no leaf)."""
         if path.startswith("root"):
             path = path[4:]  # Remove "root"
         # Extract all keys in path
@@ -76,6 +76,26 @@ if is_json_format:
             if part.strip():
                 parts.append(part)
         return " > ".join(parts[:-1]) if len(parts) > 1 else parts[0] if parts else "root"
+
+    def render_breadcrumb(section_path: str, field_name: str) -> str:
+        """Return HTML breadcrumb spans for section + field leaf using › separators."""
+        try:
+            parts = [p.strip() for p in section_path.split('>')] if section_path else []
+            parts = [p for p in (part.replace('\u200b', '') for part in parts) if p]
+        except Exception:
+            parts = [section_path] if section_path else []
+
+        # Escape each part safely
+        safe_parts = [html.escape(p, quote=True) for p in parts]
+        safe_leaf = html.escape(field_name or "", quote=True)
+
+        # Build HTML: part › part › leaf (with classes)
+        crumb_html_parts = []
+        for idx, part in enumerate(safe_parts):
+            crumb_html_parts.append(f'<span class="crumb">{part}</span>')
+            crumb_html_parts.append('<span class="crumb-sep">›</span>')
+        crumb_html_parts.append(f'<span class="crumb-leaf">{safe_leaf}</span>')
+        return "".join(crumb_html_parts)
 
     def extract_field_name(field_path: str) -> str:
         """Extract the last key from a DeepDiff path, fallback to full path."""
@@ -524,6 +544,12 @@ tr:hover {
   font-family: monospace;
 }
 
+/* Breadcrumb styling for field paths */
+.section-tag .crumb { color: #64748b; }
+.section-tag .crumb-leaf { color: #0f172a; font-weight: 600; }
+.section-tag .crumb-sep { color: #cbd5e1; padding: 0 6px; }
+.section-tag { white-space: nowrap; display: inline-block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
+
 .chart-container {
   display: flex;
   justify-content: center;
@@ -824,13 +850,14 @@ if new_fields:
     for item in new_fields:
         field_path = html.escape(item.get("Field", ""), quote=True)
         section = html.escape(item.get("Section", "root") or "root", quote=True)
+        breadcrumb_html = render_breadcrumb(section, field_path)
         value = str(item.get("Value", "N/A"))
         display_value = (value[:100] + '...') if len(value) > 100 else value
         display_value = html.escape(display_value, quote=True)
         html_content += f"""
                     <tr>
                         <td class=\"field-name\">{field_path}</td>
-                        <td><span class=\"section-tag\">{section}</span></td>
+                        <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
                         <td><span class=\"value new-value\">{display_value}</span></td>
                     </tr>
 """
@@ -874,6 +901,7 @@ if modified_fields:
     for item in modified_fields:
         field_path = html.escape(item.get("Field", ""), quote=True)
         section = html.escape(item.get("Section", "root") or "root", quote=True)
+        breadcrumb_html = render_breadcrumb(section, field_path)
         old_val = str(item.get("Old Value", "N/A"))
         new_val = str(item.get("New Value", "N/A"))
         old_display = (old_val[:80] + '...') if len(old_val) > 80 else old_val
@@ -883,7 +911,7 @@ if modified_fields:
         html_content += f"""
                     <tr>
                         <td class=\"field-name\">{field_path}</td>
-                        <td><span class=\"section-tag\">{section}</span></td>
+                        <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
                         <td><span class=\"value old-value\">{old_display}</span></td>
                         <td><span class=\"value new-value\">{new_display}</span></td>
                     </tr>
@@ -928,13 +956,14 @@ if removed_fields:
     for item in removed_fields:
         field_path = html.escape(item.get("Field", ""), quote=True)
         section = html.escape(item.get("Section", "root") or "root", quote=True)
+        breadcrumb_html = render_breadcrumb(section, field_path)
         value = str(item.get("Value", "N/A"))
         display_value = (value[:100] + '...') if len(value) > 100 else value
         display_value = html.escape(display_value, quote=True)
         html_content += f"""
                     <tr>
                         <td class=\"field-name\">{field_path}</td>
-                        <td><span class=\"section-tag\">{section}</span></td>
+                        <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
                         <td><span class=\"value old-value\">{display_value}</span></td>
                     </tr>
 """
