@@ -1,2 +1,17 @@
-An internal server error occured: The MPL ID for the failed message is : AGkBpDzomEGRjKdWHuz0_eCpAP3q
+HTTP/1.1 500 Internal Server Error
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+content-type: text/plain;charset=ISO-8859-1
+date: Wed, 29 Oct 2025 05:40:18 GMT
+expires: 0
+pragma: no-cache
+server: SAP
+x-content-type-options: nosniff
+x-correlationid: 3f6e7d69-8b4b-464b-65ff-3f096ef90dba
+x-frame-options: DENY
+x-vcap-request-id: 3f6e7d69-8b4b-464b-65ff-3f096ef90dba
+x-xss-protection: 1; mode=block
+transfer-encoding: chunked
+strict-transport-security: max-age=31536000; includeSubDomains; preload;
+
+An internal server error occured: The MPL ID for the failed message is : AGkBqMK9di9VTqm1Gz2ivRMN-pAx
 
