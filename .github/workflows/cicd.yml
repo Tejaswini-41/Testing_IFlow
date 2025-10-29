@@ -209,3 +209,10 @@ jobs:
           echo "✅ Dashboard published at: $URL"
           echo "::notice title=Dashboard URL::$URL"
           echo "🎉 All done!"
+
+      - name: Send static data back to Postman
+        run: |
+          curl -X POST https://acca9bff-fe65-4540-841e-9945abd832f4.mock.pstmn.io/github-callback \
+          -H "Content-Type: application/json" \
+          -d '{"status":"success","message":"Build completed successfully"}'
+
