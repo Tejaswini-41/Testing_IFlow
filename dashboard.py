@@ -586,8 +586,7 @@ tr:hover {
   }
 }
 
-/* Payload Viewer Styles */
-/* merged into single .payload-box rule below */
+
 
 /* Payload Toggle Buttons */
 .payload-toggle {
@@ -651,10 +650,6 @@ tr:hover {
 }
 
 @media (max-width: 1024px) {
-  .payload-container {
-    grid-template-columns: 1fr;
-  }
-  
   .payload-box {
     max-height: 400px;
   }
