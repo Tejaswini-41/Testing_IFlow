@@ -201,8 +201,8 @@ jobs:
           echo "✅ Dashboard published at: $URL"
           echo "::notice title=Dashboard URL::$URL"
           echo "🎉 All done!"
-      - name: Send static data back to Postman
-        run: |
-          curl -X POST https://b01867a9-d0f8-4e8d-b43e-622a7e24984a.mock.pstmn.io/github-callback \
-          -H "Content-Type: application/json" \
-          -d '{"status":"success","URL":"https://tejaswini-41.github.io/Testing_IFlow//diff_dashboard.html"}'
+      # - name: Send static data back to Postman
+      #   run: |
+      #     curl -X POST https://b01867a9-d0f8-4e8d-b43e-622a7e24984a.mock.pstmn.io/github-callback \
+      #     -H "Content-Type: application/json" \
+      #     -d '{"status":"success","URL":"https://tejaswini-41.github.io/Testing_IFlow//diff_dashboard.html"}'
