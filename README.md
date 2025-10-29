@@ -92,13 +92,11 @@ curl -X POST \
 At the end of the workflow, you will get a clickable dashboard link in the logs like:
 👉 Open this link to view the full comparison results directly in your browser.
 ```
-::notice title=Dashboard URL::https://tejaswini-41.github.io/Testing_IFlow/results/diff_dashboard.html
+https://tejaswini-41.github.io/Testing_IFlow/results/diff_dashboard.html
 ```
-
 
 🧠 Example Dashboard Preview
 <p align="center"> <img src="(https://tejaswini-41.github.io/Testing_IFlow/results/diff_dashboard.html)" width="700" alt="Dashboard Preview" /> </p>
-
 
 
 🧾 License
@@ -109,7 +107,5 @@ This project is licensed under the MIT License — see the LICENSE
 🌟 Acknowledgments
 
 Special thanks to the Integration Developers community for inspiring this automation.
-Maintained by @tejaswini-41
- ✨
+Maintained by @tejaswini-41 ✨
 
-<p align="center"> <b>💡 Simplify your CPI testing with automated comparisons and clear visual insights!</b> </p> ```
