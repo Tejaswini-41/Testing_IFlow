@@ -1,0 +1,95 @@
+
+<html>
+<head>
+<title>CPI Response Diff Dashboard</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #fafafa;
+  margin: 40px;
+}
+h1, h2 {
+  text-align: center;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+}
+th, td {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+}
+tr.addition td {
+  background-color: #e8f8e8;
+  color: #0a7a0a;
+}
+tr.deletion td {
+  background-color: #fde8e8;
+  color: #b00000;
+}
+tr.value td {
+  background-color: #fff7e6;
+  color: #b36b00;
+}
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.chart {
+  text-align: center;
+  margin-top: 20px;
+}
+footer {
+  text-align: center;
+  margin-top: 40px;
+  font-size: 13px;
+  color: #666;
+}
+</style>
+</head>
+<body>
+<h1>📊 CPI Response Comparison Dashboard</h1>
+<h2>🧩 Header Differences</h2><div class='chart'><img src='header_chart.png' width='400'/></div><table><tr><th>Type</th><th>Section</th><th>Details</th></tr><tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>content: Text</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>date: Wed, 29 Oct 2025 09:28:46 GMT</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>content: JSON</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>date: Wed, 29 Oct 2025 09:28:47 GMT</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>sap_messageprocessinglogid: AGkB3k4m6YPEnd_Mq-5f95w_4pBC</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>sap_mplcorrelationid: AGkB3k6vS17U4xwhMWSboUw5QVIa</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>sap_pregeneratedmplid: AGkB3k66P8kSk-PvrGrRIhcYgQTZ</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>sap_messageprocessinglogid: AGkB3k-TxLzr3y2TdoTolENsBSwU</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>sap_mplcorrelationid: AGkB3k9l9_dJkC-AFljGuzKIqQ52</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>sap_pregeneratedmplid: AGkB3k-a4osXZSaqFhiwdrZHn3UH</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>testheader: FirstiFlow</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>testheader: SecondiFlow</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>x-correlationid: 29780e28-42ab-45a7-7f48-a41ce2d617ea</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>x-correlationid: f5a62f63-779c-4711-7282-185593cb5f57</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,18 @@</td><td><pre>x-vcap-request-id: 29780e28-42ab-45a7-7f48-a41ce2d617ea</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,18 @@</td><td><pre>x-vcap-request-id: f5a62f63-779c-4711-7282-185593cb5f57</pre></td></tr>
+</table><h2>💾 Body Differences</h2><div class='chart'><img src='body_chart.png' width='400'/></div><table><tr><th>Type</th><th>Section</th><th>Details</th></tr><tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PO_ITM_NO']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BATCH']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REASON_REJ']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BILL_DATE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PLANT']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['STORE_LOC']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['ITEM_CATEG']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['SHORT_TEXT']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REQ_DATE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Dictionary Item Removed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Dictionary Item Removed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['CD_CU_ISO1']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']</td><td><pre></pre></td></tr>
+</table>
+<footer>
+<hr>
+<p>Generated automatically by CPI Response Compare GitHub Action.</p>
+</footer>
+</body>
+</html>
