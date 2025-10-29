@@ -308,6 +308,20 @@ tr:hover {
   min-height: 300px;
 }
 
+/* Make chart clickable */
+#pieChart {
+  cursor: pointer;
+}
+
+#pieChart .slice {
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+#pieChart .slice:hover {
+  opacity: 0.85;
+}
+
 .empty-state {
   text-align: center;
   padding: 60px 20px;
