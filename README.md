@@ -50,7 +50,7 @@ Manually via **Workflow Dispatch** in GitHub Actions.
 ---
 
 ## 📂 Repository Structure
-
+```
 Testing_IFlow/
 ├── .github/
 │ └── workflows/
@@ -65,7 +65,7 @@ Testing_IFlow/
 ├── dashboard.py # Generates the dashboard report
 ├── compare.py # Compares the two responses
 └── README.md # This file 😄
-
+```
 
 ---
 
@@ -97,18 +97,9 @@ At the end of the workflow, you will get a clickable dashboard link in the logs 
 
 
 🧠 Example Dashboard Preview
-<p align="center"> <img src="https://github.com/tejaswini-41/Testing_IFlow/raw/main/docs/demo_dashboard_preview.png" width="700" alt="Dashboard Preview" /> </p>
-🛠️ Tech Stack
+<p align="center"> <img src="(https://tejaswini-41.github.io/Testing_IFlow/results/diff_dashboard.html)" width="700" alt="Dashboard Preview" /> </p>
 
-GitHub Actions — CI/CD automation
 
-Python 3.x — core comparison and report generation
-
-Plotly — interactive visualization
-
-Pandas — data handling
-
-HTML/CSS — dashboard layout
 
 🧾 License
 
