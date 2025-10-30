@@ -68,6 +68,8 @@ if is_json_format:
     # Helper function to format field path for better readability
     def format_field_path(path):
         """Convert deepdiff path like root['a']['b']['c'] to 'a > b > c' (no leaf)."""
+        if not path:
+            return "root"
         if path.startswith("root"):
             path = path[4:]  # Remove "root"
         # Extract all keys in path
@@ -76,7 +78,7 @@ if is_json_format:
             if part.strip():
                 parts.append(part)
         return " > ".join(parts[:-1]) if len(parts) > 1 else parts[0] if parts else "root"
-
+    
     def render_breadcrumb(section_path: str, field_name: str) -> str:
         """Return HTML breadcrumb spans for section + field leaf using › separators."""
         try:
@@ -119,6 +121,19 @@ if is_json_format:
             except TypeError:
                 return
 
+    def format_field_path_slash(path):
+        """Convert DeepDiff path like root['a']['b']['c'] to 'a/b/c' including leaf."""
+        if not path:
+            return "root"
+        if path.startswith("root"):
+            path = path[4:]  # strip leading "root"
+        # Try single-quote style first
+        parts = [p for p in path.split("'")[1::2] if p.strip()]
+        if not parts:
+            # Fallback to double-quote style
+            parts = [p for p in path.split('"')[1::2] if p.strip()]
+        return "/".join(parts) if parts else "root"
+
     # Handle DeepDiff JSON format
     for key, value in diff_data.items():
         if key == "dictionary_item_added":
@@ -128,7 +143,8 @@ if is_json_format:
                     field_changes[field_name]["added"].append(str(val))
                 else:
                     field_changes[field_name]["added"].append("<added>")
-                field_changes[field_name]["section"] = format_field_path(field_path)
+                # store slash-separated full path including leaf
+                field_changes[field_name]["section"] = format_field_path_slash(field_path)
         elif key == "dictionary_item_removed":
             for field_path, val in iter_path_items(value):
                 field_name = extract_field_name(field_path)
@@ -136,7 +152,7 @@ if is_json_format:
                     field_changes[field_name]["removed"].append(str(val))
                 else:
                     field_changes[field_name]["removed"].append("<removed>")
-                field_changes[field_name]["section"] = format_field_path(field_path)
+                field_changes[field_name]["section"] = format_field_path_slash(field_path)
         elif key == "values_changed":
             for field_path, change_data in value.items():
                 field_name = extract_field_name(field_path)
@@ -144,7 +160,7 @@ if is_json_format:
                     field_changes[field_name]["removed"].append(str(change_data["old_value"]))
                 if "new_value" in change_data:
                     field_changes[field_name]["added"].append(str(change_data["new_value"]))
-                field_changes[field_name]["section"] = format_field_path(field_path)
+                field_changes[field_name]["section"] = format_field_path_slash(field_path)
 else:
     # Handle unified diff format
     diff_lines = diff_content.splitlines()
@@ -238,7 +254,18 @@ chart_html = fig.to_html(
 
 
 # Create CSS file
-css_content = """* {
+css_content = """:root {
+  /* Gradient Color Variables */
+  --primary: #667eea;
+  --primary-dark: #5568d3;
+  --secondary: #764ba2;
+  --bg-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-success: linear-gradient(135deg, #10b981 0%, #059669 100%);
+  --gradient-warning: linear-gradient(135deg, #f59e0b 0%, #d97706 100%);
+  --gradient-danger: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+* {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
@@ -246,7 +273,7 @@ css_content = """* {
 
 body {
   font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  background: linear-gradient(180deg, #e9f0ff 0%, #eef3ff 40%, #f7f9ff 100%);
+  background: linear-gradient(135deg, #e0e7ff 0%, #f3e8ff 50%, #fce7f3 100%);
   padding: 24px;
   min-height: 100vh;
   color: #1a1a1a;
@@ -266,19 +293,28 @@ body {
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 20px 12px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.08);
   display: flex;
   flex-direction: column;
   height: fit-content;
   position: sticky;
   top: 24px;
+  z-index: 100;
+  transition: box-shadow 0.3s ease;
+}
+
+.sidebar:hover {
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
 }
 
 .brand {
   font-weight: 700;
   font-size: 1.1em;
   padding: 10px 16px 16px;
-  color: #334155;
+  background: var(--bg-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .nav {
@@ -288,31 +324,79 @@ body {
 }
 
 .nav-item {
-  padding: 10px 14px;
+  padding: 12px 16px;
   border-radius: 10px;
   color: #475569;
   text-decoration: none;
   cursor: pointer;
-  transition: all 0.2s;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   gap: 12px;
+  position: relative;
+  overflow: hidden;
 }
+
 
 .nav-item i {
   font-size: 1.1em;
   width: 20px;
   text-align: center;
+  transition: transform 0.3s ease;
+  z-index: 1;
+}
+
+.nav-item:hover i {
+  transform: scale(1.1);
+}
+
+.nav-item.active i {
+  transform: scale(1.15);
 }
 
 .nav-item:hover {
-  background: #f8f9fa;
+  background: linear-gradient(135deg, rgba(102, 126, 234, 0.08) 0%, rgba(118, 75, 162, 0.08) 100%);
+  transform: translateX(4px);
+  padding-left: 20px;
+}
+
+.nav-item:hover::before {
+  opacity: 0.5;
+  transform: scale(1);
 }
 
 .nav-item.active {
-  background: #eef2ff;
-  color: #3730a3;
+  background: var(--bg-gradient);
+  color: white;
   font-weight: 600;
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transform: translateX(4px);
+  padding-left: 20px;
+}
+
+/* Active dot indicator (fully visible) */
+.nav-item.active::before {
+  opacity: 1;
+  transform: scale(1.2);
+  background: white;
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.5);
+}
+
+/* Keep active state on hover */
+.nav-item.active:hover {
+  background: var(--bg-gradient);
+  box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
+}
+
+.nav-item span {
+  font-size: 0.95em;
+  letter-spacing: 0.3px;
+  transition: font-weight 0.2s ease;
+  z-index: 1;
+}
+
+.nav-item.active span {
+  letter-spacing: 0.5px;
 }
 
 .container {
@@ -338,7 +422,10 @@ body {
 
 .header h1 {
   font-size: 2em;
-  color: #1a1a1a;
+  background: var(--bg-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
   font-weight: 700;
   margin-bottom: 4px;
 }
@@ -390,10 +477,30 @@ body {
   line-height: 1;
 }
 
-.stat-card.total .stat-value { color: #4f46e5; }
-.stat-card.new .stat-value { color: #4CAF50; }
-.stat-card.modified .stat-value { color: #FF9800; }
-.stat-card.removed .stat-value { color: #F44336; }
+.stat-value {
+  background: var(--bg-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.stat-card.new .stat-value {
+  background: var(--gradient-success);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-card.modified .stat-value {
+  background: var(--gradient-warning);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.stat-card.removed .stat-value {
+  background: var(--gradient-danger);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
 
 .content-grid {
   display: grid;
@@ -407,7 +514,13 @@ body {
   backdrop-filter: blur(10px);
   border-radius: 16px;
   padding: 24px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 24px rgba(102, 126, 234, 0.12);
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+
+.card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(102, 126, 234, 0.18);
 }
 
 .card-header {
@@ -434,18 +547,18 @@ body {
 }
 
 .badge-new { 
-  background: #E8F5E9; 
-  color: #2E7D32; 
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
 }
 
 .badge-modified { 
-  background: #FFF3E0; 
-  color: #E65100; 
+  background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+  color: #92400e;
 }
 
 .badge-removed { 
-  background: #FFEBEE; 
-  color: #C62828; 
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
 }
 
 .full-width {
@@ -483,7 +596,7 @@ th {
   padding: 14px 16px;
   text-align: left;
   font-weight: 600;
-  color: #555;
+  color: white;
   text-transform: uppercase;
   font-size: 0.8em;
   letter-spacing: 0.5px;
@@ -528,14 +641,46 @@ tr:hover {
 }
 
 .old-value {
-  background: #FFEBEE;
-  color: #C62828;
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
   text-decoration: line-through;
 }
 
 .new-value {
-  background: #E8F5E9;
-  color: #2E7D32;
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+}
+
+.stat-card {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  padding: 24px;
+  border-radius: 16px;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  position: relative;
+  overflow: hidden;
+}
+
+.stat-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: var(--bg-gradient);
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.stat-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 40px rgba(102, 126, 234, 0.2);
+}
+
+.stat-card:hover::before {
+  transform: scaleX(1);
 }
 
 .section-tag {
@@ -645,17 +790,14 @@ tr:hover {
 
 .toggle-btn {
   padding: 8px 16px;
-  border: 2px solid #667eea;
+  border: 2px solid var(--primary);
   background: transparent;
-  color: #667eea;
+  color: var(--primary);
   border-radius: 8px;
   cursor: pointer;
   font-size: 0.9em;
   font-weight: 600;
   transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .toggle-btn:hover {
@@ -664,8 +806,9 @@ tr:hover {
 }
 
 .toggle-btn.active {
-  background: #667eea;
+  background: var(--bg-gradient);
   color: white;
+  border-color: transparent;
 }
 
 .toggle-btn i {
@@ -704,6 +847,236 @@ tr:hover {
   }
 }
 
+/* Field path toggle styles */
+.field-path-cell {
+  position: relative;
+}
+
+.section-tag {
+  font-size: 0.75em;
+  color: #999;
+  font-family: monospace;
+  display: none; /* Hidden by default */
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.3s ease;
+  margin-top: 4px;
+}
+
+.section-tag.visible {
+  display: block;
+  opacity: 1;
+  max-height: 100px;
+  animation: slideDown 0.3s ease;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Click indicator for modified fields */
+.modified-row {
+  cursor: pointer;
+  position: relative;
+}
+
+
+.modified-row:hover {
+  background: rgba(102, 126, 234, 0.05);
+}
+
+.modified-row.active {
+  background: rgba(102, 126, 234, 0.08);
+}
+
+/* Field name with click hint */
+.field-name-clickable {
+  position: relative;
+  padding-left: 20px;
+}
+
+.field-name-clickable::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-size: 0.7em;
+  transition: transform 0.3s ease;
+}
+
+.modified-row.active .field-name-clickable::before {
+  transform: rotate(90deg);
+}
+
+/* Click hint text */
+.click-hint {
+  font-size: 0.7em;
+  color: #94a3b8;
+  margin-top: 4px;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.modified-row:hover .click-hint {
+  opacity: 1;
+}
+
+/* Modified Fields Table - Clean Design */
+#modified table {
+  border-collapse: separate;
+  border-spacing: 0;
+}
+
+#modified thead th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  padding: 16px;
+  font-weight: 600;
+  text-transform: uppercase;
+  font-size: 0.75em;
+  letter-spacing: 1px;
+}
+
+/* Modified Row Styling */
+.modified-row {
+  cursor: pointer;
+  transition: all 0.3s ease;
+  border-left: 4px solid transparent;
+}
+
+.modified-row:hover {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
+  border-left-color: var(--primary);
+}
+
+.modified-row.active {
+  background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
+  border-left-color: var(--primary);
+  box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.2);
+}
+
+/* Field Name with Arrow */
+.field-name-clickable {
+  font-weight: 600;
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 0;
+  position: relative;
+  padding-left: 20px;
+}
+
+.field-name-clickable::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: var(--primary);
+  font-size: 0.7em;
+  transition: transform 0.3s ease;
+  display: inline-block;
+}
+
+.modified-row.active .field-name-clickable::before {
+  transform: rotate(90deg);
+}
+
+/* Field Path - Hidden by Default */
+.section-tag {
+  display: none;
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  margin-top: 8px;
+  padding: 12px;
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+  border-left: 3px solid var(--primary);
+  border-radius: 8px;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8em;
+  color: #475569;
+}
+
+.section-tag.visible {
+  display: block;
+  opacity: 1;
+  max-height: 200px;
+  animation: expandPath 0.4s ease;
+}
+
+@keyframes expandPath {
+  0% {
+    opacity: 0;
+    max-height: 0;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    max-height: 200px;
+    transform: translateY(0);
+  }
+}
+
+.section-tag strong {
+  color: var(--primary);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+/* Value Badges - Improved Design */
+.value {
+  font-family: 'Courier New', monospace;
+  padding: 8px 14px;
+  border-radius: 8px;
+  display: inline-block;
+  font-size: 0.85em;
+  font-weight: 500;
+  word-break: break-word;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.2s ease;
+}
+
+.value:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+}
+
+.old-value {
+  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+  color: #991b1b;
+  text-decoration: line-through;
+  border: 1px solid #fca5a5;
+}
+
+.new-value {
+  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+  color: #065f46;
+  border: 1px solid #6ee7b7;
+}
+
+/* Table Cell Spacing */
+#modified td {
+  padding: 16px;
+  vertical-align: middle;
+}
+
+/* Hover Effect on Entire Row */
+.modified-row td {
+  transition: all 0.3s ease;
+}
+
+.modified-row:hover td {
+  background: transparent;
+}
 
 """
 
@@ -849,18 +1222,18 @@ if new_fields:
 """
     for item in new_fields:
         field_path = html.escape(item.get("Field", ""), quote=True)
-        section = html.escape(item.get("Section", "root") or "root", quote=True)
-        breadcrumb_html = render_breadcrumb(section, field_path)
+        section_raw = item.get("Section", "root") or "root"
+        breadcrumb_html = html.escape(section_raw, quote=True)
         value = str(item.get("Value", "N/A"))
         display_value = (value[:100] + '...') if len(value) > 100 else value
         display_value = html.escape(display_value, quote=True)
         html_content += f"""
-                    <tr>
-                        <td class=\"field-name\">{field_path}</td>
-                        <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
-                        <td><span class=\"value new-value\">{display_value}</span></td>
-                    </tr>
-"""
+                     <tr>
+                         <td class="field-name">{field_path}</td>
+                         <td><span class="section-tag">{breadcrumb_html}</span></td>
+                         <td><span class="value new-value">{display_value}</span></td>
+                     </tr>
+ """
     html_content += """
                 </tbody>
             </table>
@@ -890,32 +1263,36 @@ if modified_fields:
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 25%;">Field</th>
-                        <th style="width: 12%;">Field Path</th>
-                        <th style="width: 31%;">Old Value</th>
-                        <th style="width: 31%;">New Value</th>
+                        <th style="width: 35%;">Field Name</th>
+                        <th style="width: 32%;">Previous Value</th>
+                        <th style="width: 33%;">New Value</th>
                     </tr>
                 </thead>
                 <tbody>
 """
-    for item in modified_fields:
+    for idx, item in enumerate(modified_fields):
         field_path = html.escape(item.get("Field", ""), quote=True)
-        section = html.escape(item.get("Section", "root") or "root", quote=True)
-        breadcrumb_html = render_breadcrumb(section, field_path)
+        section_raw = item.get("Section", "root") or "root"
+        breadcrumb_html = html.escape(section_raw, quote=True)
         old_val = str(item.get("Old Value", "N/A"))
         new_val = str(item.get("New Value", "N/A"))
-        old_display = (old_val[:80] + '...') if len(old_val) > 80 else old_val
-        new_display = (new_val[:80] + '...') if len(new_val) > 80 else new_val
+        old_display = (old_val[:60] + '...') if len(old_val) > 60 else old_val
+        new_display = (new_val[:60] + '...') if len(new_val) > 60 else new_val
         old_display = html.escape(old_display, quote=True)
         new_display = html.escape(new_display, quote=True)
+        
         html_content += f"""
-                    <tr>
-                        <td class=\"field-name\">{field_path}</td>
-                        <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
-                        <td><span class=\"value old-value\">{old_display}</span></td>
-                        <td><span class=\"value new-value\">{new_display}</span></td>
-                    </tr>
-"""
+                     <tr class="modified-row" data-row-id="mod-{idx}">
+                         <td class="field-path-cell">
+                             <div class="field-name field-name-clickable">{field_path}</div>
+                             <div class="section-tag" id="path-mod-{idx}">
+                                 <strong>Full Path:</strong> {breadcrumb_html}
+                             </div>
+                         </td>
+                         <td><span class="value old-value">{old_display}</span></td>
+                         <td><span class="value new-value">{new_display}</span></td>
+                     </tr>
+ """
     html_content += """
                 </tbody>
             </table>
@@ -938,7 +1315,6 @@ html_content += f"""
                 <h2 class="card-title">Removed Fields</h2>
                 <span class="badge badge-removed">{len(removed_fields)} items</span>
             </div>
-            
 """
 
 if removed_fields:
@@ -955,18 +1331,18 @@ if removed_fields:
 """
     for item in removed_fields:
         field_path = html.escape(item.get("Field", ""), quote=True)
-        section = html.escape(item.get("Section", "root") or "root", quote=True)
-        breadcrumb_html = render_breadcrumb(section, field_path)
+        section_raw = item.get("Section", "root") or "root"
+        breadcrumb_html = html.escape(section_raw, quote=True)
         value = str(item.get("Value", "N/A"))
         display_value = (value[:100] + '...') if len(value) > 100 else value
         display_value = html.escape(display_value, quote=True)
         html_content += f"""
-                    <tr>
-                        <td class=\"field-name\">{field_path}</td>
-                        <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
-                        <td><span class=\"value old-value\">{display_value}</span></td>
-                    </tr>
-"""
+                     <tr>
+                         <td class=\"field-name\">{field_path}</td>
+                         <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
+                         <td><span class=\"value old-value\">{display_value}</span></td>
+                     </tr>
+ """
     html_content += """
                 </tbody>
             </table>
@@ -1031,25 +1407,21 @@ html_content += f"""
 html_content += """
         </main>
     </div>
-        <script>
+    <script>
       (function() {
         const navItems = document.querySelectorAll('.nav .nav-item');
         const sections = document.querySelectorAll('.section');
         
-        // Function to show only the selected section
         function showSection(targetId) {
-          // Hide all sections
           sections.forEach(section => {
             section.classList.remove('active');
           });
           
-          // Show only the target section
           const targetSection = document.getElementById(targetId);
           if (targetSection) {
             targetSection.classList.add('active');
           }
           
-          // Update active nav item
           navItems.forEach(nav => {
             nav.classList.remove('active');
             const href = nav.getAttribute('href');
@@ -1059,61 +1431,56 @@ html_content += """
             }
           });
           
-          // Smooth scroll to top
           window.scrollTo({ top: 0, behavior: 'smooth' });
         }
         
-        // Add click handlers to navigation items
         navItems.forEach(navItem => {
           navItem.addEventListener('click', function(e) {
             e.preventDefault();
             const href = this.getAttribute('href');
-            
-            // Determine which section to show
             let sectionId = 'dashboard';
             if (href && href !== '#') {
-              sectionId = href.substring(1); // Remove the '#'
+              sectionId = href.substring(1);
             }
-            
             showSection(sectionId);
-            
-            // Update URL hash
             history.replaceState(null, '', href || '#dashboard');
           });
         });
         
-        // Chart click navigation
         const chartDiv = document.getElementById('pieChart');
         if (chartDiv) {
-          chartDiv.on('plotly_click', function(data) {
-            const label = data.points[0].label;
+          function handleChartClick(label) {
             let targetSection = 'dashboard';
-            
-            // Map chart labels to section IDs
-            if (label === 'New Fields') {
-              targetSection = 'new';
-            } else if (label === 'Modified Fields') {
-              targetSection = 'modified';
-            } else if (label === 'Removed Fields') {
-              targetSection = 'removed';
-            }
-            
+            if (label === 'New Fields') targetSection = 'new';
+            else if (label === 'Modified Fields') targetSection = 'modified';
+            else if (label === 'Removed Fields') targetSection = 'removed';
             showSection(targetSection);
             history.replaceState(null, '', '#' + targetSection);
-          });
+          }
+
+          if (typeof chartDiv.on === 'function') {
+            chartDiv.on('plotly_click', function(data) {
+              const label = (data && data.points && data.points[0] && data.points[0].label) || '';
+              handleChartClick(label);
+            });
+          } else {
+            chartDiv.addEventListener('plotly_click', function(evt) {
+              const detail = evt.detail || {};
+              const label = (detail && detail.points && detail.points[0] && detail.points[0].label) || '';
+              handleChartClick(label);
+            });
+          }
         }
         
-        // Handle initial page load with hash
         const initialHash = window.location.hash;
         if (initialHash && initialHash.length > 1) {
           const initialSection = initialHash.substring(1);
           showSection(initialSection);
         } else {
-          // Show dashboard by default
           showSection('dashboard');
         }
         
-        // Payload Toggle Functionality
+        // Payload Toggle
         const toggleBtns = document.querySelectorAll('.toggle-btn');
         const currentPayloadBox = document.getElementById('currentPayloadBox');
         const basePayloadBox = document.getElementById('basePayloadBox');
@@ -1121,12 +1488,9 @@ html_content += """
         toggleBtns.forEach(btn => {
           btn.addEventListener('click', function() {
             const payloadType = this.getAttribute('data-payload');
-            
-            // Update button states
             toggleBtns.forEach(b => b.classList.remove('active'));
             this.classList.add('active');
             
-            // Show/hide payload boxes
             if (payloadType === 'current') {
               currentPayloadBox.style.display = 'block';
               basePayloadBox.style.display = 'none';
@@ -1136,6 +1500,43 @@ html_content += """
             }
           });
         });
+
+        // ========== NEW: Toggle Field Path on Click ==========
+        const modifiedRows = document.querySelectorAll('.modified-row');
+
+        modifiedRows.forEach(row => {
+          row.addEventListener('click', function(e) {
+            // Don't trigger if clicking on a value span
+            if (e.target.classList.contains('value')) return;
+            
+            const rowId = this.getAttribute('data-row-id');
+            const pathElement = document.getElementById('path-' + rowId);
+            
+            // Close all other paths
+            document.querySelectorAll('.section-tag').forEach(tag => {
+              if (tag.id !== 'path-' + rowId) {
+                tag.classList.remove('visible');
+              }
+            });
+            
+            // Remove active class from all rows
+            modifiedRows.forEach(r => r.classList.remove('active'));
+            
+            // Toggle current path
+            if (pathElement) {
+              const isVisible = pathElement.classList.contains('visible');
+              
+              if (isVisible) {
+                pathElement.classList.remove('visible');
+                this.classList.remove('active');
+              } else {
+                pathElement.classList.add('visible');
+                this.classList.add('active');
+              }
+            }
+          });
+        });
+        
       })();
     </script>
  </body>
