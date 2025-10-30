@@ -1,0 +1,12 @@
+{
+  "values_changed": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_ROLE']": {
+      "new_value": "TEJ",
+      "old_value": "We"
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_NUMB']": {
+      "new_value": "4717357",
+      "old_value": "123"
+    }
+  }
+}

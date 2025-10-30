@@ -1,0 +1,42 @@
+--- results/headers_base.txt
++++ results/headers_current.txt
+@@ -4,15 +4,15 @@
+ date: Thu, 30 Oct 2025 13:02:14 GMT
+
+ expires: 0
+
+ pragma: no-cache
+
+-sap_messageprocessinglogid: AGkDYdZLQ7N43Dol8x3fZCU9EEgL
+
+-sap_mplcorrelationid: AGkDYda3eu1E1CnMXVDXF4C2peO5
+
+-sap_pregeneratedmplid: AGkDYdZyjfi9BsD9sn2Dkj4xEvG4
+
++sap_messageprocessinglogid: AGkDYdYx6SL0xbSPeVVKujiwtrrq
+
++sap_mplcorrelationid: AGkDYdbxzYcGexfs-NJRIrR99WEG
+
++sap_pregeneratedmplid: AGkDYda1aPsnF5AknieMIcGU6boA
+
+ server: SAP
+
+ testheader: FirstiFlow
+
+ x-content-type-options: nosniff
+
+-x-correlationid: 80f71db7-9bfb-42ca-5fee-588be316585a
+
++x-correlationid: f4820d25-9055-4d43-7fee-cbcd7b4364df
+
+ x-frame-options: DENY
+
+-x-vcap-request-id: 80f71db7-9bfb-42ca-5fee-588be316585a
+
++x-vcap-request-id: f4820d25-9055-4d43-7fee-cbcd7b4364df
+
+ x-xss-protection: 1; mode=block
+
+ transfer-encoding: chunked
+
+ strict-transport-security: max-age=31536000; includeSubDomains; preload;
