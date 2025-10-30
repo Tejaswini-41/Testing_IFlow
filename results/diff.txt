@@ -1,32 +1,5 @@
-{
-  "dictionary_item_added": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PO_ITM_NO']": "30",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BATCH']": "102530",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REASON_REJ']": "Order is Rejected due to customer being blocked",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BILL_DATE']": "20251030122409",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['PLANT']": "Santa Monica",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['STORE_LOC']": "Basel, Switzerland",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['ITEM_CATEG']": "Fertilizers",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['SHORT_TEXT']": "Order to be placed once customer is unblocked",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['REQ_DATE']": "2025-10-30",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']": "PO:411789",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']": "0124-24356823",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']": "EN",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']": "Commercial",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251030"
-  },
-  "dictionary_item_removed": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']": "0135",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['CD_CU_ISO1']": "GBP"
-  },
-  "values_changed": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
-      "new_value": "Poland",
-      "old_value": "PL"
-    },
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
-      "new_value": "Pune(IN)",
-      "old_value": "Pune"
-    }
-  }
-}
+--- results/response_base.txt
++++ results/response_current.txt
+@@ -1 +1 @@
+-<!doctype html><html lang="en"><head><title>HTTP Status 404 – Not Found</title><style type="text/css">body {font-family:Tahoma,Arial,sans-serif;} h1, h2, h3, b {color:white;background-color:#525D76;} h1 {font-size:22px;} h2 {font-size:16px;} h3 {font-size:14px;} p {font-size:12px;} a {color:black;} .line {height:1px;background-color:#525D76;border:none;}</style></head><body><h1>HTTP Status 404 – Not Found</h1></body></html>
++{"ns1:ZSD_BAPI_SALESORDER_SIMULATE":{"C_ORDER_ITEMS_IN":{"item":{"CUSTOM_ITEM_ID":"0a99O000000iezRQAQ","PO_ITM_NO":"30","MATERIAL":"230951","BATCH":"102530","REASON_REJ":"Order is Rejected due to customer being blocked","BILL_DATE":"20251030140817","PLANT":"Santa Monica","STORE_LOC":"Basel, Switzerland","TARGET_QTY":"2000","REQ_QTY":"2000","SALES_UNIT":"IGB","ITEM_CATEG":"Fertilizers","SHORT_TEXT":"Order to be placed once customer is unblocked","REQ_DATE":"2025-10-30"},"item":{"CUSTOM_ITEM_ID":"0a99O000000if13QAA","PO_ITM_NO":"30","MATERIAL":"230952","BATCH":"102530","REASON_REJ":"Order is Rejected due to customer being blocked","BILL_DATE":"20251030140817","PLANT":"Santa Monica","STORE_LOC":"Basel, Switzerland","TARGET_QTY":"3000","REQ_QTY":"3000","SALES_UNIT":"IGB","ITEM_CATEG":"Fertilizers","SHORT_TEXT":"Order to be placed once customer is unblocked","REQ_DATE":"2025-10-30"}},"C_ORDER_PARTNERS":{"item":{"PARTN_ROLE":"AG","PARTN_NUMB":"4717357","COUNTRY":"Poland","POSTL_CODE":"PO:411789","CITY":"Pune(IN)","TELEPHONE":"0124-24356823","LANGU":"EN","ADDR_TYPE":"Commercial"},"item":{"PARTN_ROLE":"TEJ","PARTN_NUMB":"4717357","COUNTRY":"Poland","POSTL_CODE":"PO:411789","CITY":"Pune(IN)","TELEPHONE":"0124-24356823","LANGU":"EN","ADDR_TYPE":"Commercial"}},"I_CUSTOM_HEADER_IN":{"CUSTOM_HEADER_ID":"0a69O000000F3yTQAS"},"I_EXTENSION_IN":{"TAXK1":"1"},"I_ORDER_HEADER_IN":{"DOC_NUMBER":"20251030","DOC_TYPE":"ZDPP","DISTR_CHAN":"02","DIVISION":"02","PURCH_NO":"UK Cart","PMNTTRMS":"0600","CD_TYPE1":"","CD_VALUE1":"0","CD_TYPE2":"ZDR3","CD_VALUE2":"0","CD_CU_ISO2":""}}}
