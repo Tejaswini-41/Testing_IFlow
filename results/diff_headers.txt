@@ -1,52 +1,54 @@
 --- results/headers_base.txt
 +++ results/headers_current.txt
-@@ -1,16 +1,19 @@
--HTTP/1.1 404 Not Found
-
-+HTTP/1.1 200 OK
+@@ -1,18 +1,18 @@
+ HTTP/1.1 200 OK
 
  cache-control: no-cache, no-store, max-age=0, must-revalidate
 
--content-language: en
+-content: Text
 
--content-length: 431
-
--content-type: text/html;charset=utf-8
+-date: Thu, 30 Oct 2025 11:44:16 GMT
 
 +content: JSON
 
- date: Thu, 30 Oct 2025 08:38:17 GMT
++date: Thu, 30 Oct 2025 11:44:17 GMT
 
  expires: 0
 
  pragma: no-cache
 
-+sap_messageprocessinglogid: AGkDI_mlh7ShiZqvBjMHFFrvdiQl
+-sap_messageprocessinglogid: AGkDT5BYTa1YI5hpqHv6k5qQ4rRr
 
-+sap_mplcorrelationid: AGkDI_lvplauKOzknG59KTm-F6Y9
+-sap_mplcorrelationid: AGkDT5CYrX1UncDqkQy4fwh12s0F
 
-+sap_pregeneratedmplid: AGkDI_mY9qZmPVLRjRfidjRm3K-8
+-sap_pregeneratedmplid: AGkDT5AoCapRQBwzuUv3lS2MKBuY
+
++sap_messageprocessinglogid: AGkDT5E2lWHVwVeCp_vqHR6V60rY
+
++sap_mplcorrelationid: AGkDT5Fh-e3JkJDwD03sxS2vsN0f
+
++sap_pregeneratedmplid: AGkDT5G6Ycl0PbaOrkGM9efzmzIf
 
  server: SAP
+
+-testheader: FirstiFlow
 
 +testheader: SecondiFlow
 
  x-content-type-options: nosniff
 
--x-correlationid: df11ef11-f20e-45d9-4a5b-b8cf0640f32b
+-x-correlationid: e9b7dab0-3d66-47b1-41e9-32d1d6e781d5
 
-+x-correlationid: f256a1f5-bd8b-4505-5b38-f651398fbccc
++x-correlationid: 78d8681e-5261-4f81-56fd-cf06ff914b9a
 
  x-frame-options: DENY
 
--x-vcap-request-id: df11ef11-f20e-45d9-4a5b-b8cf0640f32b
+-x-vcap-request-id: e9b7dab0-3d66-47b1-41e9-32d1d6e781d5
 
-+x-vcap-request-id: f256a1f5-bd8b-4505-5b38-f651398fbccc
++x-vcap-request-id: 78d8681e-5261-4f81-56fd-cf06ff914b9a
 
  x-xss-protection: 1; mode=block
 
-+transfer-encoding: chunked
+ transfer-encoding: chunked
 
  strict-transport-security: max-age=31536000; includeSubDomains; preload;
-
- 
