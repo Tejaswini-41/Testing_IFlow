@@ -6,6 +6,85 @@ import re
 import plotly.graph_objects as go
 from pathlib import Path
 from collections import defaultdict
+import logging
+import difflib
+import copy
+
+# ========== LOGGING SETUP ==========
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s - %(levelname)s - %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S'
+)
+logger = logging.getLogger(__name__)
+
+# ========== HELPER FUNCTION FOR TABLE ROW GENERATION ==========
+def create_field_row(item, row_type, idx):
+    """
+    Generate HTML for a table row (new/modified/removed).
+    
+    Args:
+        item: Dictionary containing field data
+        row_type: 'new', 'modified', or 'removed'
+        idx: Row index for unique ID generation
+    
+    Returns:
+        HTML string for the table row
+    """
+    field_path = html.escape(item.get("Field", ""), quote=True)
+    section_raw = item.get("Section", "root") or "root"
+    breadcrumb_html = html.escape(section_raw, quote=True)
+    row_id = f'{row_type}-{idx}' if row_type != 'modified' else f'mod-{idx}'
+    # Path row is hidden by default, shown when main row is active (by JS toggle)
+    path_row = f"""
+        <tr id='row-path-{row_id}' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>{breadcrumb_html}</span></td></tr>
+    """
+    row_class = f"{row_type}-row" if row_type != 'modified' else 'modified-row'
+    if row_type == "modified":
+        old_val = str(item.get("Old Value", "N/A"))
+        new_val = str(item.get("New Value", "N/A"))
+        old_display = (old_val[:60] + '...') if len(old_val) > 60 else old_val
+        new_display = (new_val[:60] + '...') if len(new_val) > 60 else new_val
+        old_display = html.escape(old_display, quote=True)
+        new_display = html.escape(new_display, quote=True)
+        main_row = f"""
+            <tr class="{row_class}" data-row-id="{row_id}" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">{field_path}</div></td>
+                <td><span class="value old-value">{old_display}</span></td>
+                <td><span class="value new-value">{new_display}</span></td>
+            </tr>
+        """
+        return main_row + path_row
+    else:
+        value = str(item.get("Value", "N/A"))
+        display_value = (value[:80] + '...') if len(value) > 80 else value
+        display_value = html.escape(display_value, quote=True)
+        value_class = "new-value" if row_type == "new" else "old-value"
+        main_row = f"""
+            <tr class="{row_class}" data-row-id="{row_id}" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">{field_path}</div></td>
+                <td><span class="value {value_class}">{display_value}</span></td>
+            </tr>
+        """
+        return main_row + path_row
+
+def html_escape(s):
+    import html
+    return html.escape(s, quote=False)
+
+def build_diff_table(diff):
+    html_rows = ['<table class="diff-table"><thead><tr><th>Old Response</th><th>New Response</th></tr></thead><tbody>']
+    for line in diff:
+        tag, text = line[0], line[2:]
+        if tag == ' ':  # Unchanged
+            html_rows.append(f'<tr><td class="diff-ctx">{html_escape(text)}</td><td class="diff-ctx">{html_escape(text)}</td></tr>')
+        elif tag == '-':  # Deletion
+            html_rows.append(f'<tr><td class="diff-del">{html_escape(text)}</td><td class="diff-empty"></td></tr>')
+        elif tag == '+':  # Addition
+            html_rows.append(f'<tr><td class="diff-empty"></td><td class="diff-add">{html_escape(text)}</td></tr>')
+        # ignore '?' hint lines
+    html_rows.append('</tbody></table>')
+    return '\n'.join(html_rows)
 
 diff_file = sys.argv[1] if len(sys.argv) > 1 else "results/diff.txt"
 output_dir = Path("results")
@@ -18,8 +97,15 @@ if not os.path.exists(diff_file):
     print(f"Diff file not found: {diff_file}")
     sys.exit(1)
 
-with open(diff_file, "r", encoding="utf-8") as f:
-    diff_content = f.read()
+try:
+    logger.info(f"Reading diff file: {diff_file}")
+    with open(diff_file, "r", encoding="utf-8") as f:
+        diff_content = f.read()
+    logger.info(f"Successfully read diff file ({len(diff_content)} bytes)")
+except Exception as e:
+    logger.error(f"Failed to read diff file: {e}")
+    print(f"Error reading diff file: {e}")
+    sys.exit(1)
 
 # Load payload files
 base_payload_file = "results/response_base.txt"
@@ -29,35 +115,52 @@ base_payload = ""
 current_payload = ""
 
 try:
+    logger.info(f"Loading base payload: {base_payload_file}")
     with open(base_payload_file, "r", encoding="utf-8") as f:
         base_payload_raw = f.read()
         try:
-            # Try to pretty print JSON
             base_payload_obj = json.loads(base_payload_raw)
-            base_payload = json.dumps(base_payload_obj, indent=2)
+            base_payload = json.dumps(base_payload_obj, indent=2, sort_keys=True)
+            logger.info("Base payload parsed as JSON")
         except json.JSONDecodeError:
             base_payload = base_payload_raw
+            logger.info("Base payload loaded as plain text")
 except FileNotFoundError:
+    logger.warning(f"Base payload file not found: {base_payload_file}")
     base_payload = "# Base payload file not found\n# Expected location: results/response_base.txt"
+except Exception as e:
+    logger.error(f"Error loading base payload: {e}")
+    base_payload = f"# Error loading base payload: {str(e)}"
 
 try:
+    logger.info(f"Loading current payload: {current_payload_file}")
     with open(current_payload_file, "r", encoding="utf-8") as f:
         current_payload_raw = f.read()
         try:
-            # Try to pretty print JSON
             current_payload_obj = json.loads(current_payload_raw)
-            current_payload = json.dumps(current_payload_obj, indent=2)
+            current_payload = json.dumps(current_payload_obj, indent=2, sort_keys=True)
+            logger.info("Current payload parsed as JSON")
         except json.JSONDecodeError:
             current_payload = current_payload_raw
+            logger.info("Current payload loaded as plain text")
 except FileNotFoundError:
+    logger.warning(f"Current payload file not found: {current_payload_file}")
     current_payload = "# Current payload file not found\n# Expected location: results/response_current.txt"
+except Exception as e:
+    logger.error(f"Error loading current payload: {e}")
+    current_payload = f"# Error loading current payload: {str(e)}"
+
+escaped_base_payload = html.escape(base_payload, quote=True)
+escaped_current_payload = html.escape(current_payload, quote=True)
 
 # Check if it's JSON format (DeepDiff) or unified diff format
 is_json_format = False
 try:
     diff_data = json.loads(diff_content)
     is_json_format = True
+    logger.info("Diff format detected: JSON (DeepDiff)")
 except json.JSONDecodeError:
+    logger.info("Diff format detected: Unified diff")
     pass
 
 # Parse diff intelligently
@@ -215,7 +318,14 @@ for field, changes in field_changes.items():
 # Create summary metrics
 total_changes = len(new_fields) + len(modified_fields) + len(removed_fields)
 
+logger.info(f"Diff parsing complete:")
+logger.info(f"  - New fields: {len(new_fields)}")
+logger.info(f"  - Modified fields: {len(modified_fields)}")
+logger.info(f"  - Removed fields: {len(removed_fields)}")
+logger.info(f"  - Total changes: {total_changes}")
+
 if total_changes == 0:
+    logger.warning("No differences found in the comparison")
     print("No differences found.")
     sys.exit(0)
 
@@ -643,7 +753,6 @@ tr:hover {
 .old-value {
   background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
   color: #991b1b;
-  text-decoration: line-through;
 }
 
 .new-value {
@@ -779,8 +888,6 @@ tr:hover {
     margin-top: 8px;
   }
 }
-
-
 
 /* Payload Toggle Buttons */
 .payload-toggle {
@@ -929,14 +1036,22 @@ tr:hover {
   opacity: 1;
 }
 
-/* Modified Fields Table - Clean Design */
-#modified table {
+
+
+/* ========== CONSOLIDATED TABLE STYLING FOR ALL SECTIONS ========== */
+
+/* Base table styling for all sections */
+#modified table,
+#new table,
+#removed table {
   border-collapse: separate;
   border-spacing: 0;
 }
 
-#modified thead th {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+/* Common table header styling */
+#modified thead th,
+#new thead th,
+#removed thead th {
   color: white;
   padding: 16px;
   font-weight: 600;
@@ -945,146 +1060,219 @@ tr:hover {
   letter-spacing: 1px;
 }
 
-/* Modified Row Styling */
-.modified-row {
+/* Section-specific header colors */
+#modified thead th {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+#new thead th {
+  background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+}
+
+#removed thead th {
+  background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+}
+
+/* Common row styling for all change types */
+.modified-row,
+.new-row,
+.removed-row {
   cursor: pointer;
   transition: all 0.3s ease;
   border-left: 4px solid transparent;
 }
 
+/* Hover states with section-specific colors */
 .modified-row:hover {
   background: linear-gradient(90deg, rgba(102, 126, 234, 0.05) 0%, transparent 100%);
   border-left-color: var(--primary);
 }
 
+.new-row:hover {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.05) 0%, transparent 100%);
+  border-left-color: #10b981;
+}
+
+.removed-row:hover {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.05) 0%, transparent 100%);
+  border-left-color: #ef4444;
+}
+
+/* Active states with section-specific colors */
 .modified-row.active {
   background: linear-gradient(90deg, rgba(102, 126, 234, 0.1) 0%, transparent 100%);
   border-left-color: var(--primary);
   box-shadow: inset 0 0 0 1px rgba(102, 126, 234, 0.2);
 }
 
-/* Field Name with Arrow */
-.field-name-clickable {
-  font-weight: 600;
-  color: #1e293b;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 12px 0;
-  position: relative;
-  padding-left: 20px;
+.new-row.active {
+  background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, transparent 100%);
+  border-left-color: #10b981;
+  box-shadow: inset 0 0 0 1px rgba(16, 185, 129, 0.2);
 }
 
-.field-name-clickable::before {
-  content: '▶';
-  position: absolute;
-  left: 0;
+.removed-row.active {
+  background: linear-gradient(90deg, rgba(239, 68, 68, 0.1) 0%, transparent 100%);
+  border-left-color: #ef4444;
+  box-shadow: inset 0 0 0 1px rgba(239, 68, 68, 0.2);
+}
+
+/* Arrow indicators - section-specific colors */
+.modified-row .field-name-clickable::before {
   color: var(--primary);
-  font-size: 0.7em;
-  transition: transform 0.3s ease;
-  display: inline-block;
 }
 
-.modified-row.active .field-name-clickable::before {
+.new-row .field-name-clickable::before {
+  color: #10b981;
+}
+
+.removed-row .field-name-clickable::before {
+  color: #ef4444;
+}
+
+/* Rotate arrow on active */
+.modified-row.active .field-name-clickable::before,
+.new-row.active .field-name-clickable::before,
+.removed-row.active .field-name-clickable::before {
   transform: rotate(90deg);
 }
 
-/* Field Path - Hidden by Default */
-.section-tag {
-  display: none;
-  opacity: 0;
-  max-height: 0;
-  overflow: hidden;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  margin-top: 8px;
-  padding: 12px;
-  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
-  border-left: 3px solid var(--primary);
-  border-radius: 8px;
-  font-family: 'Courier New', monospace;
-  font-size: 0.8em;
-  color: #475569;
+/* Field path styling - section-specific border colors */
+.modified-row .section-tag {
+  border-left-color: var(--primary);
 }
 
-.section-tag.visible {
-  display: block;
-  opacity: 1;
-  max-height: 200px;
-  animation: expandPath 0.4s ease;
+.new-row .section-tag {
+  border-left-color: #10b981;
 }
 
-@keyframes expandPath {
-  0% {
-    opacity: 0;
-    max-height: 0;
-    transform: translateY(-10px);
-  }
-  100% {
-    opacity: 1;
-    max-height: 200px;
-    transform: translateY(0);
-  }
+.removed-row .section-tag {
+  border-left-color: #ef4444;
 }
 
-.section-tag strong {
+/* Field path strong text - section-specific colors */
+.modified-row .section-tag strong {
   color: var(--primary);
-  font-weight: 700;
-  margin-right: 8px;
 }
 
-/* Value Badges - Improved Design */
-.value {
-  font-family: 'Courier New', monospace;
-  padding: 8px 14px;
-  border-radius: 8px;
-  display: inline-block;
-  font-size: 0.85em;
-  font-weight: 500;
-  word-break: break-word;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.2s ease;
+.new-row .section-tag strong {
+  color: #10b981;
 }
 
-.value:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+.removed-row .section-tag strong {
+  color: #ef4444;
 }
 
-.old-value {
-  background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
-  color: #991b1b;
-  text-decoration: line-through;
-  border: 1px solid #fca5a5;
-}
-
-.new-value {
-  background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
-  color: #065f46;
-  border: 1px solid #6ee7b7;
-}
-
-/* Table Cell Spacing */
-#modified td {
+/* Common table cell padding */
+#modified td,
+#new td,
+#removed td {
   padding: 16px;
   vertical-align: middle;
 }
 
-/* Hover Effect on Entire Row */
-.modified-row td {
+/* Hover effect on entire row */
+.modified-row td,
+.new-row td,
+.removed-row td {
   transition: all 0.3s ease;
 }
 
-.modified-row:hover td {
+.modified-row:hover td,
+.new-row:hover td,
+.removed-row:hover td {
   background: transparent;
 }
 
 """
 
+# Add CSS for .diff-table, .diff-del (red), .diff-add (green), .diff-ctx (no bg), .diff-empty (blank cell) right before writing CSS file:
+css_content += '''
+.diff-table { border-collapse: separate; border-spacing: 0; width: 100%; font-size: 0.93em; font-family: "Fira Mono", "Courier New", monospace; }
+.diff-table th { background: #f4f0fa; color: #4c3487; padding: 8px 12px; border-bottom: 2px solid #ddd; font-size:1em;}
+.diff-table td { padding: 3px 12px; vertical-align: top; white-space: pre; }
+.diff-del { background: #fbeaea; color: #bf2222; border-left: 4px solid #f95b5b; }
+.diff-add { background: #e7faea; color: #13773b; border-left: 4px solid #21c65a; }
+.diff-ctx { background: #fff; color: #333; }
+.diff-empty { background: #f8fafc; }
+'''
+
+# Add the CSS for .full-path-label and .full-path-mono
+css_content += """
+.full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; }
+.full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }
+"""
+
+# Add/replace CSS for sticky header/footer, e.g.
+css_content += '''
+.header {
+  background: rgba(255, 255, 255, 0.95);
+  position: sticky;
+  top: 0;
+  z-index: 201;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+'''
+
+css_content += """
+/* Download Button Styling */
+.download-btn {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  padding: 8px 16px;
+  font-size: 0.85em;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: 0 2px 8px rgba(102, 126, 234, 0.25);
+}
+
+.download-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.35);
+}
+
+.download-btn:active {
+  transform: translateY(0);
+}
+
+.download-btn i {
+  font-size: 1em;
+}
+"""
+
+# Update the .footer CSS (remove position: sticky and bottom: 0)
+css_content += '''
+.footer {
+  /* No sticky or fixed positioning */
+  position: static;
+  margin-top: auto;
+  background: rgba(255, 255, 255, 0.98);
+  z-index: 200;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.06);
+}
+'''
+
+
+
 # Write the complete CSS to file
-with open(dashboard_css, "w", encoding="utf-8") as f:
-    f.write(css_content)
+try:
+    logger.info(f"Writing CSS file: {dashboard_css}")
+    with open(dashboard_css, "w", encoding="utf-8") as f:
+        f.write(css_content)
+    logger.info(f"CSS file written successfully ({len(css_content)} bytes)")
+except Exception as e:
+    logger.error(f"Failed to write CSS file: {e}")
+    print(f"Error writing CSS file: {e}")
+    sys.exit(1)
 
 # Generate HTML
+
+base_lines = base_payload.splitlines()
+current_lines = current_payload.splitlines()
+diff = list(difflib.ndiff(base_lines, current_lines))
 
 html_content = f"""<!DOCTYPE html>
 <html lang="en">
@@ -1099,7 +1287,7 @@ html_content = f"""<!DOCTYPE html>
  <body>
     <div class="layout">
         <aside class="sidebar">
-            <div class="brand">Diff Explorer</div>
+            <div class="brand">Sidebar</div>
             <nav class="nav">
                 <a class="nav-item active" href="#">
                     <i class="fa-solid fa-table-columns"></i>
@@ -1117,9 +1305,13 @@ html_content = f"""<!DOCTYPE html>
                     <i class="fa-solid fa-eraser"></i>
                     <span>Removed Fields</span>
                 </a>
-                <a class="nav-item" href="#payloads">
+                <a class="nav-item" href="#compare">
                     <i class="fa-solid fa-code-compare"></i>
-                    <span>View Payloads</span>
+                    <span>Compare Responses</span>
+                </a>
+                <a class="nav-item" href="#payloads">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span>View Responses</span>
                 </a>
             </nav>
         </aside>
@@ -1199,6 +1391,11 @@ html_content = f"""<!DOCTYPE html>
         </div>
         </section>
 
+        
+"""
+
+# New Fields
+html_content += f"""
         <!-- New Fields -->
         <section id="new" class="section">
         <div class="card full-width">
@@ -1213,27 +1410,15 @@ if new_fields:
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30%;">Field</th>
-                        <th style="width: 15%;">Field Path</th>
-                        <th style="width: 55%;">New Value</th>
+                        <th style="width: 40%;">Field Name</th>
+                        <th style="width: 60%;">New Value</th>
                     </tr>
                 </thead>
                 <tbody>
 """
-    for item in new_fields:
-        field_path = html.escape(item.get("Field", ""), quote=True)
-        section_raw = item.get("Section", "root") or "root"
-        breadcrumb_html = html.escape(section_raw, quote=True)
-        value = str(item.get("Value", "N/A"))
-        display_value = (value[:100] + '...') if len(value) > 100 else value
-        display_value = html.escape(display_value, quote=True)
-        html_content += f"""
-                     <tr>
-                         <td class="field-name">{field_path}</td>
-                         <td><span class="section-tag">{breadcrumb_html}</span></td>
-                         <td><span class="value new-value">{display_value}</span></td>
-                     </tr>
- """
+    for idx, item in enumerate(new_fields):
+        html_content += create_field_row(item, "new", idx)
+    
     html_content += """
                 </tbody>
             </table>
@@ -1245,10 +1430,11 @@ else:
             </div>
 """
 
-html_content += f"""
+html_content += """
         </div>
         </section>
-
+"""
+html_content += f"""
         <!-- Modified Fields -->
         <section id="modified" class="section">
         <div class="card full-width">
@@ -1271,28 +1457,8 @@ if modified_fields:
                 <tbody>
 """
     for idx, item in enumerate(modified_fields):
-        field_path = html.escape(item.get("Field", ""), quote=True)
-        section_raw = item.get("Section", "root") or "root"
-        breadcrumb_html = html.escape(section_raw, quote=True)
-        old_val = str(item.get("Old Value", "N/A"))
-        new_val = str(item.get("New Value", "N/A"))
-        old_display = (old_val[:60] + '...') if len(old_val) > 60 else old_val
-        new_display = (new_val[:60] + '...') if len(new_val) > 60 else new_val
-        old_display = html.escape(old_display, quote=True)
-        new_display = html.escape(new_display, quote=True)
-        
-        html_content += f"""
-                     <tr class="modified-row" data-row-id="mod-{idx}">
-                         <td class="field-path-cell">
-                             <div class="field-name field-name-clickable">{field_path}</div>
-                             <div class="section-tag" id="path-mod-{idx}">
-                                 <strong>Full Path:</strong> {breadcrumb_html}
-                             </div>
-                         </td>
-                         <td><span class="value old-value">{old_display}</span></td>
-                         <td><span class="value new-value">{new_display}</span></td>
-                     </tr>
- """
+        html_content += create_field_row(item, "modified", idx)
+    
     html_content += """
                 </tbody>
             </table>
@@ -1307,7 +1473,10 @@ else:
 html_content += f"""
         </div>
         </section>
+"""
 
+# Removed Fields
+html_content += f"""
         <!-- Removed Fields -->
         <section id="removed" class="section">
         <div class="card full-width">
@@ -1322,27 +1491,15 @@ if removed_fields:
             <table>
                 <thead>
                     <tr>
-                        <th style="width: 30%;">Field</th>
-                        <th style="width: 15%;">Field Path</th>
-                        <th style="width: 55%;">Removed Value</th>
+                        <th style="width: 40%;">Field Name</th>
+                        <th style="width: 60%;">Removed Value</th>
                     </tr>
                 </thead>
                 <tbody>
 """
-    for item in removed_fields:
-        field_path = html.escape(item.get("Field", ""), quote=True)
-        section_raw = item.get("Section", "root") or "root"
-        breadcrumb_html = html.escape(section_raw, quote=True)
-        value = str(item.get("Value", "N/A"))
-        display_value = (value[:100] + '...') if len(value) > 100 else value
-        display_value = html.escape(display_value, quote=True)
-        html_content += f"""
-                     <tr>
-                         <td class=\"field-name\">{field_path}</td>
-                         <td><span class=\"section-tag\">{breadcrumb_html}</span></td>
-                         <td><span class=\"value old-value\">{display_value}</span></td>
-                     </tr>
- """
+    for idx, item in enumerate(removed_fields):
+        html_content += create_field_row(item, "removed", idx)
+    
     html_content += """
                 </tbody>
             </table>
@@ -1358,12 +1515,201 @@ html_content += """
         </div>
         </section>
 """
+# (1) Add new helper to render a field-based comparison table for all change types
+
+def render_compare_field_table(new_fields, modified_fields, removed_fields):
+    html_sections = []
+    if new_fields:
+        html_sections.append('<h3 style="color: #10b981; margin-top:16px;">New Fields</h3>')
+        html_sections.append('<table><thead><tr><th style="width: 40%;">Field Name</th><th style="width: 60%;">New Value</th></tr></thead><tbody>')
+        for idx, item in enumerate(new_fields):
+            html_sections.append(create_field_row(item, "new", idx))
+        html_sections.append('</tbody></table>')
+    if modified_fields:
+        html_sections.append('<h3 style="color: #FF9800; margin-top:22px;">Modified Fields</h3>')
+        html_sections.append('<table><thead><tr><th style="width: 35%;">Field Name</th><th style="width: 32%;">Old Value</th><th style="width: 33%;">New Value</th></tr></thead><tbody>')
+        for idx, item in enumerate(modified_fields):
+            html_sections.append(create_field_row(item, "modified", idx))
+        html_sections.append('</tbody></table>')
+    if removed_fields:
+        html_sections.append('<h3 style="color: #F44336; margin-top:22px;">Removed Fields</h3>')
+        html_sections.append('<table><thead><tr><th style="width: 40%;">Field Name</th><th style="width: 60%;">Removed Value</th></tr></thead><tbody>')
+        for idx, item in enumerate(removed_fields):
+            html_sections.append(create_field_row(item, "removed", idx))
+        html_sections.append('</tbody></table>')
+    if not html_sections:
+        return '<div class="empty-state"><p>No differences found.</p></div>'
+    return '\n'.join(html_sections)
+
+# NEW FUNCTION: render_side_by_side_field_diff_table
+
+def render_side_by_side_field_diff_table(new_fields, modified_fields, removed_fields):
+    html_rows = []
+    html_rows.append('<table class="diff-table"><thead><tr><th>Field Name / Path</th><th>Old Value</th><th>New Value</th></tr></thead><tbody>')
+    idx = 0
+    for item in modified_fields:
+        field_name = html.escape(item.get('Field', ''), quote=True)
+        section = html.escape(item.get('Section', ''), quote=True)
+        path = f"<div style='font-size:0.9em;color:#888;'>{section}</div>" if section else ''
+        html_rows.append(f'<tr class="modified-row"><td><b>{field_name}</b>{path}</td><td class="diff-del">{html.escape(item.get("Old Value", ""), quote=True)}</td><td class="diff-add">{html.escape(item.get("New Value", ""), quote=True)}</td></tr>')
+        idx += 1
+    for item in new_fields:
+        field_name = html.escape(item.get('Field', ''), quote=True)
+        section = html.escape(item.get('Section', ''), quote=True)
+        path = f"<div style='font-size:0.9em;color:#888;'>{section}</div>" if section else ''
+        html_rows.append(f'<tr class="new-row"><td><b>{field_name}</b>{path}</td><td class="diff-empty"></td><td class="diff-add">{html.escape(item.get("Value", ""), quote=True)}</td></tr>')
+        idx += 1
+    for item in removed_fields:
+        field_name = html.escape(item.get('Field', ''), quote=True)
+        section = html.escape(item.get('Section', ''), quote=True)
+        path = f"<div style='font-size:0.9em;color:#888;'>{section}</div>" if section else ''
+        html_rows.append(f'<tr class="removed-row"><td><b>{field_name}</b>{path}</td><td class="diff-del">{html.escape(item.get("Value", ""), quote=True)}</td><td class="diff-empty"></td></tr>')
+        idx += 1
+    if idx == 0:
+        html_rows.append('<tr><td colspan="3" class="diff-ctx" style="text-align:center;color:#888;">No differences found.</td></tr>')
+    html_rows.append('</tbody></table>')
+    return '\n'.join(html_rows)
+
+# NEW FUNCTION: render_json_side_by_side_diff
+
+def parse_deepdiff_paths(deepdiff_dict):
+    # Convert DeepDiff string paths (root['a']['b']) to tuple paths ('a','b')
+    added = set()
+    removed = set()
+    changed = set()
+    changed_old = {}  # path: old_value
+    changed_new = {}  # path: new_value
+    if 'dictionary_item_added' in deepdiff_dict:
+        for path in deepdiff_dict['dictionary_item_added']:
+            parts = tuple([p for p in re.findall(r"\['([^']+)'\]", path)])
+            added.add(parts)
+    if 'dictionary_item_removed' in deepdiff_dict:
+        for path in deepdiff_dict['dictionary_item_removed']:
+            parts = tuple([p for p in re.findall(r"\['([^']+)'\]", path)])
+            removed.add(parts)
+    if 'values_changed' in deepdiff_dict:
+        for path, value in deepdiff_dict['values_changed'].items():
+            parts = tuple([p for p in re.findall(r"\['([^']+)'\]", path)])
+            changed.add(parts)
+            changed_old[parts] = value.get('old_value')
+            changed_new[parts] = value.get('new_value')
+    return added, removed, changed, changed_old, changed_new
+
+def render_json_with_highlight(obj, highlights, highlight_vals, context='base'):
+    # highlights: dict of path -> type: 'add', 'remove', 'change'
+    # highlight_vals: dict of path -> override value for 'change'
+    # context: 'base' or 'current' (affects which changes/values to display)
+    def _render(val, path=()):
+        if isinstance(val, dict):
+            s = '{\n'
+            for ix, (k, v) in enumerate(val.items()):
+                new_path = path + (k,)
+                comma = ',' if (ix+1)<len(val) else ''
+                tag = highlights.get(new_path)
+                highlight_class = ''
+                value_override = None
+                if tag == 'add' and context == 'current':
+                    highlight_class = 'diff-add'
+                elif tag == 'remove' and context == 'base':
+                    highlight_class = 'diff-del'
+                elif tag == 'change':
+                    highlight_class = 'diff-mod'
+                    if context == 'base':
+                        value_override = highlight_vals['old'].get(new_path)
+                    else:
+                        value_override = highlight_vals['new'].get(new_path)
+                else:
+                    highlight_class = ''
+                # Field key
+                key_html = f'  "{k}": '
+                # Value (recursively)
+                if value_override is not None:
+                    val_html = json.dumps(value_override, ensure_ascii=False)
+                else:
+                    val_html = _render(v, new_path)
+                content = key_html + val_html + comma
+                if highlight_class:
+                    content = f'<span class="{highlight_class}">{content}</span>'
+                s += content + '\n'
+            s += '}'
+            return s
+        elif isinstance(val, list):
+            s = '[\n'
+            for ix, v in enumerate(val):
+                new_path = path + (ix,)
+                val_html = _render(v, new_path)
+                comma = ',' if (ix+1)<len(val) else ''
+                tag = highlights.get(new_path)
+                highlight_class = ''
+                if tag == 'add' and context == 'current':
+                    highlight_class = 'diff-add'
+                elif tag == 'remove' and context == 'base':
+                    highlight_class = 'diff-del'
+                elif tag == 'change':
+                    highlight_class = 'diff-mod'
+                else:
+                    highlight_class = ''
+                if highlight_class:
+                    val_html = f'<span class="{highlight_class}">{val_html}</span>'
+                s += '  ' + val_html + comma + '\n'
+            s += ']'            
+            return s
+        else:
+            return json.dumps(val, ensure_ascii=False)
+    return _render(obj)
+
+def render_json_side_by_side_diff(base_obj, current_obj, diff_data):
+    # Parse all path diffs
+    added, removed, changed, changed_old, changed_new = parse_deepdiff_paths(diff_data)
+    highlights = {}
+    highlight_vals = {'old': changed_old, 'new': changed_new}
+    for path in added:
+        highlights[path] = 'add'
+    for path in removed:
+        highlights[path] = 'remove'
+    for path in changed:
+        highlights[path] = 'change'
+    # Tables
+    left = render_json_with_highlight(base_obj, highlights, highlight_vals, 'base')
+    right = render_json_with_highlight(current_obj, highlights, highlight_vals, 'current')
+    
+    # Main HTML table
+    out = []
+    out.append('<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #ffeeba !important; border-left: 4px solid #eea236 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style>')
+    out.append('<table class="diff-table-json" style="width:100%;table-layout:fixed"><tr>')
+    out.append('<td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:0.99em;">'+left+'</pre></td>')
+    out.append('<td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:0.99em;">'+right+'</pre></td>')
+    out.append('</tr></table>')
+    return ''.join(out)
+
+# Replace original field diff rendering in Compare Responses section:
+html_content += """
+        <!-- Compare Responses Section (Visual Side-by-Side JSON Diff + Download) -->
+        <section id="compare" class="section">
+            <div class="card full-width">
+                <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
+                    <h2 class="card-title">Compare Responses (Side-by-Side JSON Diff)</h2>
+                    <button id="downloadDiffBtn" class="download-btn"><i class="fa fa-download"></i></button>
+                </div>
+                <div style='overflow-x:auto;padding:0 5px 15px 5px;'>
+"""
+# Call the new renderer with parsed objects and diff:
+try:
+    base_json_obj = json.loads(base_payload)
+    current_json_obj = json.loads(current_payload)
+    html_content += render_json_side_by_side_diff(base_json_obj, current_json_obj, diff_data)
+except Exception as e:
+    html_content += f'<div class="empty-state"><b>Could not render JSON diff:</b> {html.escape(str(e))}</div>'
+html_content += """
+                </div>
+            </div>
+        </section>
+"""
 html_content += """
         <!-- View Payloads Section -->
         <section id="payloads" class="section">
             <div class="card full-width">
                 <div class="card-header">
-                    <h2 class="card-title">Payload Viewer</h2>
                     <div class="payload-toggle">
                         <button class="toggle-btn active" data-payload="current">
                             <i class="fa-solid fa-file-code"></i> New Response
@@ -1392,6 +1738,9 @@ escaped_base_payload = html.escape(base_payload, quote=True)
 html_content += escaped_base_payload
 
 html_content += """</pre>
+                </div>
+                <div style='padding-top:18px;text-align:right;'>
+                    <button id='compareBtn' style="background:var(--gradient-warning);color:#fff;padding:10px 20px;border:none;border-radius:7px;cursor:pointer;font-weight:600;font-size:1em;box-shadow:0 2px 10px rgba(102,126,234,0.06);">Compare Responses</button>
                 </div>
             </div>
         </section>
@@ -1501,55 +1850,164 @@ html_content += """
           });
         });
 
-        // ========== NEW: Toggle Field Path on Click ==========
-        const modifiedRows = document.querySelectorAll('.modified-row');
-
-        modifiedRows.forEach(row => {
-          row.addEventListener('click', function(e) {
-            // Don't trigger if clicking on a value span
-            if (e.target.classList.contains('value')) return;
-            
-            const rowId = this.getAttribute('data-row-id');
-            const pathElement = document.getElementById('path-' + rowId);
-            
-            // Close all other paths
-            document.querySelectorAll('.section-tag').forEach(tag => {
-              if (tag.id !== 'path-' + rowId) {
-                tag.classList.remove('visible');
+        const compareBtn = document.getElementById('compareBtn');
+        if(compareBtn) {
+          compareBtn.addEventListener('click', function() {
+            showSection('compare');
+            history.replaceState(null, '', '#compare');
+          });
+        }
+        
+        
+        // ========== CONSOLIDATED: Toggle Field Path for All Row Types ==========
+        function setupRowToggle(rowSelector) {
+          const rows = document.querySelectorAll(rowSelector);
+          
+          rows.forEach(row => {
+            row.addEventListener('click', function(e) {
+              // Don't trigger if clicking on a value span
+              if (e.target.classList.contains('value')) return;
+              
+              const rowId = this.getAttribute('data-row-id');
+              const pathElement = document.getElementById('row-path-' + rowId);
+              
+              // Get the row type class (e.g., 'new-row', 'modified-row', 'removed-row')
+              const rowClass = this.classList[0];
+              
+              // Close all other paths in this section
+              document.querySelectorAll(`.${rowClass} .section-tag`).forEach(tag => {
+                if (tag.id !== 'row-path-' + rowId) {
+                  tag.classList.remove('visible');
+                }
+              });
+              
+              // Remove active class from all rows in this section
+              rows.forEach(r => r.classList.remove('active'));
+              
+              // Toggle current path
+              if (pathElement) {
+                const isVisible = pathElement.classList.contains('visible');
+                
+                if (isVisible) {
+                  pathElement.classList.remove('visible');
+                  this.classList.remove('active');
+                } else {
+                  pathElement.classList.add('visible');
+                  this.classList.add('active');
+                }
               }
             });
-            
-            // Remove active class from all rows
-            modifiedRows.forEach(r => r.classList.remove('active'));
-            
-            // Toggle current path
-            if (pathElement) {
-              const isVisible = pathElement.classList.contains('visible');
-              
-              if (isVisible) {
-                pathElement.classList.remove('visible');
-                this.classList.remove('active');
-              } else {
-                pathElement.classList.add('visible');
-                this.classList.add('active');
-              }
-            }
           });
-        });
+        }
+
+        // Apply to all three row types
+        setupRowToggle('.new-row');
+        setupRowToggle('.removed-row');
+        setupRowToggle('.modified-row');
         
       })();
     </script>
+    <script>window._dashboardDiffData = ' + json.dumps(diff_data) + ';</script>
+    <script>
+      // ========== NATIVE BROWSER SAVE DIALOG ==========
+      document.getElementById('downloadDiffBtn').addEventListener('click', async function() {
+        const section = document.querySelector('#compare .card.full-width');
+        if (!section) return;
+        
+        const clone = section.cloneNode(true);
+        const btn = clone.querySelector('.download-btn');
+        if (btn) btn.remove();
+        
+        const htmlDoc = '<!DOCTYPE html>\\n' +
+          '<html>\\n' +
+          '<head>\\n' +
+          '  <meta charset="UTF-8">\\n' +
+          '  <title>Compare Responses - Diff Report</title>\\n' +
+          '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\\n' +
+          '  <style>\\n' +
+          '    body { font-family: \\'Inter\\', sans-serif; background: #f7f6fa; margin: 0; padding: 32px; }\\n' +
+          '    .card { background: #fff; border-radius: 16px; padding: 24px; max-width: 1100px; margin: 0 auto; box-shadow: 0 2px 12px rgba(90,90,160,0.07); }\\n' +
+          '    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #f0f0f0; }\\n' +
+          '    .card-title { font-size: 2em; font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }\\n' +
+          '    .diff-table-json { width: 100%; table-layout: fixed; border-spacing: 0; border-collapse: collapse; }\\n' +
+          '    .diff-table-json td { vertical-align: top; background: white; padding: 8px; }\\n' +
+          '    .diff-add { background: #d1fae5; }\\n' +
+          '    .diff-del { background: #fee2e2; }\\n' +
+          '    .diff-mod { background: #ffeeba !important; border-left: 4px solid #eea236 !important; }\\n' +
+          '    pre { font-family: \\'Courier New\\', monospace; margin: 0; overflow-x: auto; font-size: 0.99em; padding: 0; }\\n' +
+          '  </style>\\n' +
+          '</head>\\n' +
+          '<body>' + clone.outerHTML + '</body>\\n' +
+          '</html>';
+        
+        const blob = new Blob([htmlDoc], { type: 'text/html' });
+        
+        // ========== CHECK IF FILE SYSTEM ACCESS API IS SUPPORTED ==========
+        if ('showSaveFilePicker' in window) {
+          try {
+            // Modern browsers - shows native file picker
+            const handle = await window.showSaveFilePicker({
+              suggestedName: 'compare-responses-' + new Date().toISOString().slice(0,10) + '.html',
+              types: [{
+                description: 'HTML Files',
+                accept: { 'text/html': ['.html'] }
+              }]
+            });
+            
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+            
+            alert('✅ File saved successfully!');
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              console.error('Save failed:', err);
+              fallbackDownload(blob);
+            }
+          }
+        } else {
+          // Fallback for older browsers
+          fallbackDownload(blob);
+        }
+      });
+
+      // Fallback download method
+      function fallbackDownload(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'compare-responses-' + new Date().toISOString().slice(0,10) + '.html';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 500);
+      }
+      </script>
  </body>
 </html>
 """
 
 # Save HTML file into results directory
-with open(dashboard_html, 'w', encoding='utf-8') as f:
-    f.write(html_content)
+try:
+    logger.info(f"Writing HTML file: {dashboard_html}")
+    with open(dashboard_html, 'w', encoding='utf-8') as f:
+        f.write(html_content)
+    logger.info(f"HTML file written successfully ({len(html_content)} bytes)")
+except Exception as e:
+    logger.error(f"Failed to write HTML file: {e}")
+    print(f"Error writing HTML file: {e}")
+    sys.exit(1)
 
-print("Dashboard generated successfully.")
-print("Files created:")
-print(f"   - {dashboard_html}")
-print(f"   - {dashboard_css}")
-print("\nOpen 'results/diff_dashboard.html' in your browser to view the dashboard")
+logger.info("Dashboard generation completed successfully")
+print("\n" + "="*60)
+print("✅ Dashboard generated successfully!")
+print("="*60)
+print("\nFiles created:")
+print(f"   📄 {dashboard_html}")
+print(f"   🎨 {dashboard_css}")
+print(f"\n📊 Summary:")
+print(f"   • Total changes: {total_changes}")
+print(f"   • New fields: {len(new_fields)}")
+print(f"   • Modified fields: {len(modified_fields)}")
+print(f"   • Removed fields: {len(removed_fields)}")
+print("\n🌐 Open 'results/diff_dashboard.html' in your browser to view the dashboard")
+print("="*60 + "\n")
 
