@@ -3,10 +3,16 @@ name: CPI Response Compare
 on:
   workflow_dispatch:
     inputs:
-      payload_file:
-        description: 'Payload file name (used for both iFlows)'
+      payload_file1:
+        description: 'First Payload file name'
         required: false
-        default: 'payload.json'
+        default: 'payload1.json'
+
+      payload_file2:
+        description: 'Second Payload file name'
+        required: false
+        default: 'payload2.json'
+        
       iflow_base_url:
         description: 'CPI Old Mapping Endpoint'
         required: true
@@ -99,7 +105,7 @@ jobs:
             -o results/response_base.txt \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file }}
+            --data-binary @${{ github.event.inputs.payload_file1 }}
 
           echo "✅ Response 1 saved (headers_base.txt + response_base.txt)"
 
@@ -115,7 +121,7 @@ jobs:
             -o results/response_current.txt \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file }}
+            --data-binary @${{ github.event.inputs.payload_file2 }}
 
           echo "✅ Response 2 saved (headers_current.txt + response_current.txt)"
 
