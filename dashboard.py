@@ -1626,7 +1626,7 @@ html_content = f"""<!DOCTYPE html>
     <div class="layout">
         <aside class="sidebar">
             <div class="brand">
-              <img src="syngenta_logo.jpg" alt="Syngenta Logo" class="brand-logo" title="Collapse sidebar">
+              <img src="../assests/syngenta_logo.jpg" alt="Syngenta Logo" class="brand-logo" title="Collapse sidebar">
               <div style="display:flex;flex-direction:column;gap:2px;">
                 <span class="brand-text">SAP-Testing</span>
               </div>

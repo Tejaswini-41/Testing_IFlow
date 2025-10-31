@@ -1,0 +1,49 @@
+{
+  "order_partners": {
+    "item": [
+      {
+        "partn_role": "AG",
+        "partn_numb": "123",
+        "country": "India",
+        "city": "Pune"
+      },
+      {
+        "partn_role": "Tejaswini",
+        "partn_numb": "123",
+        "country": "India",
+        "city": "Pune"
+      }
+    ]
+  },
+  "order_items": {
+    "item": [
+      {
+        "custom_item_id": "0a99O000000iezRQAQ",
+        "target_qty": "2",
+        "sales_unit": "IGB",
+        "material": "230951"
+      },
+      {
+        "custom_item_id": "0a99O000000if13QAA",
+        "target_qty": "3",
+        "sales_unit": "IGB",
+        "material": "230952"
+      }
+    ]
+  },
+  "order_header": {
+    "currency": "GBP",
+    "cd_value_promo": "0",
+    "cd_type_promo": "ZDR3",
+    "cd_value_freight": "0",
+    "cd_type_freight": "",
+    "custom_header_id": "0a69O000000F3yTQAS",
+    "customer_tax": "1",
+    "sales_org": "0135",
+    "pmnttrms": "0600",
+    "purch_no": "UK Cart",
+    "doc_type": "ZDPP",
+    "division": "02",
+    "distr_chan": "02"
+  }
+}
