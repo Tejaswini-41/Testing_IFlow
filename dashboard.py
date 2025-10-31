@@ -97,6 +97,12 @@ output_dir.mkdir(exist_ok=True)
 dashboard_html = output_dir / "diff_dashboard.html"
 dashboard_css = output_dir / "diff_dashboard.css"
 
+# Calculate logo path relative to script location (works for GitHub/workflows)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+logo_path = os.path.join(script_dir, "assests", "syngenta_logo.jpg")
+# Calculate relative path from HTML output location to logo for browser
+logo_relative_path = os.path.relpath(logo_path, os.path.dirname(dashboard_html)).replace("\\", "/")
+
 if not os.path.exists(diff_file):
     print(f"Diff file not found: {diff_file}")
     sys.exit(1)
@@ -1626,7 +1632,7 @@ html_content = f"""<!DOCTYPE html>
     <div class="layout">
         <aside class="sidebar">
             <div class="brand">
-              <img src="../assests/syngenta_logo.jpg" alt="Syngenta Logo" class="brand-logo" title="Collapse sidebar">
+              <img src="{logo_relative_path}" alt="Syngenta Logo" class="brand-logo" title="Collapse sidebar">
               <div style="display:flex;flex-direction:column;gap:2px;">
                 <span class="brand-text">SAP-Testing</span>
               </div>
