@@ -34,11 +34,15 @@ def create_field_row(item, row_type, idx):
     field_path = html.escape(item.get("Field", ""), quote=True)
     section_raw = item.get("Section", "root") or "root"
     breadcrumb_html = html.escape(section_raw, quote=True)
+    include_path_row = bool(section_raw) and section_raw != "Headers"
     row_id = f'{row_type}-{idx}' if row_type != 'modified' else f'mod-{idx}'
     # Path row is hidden by default, shown when main row is active (by JS toggle)
-    path_row = f"""
+    path_row = (
+        f"""
         <tr id='row-path-{row_id}' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>{breadcrumb_html}</span></td></tr>
-    """
+        """
+        if include_path_row else ""
+    )
     row_class = f"{row_type}-row" if row_type != 'modified' else 'modified-row'
     if row_type == "modified":
         old_val = str(item.get("Old Value", "N/A"))
@@ -155,6 +159,7 @@ escaped_current_payload = html.escape(current_payload, quote=True)
 
 # Check if it's JSON format (DeepDiff) or unified diff format
 is_json_format = False
+diff_data = {}
 try:
     diff_data = json.loads(diff_content)
     is_json_format = True
@@ -164,7 +169,8 @@ except json.JSONDecodeError:
     pass
 
 # Parse diff intelligently
-field_changes = defaultdict(lambda: {"added": [], "removed": [], "section": ""})
+# Store by FULL PATH to avoid collisions between identical leaf names in different branches
+field_changes = defaultdict(lambda: {"added": [], "removed": [], "section": "", "field": ""})
 current_section = ""
 
 if is_json_format:
@@ -237,33 +243,78 @@ if is_json_format:
             parts = [p for p in path.split('"')[1::2] if p.strip()]
         return "/".join(parts) if parts else "root"
 
+    def flatten_object_change(old_obj, new_obj, base_path_slash):
+        """Flatten nested dict changes into per-leaf entries under field_changes keyed by full path."""
+        if isinstance(old_obj, dict) and isinstance(new_obj, dict):
+            keys = set(old_obj.keys()) | set(new_obj.keys())
+            for k in keys:
+                child_old = old_obj.get(k, None)
+                child_new = new_obj.get(k, None)
+                child_path = f"{base_path_slash}/{k}" if base_path_slash else k
+                if isinstance(child_old, dict) and isinstance(child_new, dict):
+                    flatten_object_change(child_old, child_new, child_path)
+                else:
+                    full_key = child_path
+                    leaf = str(k)
+                    # added / removed / changed
+                    if child_old is None and child_new is not None:
+                        field_changes[full_key]["added"].append(str(child_new))
+                    elif child_new is None and child_old is not None:
+                        field_changes[full_key]["removed"].append(str(child_old))
+                    elif child_old is not None and child_new is not None and child_old != child_new:
+                        field_changes[full_key]["removed"].append(str(child_old))
+                        field_changes[full_key]["added"].append(str(child_new))
+                    # section and display field
+                    field_changes[full_key]["section"] = full_key
+                    field_changes[full_key]["field"] = leaf
+        else:
+            # Primitive to primitive change at base path
+            if old_obj != new_obj:
+                full_key = base_path_slash
+                leaf = base_path_slash.split("/")[-1] if base_path_slash else base_path_slash
+                field_changes[full_key]["removed"].append(str(old_obj))
+                field_changes[full_key]["added"].append(str(new_obj))
+                field_changes[full_key]["section"] = full_key
+                field_changes[full_key]["field"] = leaf
+
     # Handle DeepDiff JSON format
     for key, value in diff_data.items():
         if key == "dictionary_item_added":
             for field_path, val in iter_path_items(value):
+                full_path = format_field_path_slash(field_path)
                 field_name = extract_field_name(field_path)
                 if val is not None:
-                    field_changes[field_name]["added"].append(str(val))
+                    field_changes[full_path]["added"].append(str(val))
                 else:
-                    field_changes[field_name]["added"].append("<added>")
-                # store slash-separated full path including leaf
-                field_changes[field_name]["section"] = format_field_path_slash(field_path)
+                    field_changes[full_path]["added"].append("<added>")
+                field_changes[full_path]["section"] = full_path
+                field_changes[full_path]["field"] = field_name
         elif key == "dictionary_item_removed":
             for field_path, val in iter_path_items(value):
+                full_path = format_field_path_slash(field_path)
                 field_name = extract_field_name(field_path)
                 if val is not None:
-                    field_changes[field_name]["removed"].append(str(val))
+                    field_changes[full_path]["removed"].append(str(val))
                 else:
-                    field_changes[field_name]["removed"].append("<removed>")
-                field_changes[field_name]["section"] = format_field_path_slash(field_path)
+                    field_changes[full_path]["removed"].append("<removed>")
+                field_changes[full_path]["section"] = full_path
+                field_changes[full_path]["field"] = field_name
         elif key == "values_changed":
             for field_path, change_data in value.items():
+                full_path = format_field_path_slash(field_path)
                 field_name = extract_field_name(field_path)
-                if "old_value" in change_data:
-                    field_changes[field_name]["removed"].append(str(change_data["old_value"]))
-                if "new_value" in change_data:
-                    field_changes[field_name]["added"].append(str(change_data["new_value"]))
-                field_changes[field_name]["section"] = format_field_path_slash(field_path)
+                old_v = change_data.get("old_value")
+                new_v = change_data.get("new_value")
+                # If object-level change, flatten into per-leaf rows
+                if isinstance(old_v, dict) and isinstance(new_v, dict):
+                    flatten_object_change(old_v, new_v, full_path)
+                else:
+                    if "old_value" in change_data:
+                        field_changes[full_path]["removed"].append(str(old_v))
+                    if "new_value" in change_data:
+                        field_changes[full_path]["added"].append(str(new_v))
+                    field_changes[full_path]["section"] = full_path
+                    field_changes[full_path]["field"] = field_name
 else:
     # Handle unified diff format
     diff_lines = diff_content.splitlines()
@@ -294,25 +345,26 @@ new_fields = []
 modified_fields = []
 removed_fields = []
 
-for field, changes in field_changes.items():
+for full_path, changes in field_changes.items():
+    display_field = changes.get("field") or full_path.split("/")[-1]
     if changes["added"] and changes["removed"]:
         modified_fields.append({
-            "Field": field,
+            "Field": display_field,
             "Old Value": ", ".join(changes["removed"]),
             "New Value": ", ".join(changes["added"]),
-            "Section": changes["section"]
+            "Section": changes["section"] or full_path
         })
     elif changes["added"]:
         new_fields.append({
-            "Field": field,
+            "Field": display_field,
             "Value": ", ".join(changes["added"]),
-            "Section": changes["section"]
+            "Section": changes["section"] or full_path
         })
     elif changes["removed"]:
         removed_fields.append({
-            "Field": field,
+            "Field": display_field,
             "Value": ", ".join(changes["removed"]),
-            "Section": changes["section"]
+            "Section": changes["section"] or full_path
         })
 
 # Create summary metrics
@@ -328,6 +380,145 @@ if total_changes == 0:
     logger.warning("No differences found in the comparison")
     print("No differences found.")
     sys.exit(0)
+
+# ===================== HEADERS DIFF PARSING (results/diff_headers.txt) =====================
+headers_diff_file = "results/diff_headers.txt"
+headers_diff_content = ""
+headers_is_json_format = False
+headers_new = []
+headers_modified = []
+headers_removed = []
+
+if os.path.exists(headers_diff_file):
+    try:
+        logger.info(f"Reading headers diff file: {headers_diff_file}")
+        with open(headers_diff_file, "r", encoding="utf-8") as hf:
+            headers_diff_content = hf.read()
+    except Exception as e:
+        logger.warning(f"Failed to read headers diff file: {e}")
+
+    if headers_diff_content:
+        # Try DeepDiff JSON first
+        headers_changes_map = defaultdict(lambda: {"added": [], "removed": [], "section": "", "field": ""})
+        try:
+            headers_diff_data = json.loads(headers_diff_content)
+            headers_is_json_format = True
+            # Helpers for full-path handling and flattening
+            def _hdr_full_path(path: str) -> str:
+                if not path:
+                    return "root"
+                p = path[4:] if path.startswith("root") else path
+                parts = [x for x in p.split("'")[1::2] if x.strip()]
+                if not parts:
+                    parts = [x for x in p.split('"')[1::2] if x.strip()]
+                return "/".join(parts) if parts else "root"
+            def _hdr_leaf(path: str) -> str:
+                try:
+                    parts = [x for x in path.split("'")[1::2] if x.strip()] or [x for x in path.split('"')[1::2] if x.strip()]
+                    return parts[-1] if parts else path
+                except Exception:
+                    return path
+            def _flatten_hdr(old_obj, new_obj, base_path: str):
+                if isinstance(old_obj, dict) and isinstance(new_obj, dict):
+                    keys = set(old_obj.keys()) | set(new_obj.keys())
+                    for k in keys:
+                        o = old_obj.get(k)
+                        n = new_obj.get(k)
+                        fp = f"{base_path}/{k}" if base_path else str(k)
+                        if isinstance(o, dict) and isinstance(n, dict):
+                            _flatten_hdr(o, n, fp)
+                        else:
+                            if o is None and n is not None:
+                                headers_changes_map[fp]["added"].append(str(n))
+                            elif n is None and o is not None:
+                                headers_changes_map[fp]["removed"].append(str(o))
+                            elif o is not None and n is not None and o != n:
+                                headers_changes_map[fp]["removed"].append(str(o))
+                                headers_changes_map[fp]["added"].append(str(n))
+                            headers_changes_map[fp]["section"] = fp
+                            headers_changes_map[fp]["field"] = str(k)
+                else:
+                    if old_obj != new_obj:
+                        fp = base_path
+                        headers_changes_map[fp]["removed"].append(str(old_obj))
+                        headers_changes_map[fp]["added"].append(str(new_obj))
+                        headers_changes_map[fp]["section"] = fp
+                        headers_changes_map[fp]["field"] = fp.split("/")[-1]
+
+            # Handle DeepDiff JSON for headers
+            if "dictionary_item_added" in headers_diff_data:
+                for path in headers_diff_data["dictionary_item_added"]:
+                    fp = _hdr_full_path(path)
+                    leaf = _hdr_leaf(path)
+                    headers_changes_map[fp]["added"].append("<added>")
+                    headers_changes_map[fp]["section"] = fp
+                    headers_changes_map[fp]["field"] = leaf
+            if "dictionary_item_removed" in headers_diff_data:
+                for path in headers_diff_data["dictionary_item_removed"]:
+                    fp = _hdr_full_path(path)
+                    leaf = _hdr_leaf(path)
+                    headers_changes_map[fp]["removed"].append("<removed>")
+                    headers_changes_map[fp]["section"] = fp
+                    headers_changes_map[fp]["field"] = leaf
+            if "values_changed" in headers_diff_data:
+                for path, change in headers_diff_data["values_changed"].items():
+                    fp = _hdr_full_path(path)
+                    leaf = _hdr_leaf(path)
+                    old_val = change.get("old_value")
+                    new_val = change.get("new_value")
+                    if isinstance(old_val, dict) and isinstance(new_val, dict):
+                        _flatten_hdr(old_val, new_val, fp)
+                    else:
+                        if "old_value" in change:
+                            headers_changes_map[fp]["removed"].append(str(old_val))
+                        if "new_value" in change:
+                            headers_changes_map[fp]["added"].append(str(new_val))
+                        headers_changes_map[fp]["section"] = fp
+                        headers_changes_map[fp]["field"] = leaf
+        except json.JSONDecodeError:
+            # Unified diff style: +Header: value, -Header: value
+            for line in headers_diff_content.splitlines():
+                line = line.rstrip("\n")
+                if line.startswith("+++") or line.startswith("---") or line.startswith("@@"):
+                    continue
+                if line.startswith("+") and not line.startswith("+++"):
+                    content = line[1:].strip()
+                    m = re.match(r"([^:]+):\s*(.*)", content)
+                    if m:
+                        name = m.group(1).strip()
+                        val = m.group(2).strip()
+                        headers_changes_map[name]["added"].append(val)
+                elif line.startswith("-") and not line.startswith("---"):
+                    content = line[1:].strip()
+                    m = re.match(r"([^:]+):\s*(.*)", content)
+                    if m:
+                        name = m.group(1).strip()
+                        val = m.group(2).strip()
+                        headers_changes_map[name]["removed"].append(val)
+
+        # Categorize
+        for name, ch in headers_changes_map.items():
+            display_field = ch.get("field") or name
+            section = ch.get("section") or "Headers"
+            if ch["added"] and ch["removed"]:
+                headers_modified.append({
+                    "Field": display_field,
+                    "Old Value": ", ".join(ch["removed"]),
+                    "New Value": ", ".join(ch["added"]),
+                    "Section": section
+                })
+            elif ch["added"]:
+                headers_new.append({
+                    "Field": display_field,
+                    "Value": ", ".join(ch["added"]),
+                    "Section": section
+                })
+            elif ch["removed"]:
+                headers_removed.append({
+                    "Field": display_field,
+                    "Value": ", ".join(ch["removed"]),
+                    "Section": section
+                })
 
 # Summary donut chart
 change_types = {
@@ -398,6 +589,11 @@ body {
   flex: 1;
 }
 
+/* Collapsed layout for sidebar */
+.layout.collapsed {
+  grid-template-columns: 72px 1fr;
+}
+
 .sidebar {
   background: rgba(255, 255, 255, 0.95);
   backdrop-filter: blur(10px);
@@ -413,18 +609,109 @@ body {
   transition: box-shadow 0.3s ease;
 }
 
+/* Collapsed sidebar styling */
+.sidebar.collapsed {
+  padding: 16px 8px;
+  align-items: center;
+}
+
+.sidebar.collapsed .brand-text,
+.sidebar.collapsed .brand-subtitle,
+.sidebar.collapsed .nav-item span,
+.sidebar.collapsed .nav-submenu {
+  display: none;
+}
+
+/* Allow header submenu to show as overlay when collapsed */
+.sidebar.collapsed .nav { position: relative; }
+.sidebar.collapsed #nav-header { position: relative; }
+.sidebar.collapsed .nav-submenu.show {
+  display: flex;
+  position: absolute;
+  left: 74px; /* just outside collapsed sidebar */
+  top: 0;
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 8px;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+  z-index: 2000;
+  min-width: 220px;
+}
+
+.sidebar.collapsed .nav-item {
+  justify-content: center;
+  padding: 12px 10px;
+}
+
+.sidebar.collapsed .caret { display: none; }
+
 .sidebar:hover {
   box-shadow: 0 8px 32px rgba(102, 126, 234, 0.15);
 }
 
 .brand {
   font-weight: 700;
+  font-size: 1em;
+  padding: 10px 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 8px;
+  border-bottom: 2px solid #f0f0f0;
+}
+
+/* Sidebar toggle button */
+.sidebar-toggle {
+  margin-left: auto;
+  background: rgba(102, 126, 234, 0.1);
+  border: 1px solid rgba(102, 126, 234, 0.25);
+  color: #5568d3;
+  width: 32px;
+  height: 32px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+}
+
+.sidebar-toggle:hover { background: rgba(102, 126, 234, 0.18); transform: translateY(-1px); }
+.sidebar.collapsed .sidebar-toggle { margin: 0; }
+
+.brand-logo {
+  width: 60px;
+  height: 55px;
+  object-fit: contain;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 6px;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.06);
+  cursor: pointer;
+}
+
+/* Shrink logo when sidebar is collapsed */
+.sidebar.collapsed .brand-logo {
+  width: 36px;
+  height: 36px;
+  padding: 4px;
+  border-radius: 8px;
+}
+
+.brand-text {
+  font-weight: 700;
   font-size: 1.1em;
-  padding: 10px 16px 16px;
   background: var(--bg-gradient);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
+}
+
+.brand-subtitle {
+  font-size: 0.8em;
+  color: #64748b;
+  font-weight: 600;
 }
 
 .nav {
@@ -445,6 +732,52 @@ body {
   gap: 12px;
   position: relative;
   overflow: hidden;
+}
+
+/* Submenu styling for Header dropdown */
+.nav-submenu {
+  display: none;
+  flex-direction: column;
+  gap: 6px;
+  margin: 6px 0 0 36px;
+}
+
+.nav-submenu.show {
+  display: flex;
+}
+
+.nav-subitem {
+  padding: 10px 14px;
+  border-radius: 8px;
+  color: #5b6472;
+  text-decoration: none;
+  transition: background 0.2s ease, transform 0.2s ease;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 0.9em;
+}
+
+.nav-subitem:hover {
+  background: rgba(102, 126, 234, 0.08);
+  transform: translateX(3px);
+}
+
+.nav-subitem i {
+  font-size: 0.95em;
+  width: 16px;
+  text-align: center;
+}
+
+.nav-item .caret {
+  margin-left: auto;
+  font-size: 0.8em;
+  color: #94a3b8;
+  transition: transform 0.2s ease;
+}
+
+.nav-item.expanded .caret {
+  transform: rotate(90deg);
 }
 
 
@@ -706,7 +1039,7 @@ th {
   padding: 14px 16px;
   text-align: left;
   font-weight: 600;
-  color: white;
+  color: #333;
   text-transform: uppercase;
   font-size: 0.8em;
   letter-spacing: 0.5px;
@@ -741,12 +1074,12 @@ tr:hover {
 }
 
 .value {
-  font-family: 'Courier New', monospace;
+  font-family: 'Montserrat', sans-serif;
   background: #f5f5f5;
   padding: 6px 10px;
   border-radius: 6px;
   display: inline-block;
-  font-size: 0.9em;
+  font-size: 1em;
   word-break: break-word;
 }
 
@@ -988,6 +1321,10 @@ tr:hover {
     transform: translateY(0);
   }
 }
+
+/* Path rows toggling inside tables */
+.field-path-row { display: none; }
+.field-path-row.visible { display: table-row !important; }
 
 /* Click indicator for modified fields */
 .modified-row {
@@ -1279,15 +1616,21 @@ html_content = f"""<!DOCTYPE html>
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Diff Analysis Dashboard</title>
+    <title>Variance Analysis Dashboard</title>
     <link rel="stylesheet" href="diff_dashboard.css">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
  </head>
  <body>
     <div class="layout">
         <aside class="sidebar">
-            <div class="brand">Sidebar</div>
+            <div class="brand">
+              <img src="syngenta_logo.jpg" alt="Syngenta Logo" class="brand-logo" title="Collapse sidebar">
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <span class="brand-text">SAP-Testing</span>
+              </div>
+            </div>
             <nav class="nav">
                 <a class="nav-item active" href="#">
                     <i class="fa-solid fa-table-columns"></i>
@@ -1313,6 +1656,16 @@ html_content = f"""<!DOCTYPE html>
                     <i class="fa-solid fa-book-open-reader"></i>
                     <span>View Responses</span>
                 </a>
+                <a id="nav-header" class="nav-item">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Header</span>
+                    <i class="fa-solid fa-chevron-right caret"></i>
+                </a>
+                <div id="nav-header-submenu" class="nav-submenu">
+                    <a class="nav-subitem" href="#header-new"><i class="fa-solid fa-square-plus"></i><span>New Header</span></a>
+                    <a class="nav-subitem" href="#header-modified"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Modified Header</span></a>
+                    <a class="nav-subitem" href="#header-removed"><i class="fa-solid fa-trash-can"></i><span>Removed Header</span></a>
+                </div>
             </nav>
         </aside>
         <main class="container">
@@ -1320,7 +1673,7 @@ html_content = f"""<!DOCTYPE html>
         <div class="header">
             <div class="header-content">
                 <div>
-                    <h1>Diff Analysis Dashboard</h1>
+                    <h1>Variance Analysis Dashboard</h1>
                     <p class="header-subtitle">Comprehensive comparison of configuration changes</p>
                 </div>
                 <div class="timestamp">
@@ -1474,6 +1827,112 @@ html_content += f"""
         </div>
         </section>
 """
+# ===================== HEADERS SECTIONS =====================
+html_content += f"""
+        <!-- New Headers -->
+        <section id="header-new" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">New Headers</h2>
+                <span class="badge badge-new">{len(headers_new)} items</span>
+            </div>
+"""
+if headers_new:
+    html_content += """
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Header</th>
+                        <th style="width: 60%;">New Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+"""
+    for idx, item in enumerate(headers_new):
+        html_content += create_field_row(item, "new", idx)
+    html_content += """
+                </tbody>
+            </table>
+"""
+else:
+    html_content += """
+            <div class="empty-state"><p>No new headers detected</p></div>
+"""
+html_content += """
+        </div>
+        </section>
+"""
+
+html_content += f"""
+        <!-- Modified Headers -->
+        <section id="header-modified" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">Modified Headers</h2>
+                <span class="badge badge-modified">{len(headers_modified)} items</span>
+            </div>
+"""
+if headers_modified:
+    html_content += """
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Header</th>
+                        <th style="width: 32%;">Previous Value</th>
+                        <th style="width: 33%;">New Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+"""
+    for idx, item in enumerate(headers_modified):
+        html_content += create_field_row(item, "modified", idx)
+    html_content += """
+                </tbody>
+            </table>
+"""
+else:
+    html_content += """
+            <div class="empty-state"><p>No modified headers detected</p></div>
+"""
+html_content += """
+        </div>
+        </section>
+"""
+
+html_content += f"""
+        <!-- Removed Headers -->
+        <section id="header-removed" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">Removed Headers</h2>
+                <span class="badge badge-removed">{len(headers_removed)} items</span>
+            </div>
+"""
+if headers_removed:
+    html_content += """
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Header</th>
+                        <th style="width: 60%;">Removed Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+"""
+    for idx, item in enumerate(headers_removed):
+        html_content += create_field_row(item, "removed", idx)
+    html_content += """
+                </tbody>
+            </table>
+"""
+else:
+    html_content += """
+            <div class="empty-state"><p>No removed headers detected</p></div>
+"""
+html_content += """
+        </div>
+        </section>
+"""
 
 # Removed Fields
 html_content += f"""
@@ -1624,7 +2083,11 @@ def render_json_with_highlight(obj, highlights, highlight_vals, context='base'):
                 key_html = f'  "{k}": '
                 # Value (recursively)
                 if value_override is not None:
-                    val_html = json.dumps(value_override, ensure_ascii=False)
+                    # Pretty render complex overrides (dict/list) to match View Responses formatting
+                    if isinstance(value_override, (dict, list)):
+                        val_html = _render(value_override, new_path)
+                    else:
+                        val_html = json.dumps(value_override, ensure_ascii=False)
                 else:
                     val_html = _render(v, new_path)
                 content = key_html + val_html + comma
@@ -1659,26 +2122,67 @@ def render_json_with_highlight(obj, highlights, highlight_vals, context='base'):
     return _render(obj)
 
 def render_json_side_by_side_diff(base_obj, current_obj, diff_data):
-    # Parse all path diffs
-    added, removed, changed, changed_old, changed_new = parse_deepdiff_paths(diff_data)
+    def str_path_to_tuple(path_str):
+        if not path_str:
+            return tuple()
+        parts = [p for p in path_str.split('/') if p != '']
+        # Keep as strings; list indices are unlikely here and safe as strings for highlighting
+        return tuple(parts)
+
+    MISSING = object()
+
+    def get_value_at_path(obj, path_tuple):
+        cur = obj
+        for key in path_tuple:
+            try:
+                cur = cur[key]
+            except Exception:
+                return MISSING
+        return cur
+
+    # Prefer our normalized field_changes to classify add/remove/change consistently
     highlights = {}
+    changed_old = {}
+    changed_new = {}
+    try:
+        for full_path in field_changes.keys():
+            path_tuple = str_path_to_tuple(full_path)
+            base_val = get_value_at_path(base_obj, path_tuple)
+            curr_val = get_value_at_path(current_obj, path_tuple)
+            base_missing = (base_val is MISSING)
+            curr_missing = (curr_val is MISSING)
+            if base_missing and not curr_missing:
+                highlights[path_tuple] = 'add'
+            elif curr_missing and not base_missing:
+                highlights[path_tuple] = 'remove'
+            else:
+                if base_val != curr_val:
+                    highlights[path_tuple] = 'change'
+                    changed_old[path_tuple] = base_val
+                    changed_new[path_tuple] = curr_val
+    except Exception:
+        # Fallback to DeepDiff parsing if something goes wrong
+        added, removed, changed, dd_old, dd_new = parse_deepdiff_paths(diff_data)
+        for path in added:
+            highlights[path] = 'add'
+        for path in removed:
+            highlights[path] = 'remove'
+        for path in changed:
+            highlights[path] = 'change'
+        changed_old = dd_old
+        changed_new = dd_new
+
     highlight_vals = {'old': changed_old, 'new': changed_new}
-    for path in added:
-        highlights[path] = 'add'
-    for path in removed:
-        highlights[path] = 'remove'
-    for path in changed:
-        highlights[path] = 'change'
     # Tables
     left = render_json_with_highlight(base_obj, highlights, highlight_vals, 'base')
     right = render_json_with_highlight(current_obj, highlights, highlight_vals, 'current')
     
     # Main HTML table
     out = []
-    out.append('<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #ffeeba !important; border-left: 4px solid #eea236 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style>')
+    out.append('<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #fee2e9 !important; border-left: 4px solid #eea236 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style>')
     out.append('<table class="diff-table-json" style="width:100%;table-layout:fixed"><tr>')
-    out.append('<td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:0.99em;">'+left+'</pre></td>')
-    out.append('<td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:0.99em;">'+right+'</pre></td>')
+    out.append('<td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">'+left+'</pre></td>')
+    out.append('<td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">'+right+'</pre></td>')
     out.append('</tr></table>')
     return ''.join(out)
 
@@ -1687,8 +2191,24 @@ html_content += """
         <!-- Compare Responses Section (Visual Side-by-Side JSON Diff + Download) -->
         <section id="compare" class="section">
             <div class="card full-width">
-                <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
-                    <h2 class="card-title">Compare Responses (Side-by-Side JSON Diff)</h2>
+                <div class="card-header" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <h2 class="card-title">Compare Responses</h2>
+                        <div class="legend" style="display:flex; align-items:center; gap: 12px; font-size: 0.9em; color:#475569;">
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#d1fae5; border-left:4px solid #21c65a; border-radius:3px;"></span>
+                                <span>Added</span>
+                            </div>
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e2; border-left:4px solid #f95b5b; border-radius:3px;"></span>
+                                <span>Removed</span>
+                            </div>
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e9; border-left:4px solid #eea236; border-radius:3px;"></span>
+                                <span>Modified</span>
+                            </div>
+                        </div>
+                    </div>
                     <button id="downloadDiffBtn" class="download-btn"><i class="fa fa-download"></i></button>
                 </div>
                 <div style='overflow-x:auto;padding:0 5px 15px 5px;'>
@@ -1760,6 +2280,8 @@ html_content += """
       (function() {
         const navItems = document.querySelectorAll('.nav .nav-item');
         const sections = document.querySelectorAll('.section');
+        const layoutEl = document.querySelector('.layout');
+        const sidebarEl = document.querySelector('.sidebar');
         
         function showSection(targetId) {
           sections.forEach(section => {
@@ -1795,6 +2317,37 @@ html_content += """
             history.replaceState(null, '', href || '#dashboard');
           });
         });
+
+        // Header dropdown toggle
+        const headerNav = document.getElementById('nav-header');
+        const headerSubmenu = document.getElementById('nav-header-submenu');
+        if (headerNav && headerSubmenu) {
+          headerNav.addEventListener('click', function(e) {
+            // Toggle submenu open/close, but still allow navigation to #header if desired
+            headerSubmenu.classList.toggle('show');
+            headerNav.classList.toggle('expanded');
+          });
+          // Submenu item clicks should also update active state
+          headerSubmenu.querySelectorAll('a').forEach(item => {
+            item.addEventListener('click', function(e) {
+              const href = this.getAttribute('href') || '#header';
+              const sectionId = href.substring(1);
+              showSection(sectionId);
+              history.replaceState(null, '', href);
+            });
+          });
+        }
+
+        // Sidebar collapse toggle on logo
+        const brandLogoEl = document.querySelector('.brand-logo');
+        if (brandLogoEl && layoutEl && sidebarEl) {
+          brandLogoEl.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sidebarEl.classList.toggle('collapsed');
+            layoutEl.classList.toggle('collapsed');
+            this.title = sidebarEl.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar';
+          });
+        }
         
         const chartDiv = document.getElementById('pieChart');
         if (chartDiv) {
@@ -1874,12 +2427,15 @@ html_content += """
               // Get the row type class (e.g., 'new-row', 'modified-row', 'removed-row')
               const rowClass = this.classList[0];
               
-              // Close all other paths in this section
-              document.querySelectorAll(`.${rowClass} .section-tag`).forEach(tag => {
-                if (tag.id !== 'row-path-' + rowId) {
-                  tag.classList.remove('visible');
-                }
-              });
+              // Close all other path rows within the same table body
+              const tbody = this.closest('tbody');
+              if (tbody) {
+                tbody.querySelectorAll('.field-path-row.visible').forEach(tag => {
+                  if (tag.id !== 'row-path-' + rowId) {
+                    tag.classList.remove('visible');
+                  }
+                });
+              }
               
               // Remove active class from all rows in this section
               rows.forEach(r => r.classList.remove('active'));
@@ -1907,7 +2463,12 @@ html_content += """
         
       })();
     </script>
-    <script>window._dashboardDiffData = ' + json.dumps(diff_data) + ';</script>
+    """
+diff_json_js = json.dumps(diff_data) if is_json_format else 'null'
+html_content += f"""
+    <script>window._dashboardDiffData = {diff_json_js};</script>
+"""
+html_content += """
     <script>
       // ========== NATIVE BROWSER SAVE DIALOG ==========
       document.getElementById('downloadDiffBtn').addEventListener('click', async function() {
@@ -2010,4 +2571,3 @@ print(f"   • Modified fields: {len(modified_fields)}")
 print(f"   • Removed fields: {len(removed_fields)}")
 print("\n🌐 Open 'results/diff_dashboard.html' in your browser to view the dashboard")
 print("="*60 + "\n")
-
