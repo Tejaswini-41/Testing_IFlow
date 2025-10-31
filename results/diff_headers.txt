@@ -1,23 +1,31 @@
 --- results/headers_base.txt
 +++ results/headers_current.txt
-@@ -4,15 +4,15 @@
- date: Fri, 31 Oct 2025 06:15:46 GMT
+@@ -1,18 +1,18 @@
+ HTTP/1.1 200 OK
+
+ cache-control: no-cache, no-store, max-age=0, must-revalidate
+
+ content: Text
+
+-date: Fri, 31 Oct 2025 06:16:25 GMT
+
++date: Fri, 31 Oct 2025 06:16:26 GMT
 
  expires: 0
 
  pragma: no-cache
 
--sap_messageprocessinglogid: AGkEVBLIHUTdfh46X7orFlpUqfoX
+-sap_messageprocessinglogid: AGkEVDmhFCtBXoVyLRizjxgZqeJ_
 
--sap_mplcorrelationid: AGkEVBL8r4_S4ShRu-MpPCBGWXIw
+-sap_mplcorrelationid: AGkEVDnScBwd_I-dMgqwxGK1y9QH
 
--sap_pregeneratedmplid: AGkEVBKqF-iVuWM4eLcgXYc2Yn-X
+-sap_pregeneratedmplid: AGkEVDmQxdONyjpEEzpsLZXUGL61
 
-+sap_messageprocessinglogid: AGkEVBKwHvHlC5S9qoGJ192jDiLe
++sap_messageprocessinglogid: AGkEVDobHknqNa0onjweeajAHtPZ
 
-+sap_mplcorrelationid: AGkEVBK1q-uDtbReXy3yQn-yRYRC
++sap_mplcorrelationid: AGkEVDpNVXA20FLW239XRU2oYx2X
 
-+sap_pregeneratedmplid: AGkEVBJjSuTpJC7OeDtO8oU7U4H6
++sap_pregeneratedmplid: AGkEVDq_LWamlUPF5rvQ-zqcKXRY
 
  server: SAP
 
@@ -25,15 +33,15 @@
 
  x-content-type-options: nosniff
 
--x-correlationid: 8dda31ca-1585-428e-5af4-f3102b608fc0
+-x-correlationid: fbf31f63-90a1-4f57-689e-0d5737b29312
 
-+x-correlationid: e3f3826e-9d5d-4a87-6544-714e70d5d4ea
++x-correlationid: 73825da6-ba73-4b2d-7781-e5a04749469b
 
  x-frame-options: DENY
 
--x-vcap-request-id: 8dda31ca-1585-428e-5af4-f3102b608fc0
+-x-vcap-request-id: fbf31f63-90a1-4f57-689e-0d5737b29312
 
-+x-vcap-request-id: e3f3826e-9d5d-4a87-6544-714e70d5d4ea
++x-vcap-request-id: 73825da6-ba73-4b2d-7781-e5a04749469b
 
  x-xss-protection: 1; mode=block
 
