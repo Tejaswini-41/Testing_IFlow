@@ -19,7 +19,7 @@
         "BATCH": "102531",
         "REASON_REJ": "Order is Rejected due to customer being blocked",
         "BILL_BLOCK": "Bill creation is blocked, please check",
-        "BILL_DATE": "20251031172212",
+        "BILL_DATE": "20251031173032",
         "PLANT": "Santa Monica",
         "STORE_LOC": "Basel, Switzerland",
         "TARGET_QTY": "3000",
@@ -38,8 +38,16 @@
         "SALES_UNIT": "IGB"
       }
     },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_ROLE']": {
+      "new_value": "Tejaswini",
+      "old_value": "We"
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_NUMB']": {
+      "new_value": "123",
+      "old_value": "4717357"
+    },
     "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
-      "new_value": "Poland",
+      "new_value": "INDIA",
       "old_value": "PL"
     },
     "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
