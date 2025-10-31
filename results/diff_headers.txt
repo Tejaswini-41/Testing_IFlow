@@ -1,0 +1,54 @@
+--- results/headers_base.txt
++++ results/headers_current.txt
+@@ -1,18 +1,19 @@
+ HTTP/1.1 200 OK
+
+ cache-control: no-cache, no-store, max-age=0, must-revalidate
+
+-content: Text
+
++content: JSON
+
++currentdate: 2025-10-31
+
+ date: Fri, 31 Oct 2025 11:52:12 GMT
+
+ expires: 0
+
+ pragma: no-cache
+
+-sap_messageprocessinglogid: AGkEouwd4_WoOj0Wu21EqbUBej-C
+
+-sap_mplcorrelationid: AGkEouyT_QM63lUISp0VB_UlRJNu
+
+-sap_pregeneratedmplid: AGkEouy3GEmwh6tBctarSx7YDHCI
+
++sap_messageprocessinglogid: AGkEouw6tUPzMq52RP14PpG5566X
+
++sap_mplcorrelationid: AGkEouwoNq1aCZbFBqw90LHajhTm
+
++sap_pregeneratedmplid: AGkEouyr4DhcVAKlsGEx05SJhkXS
+
+ server: SAP
+
+-testheader: FirstiFlow
+
++testheader: SecondiFlow
+
+ x-content-type-options: nosniff
+
+-x-correlationid: a30eb697-22e0-4b95-7813-a77bed788387
+
++x-correlationid: 0492ff9a-a323-4d7d-7563-73a1e26f855f
+
+ x-frame-options: DENY
+
+-x-vcap-request-id: a30eb697-22e0-4b95-7813-a77bed788387
+
++x-vcap-request-id: 0492ff9a-a323-4d7d-7563-73a1e26f855f
+
+ x-xss-protection: 1; mode=block
+
+ transfer-encoding: chunked
+
+ strict-transport-security: max-age=31536000; includeSubDomains; preload;

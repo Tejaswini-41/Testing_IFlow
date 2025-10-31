@@ -1,0 +1,76 @@
+
+<html>
+<head>
+<title>CPI Response Diff Dashboard</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: #fafafa;
+  margin: 40px;
+}
+h1, h2 {
+  text-align: center;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px;
+}
+th, td {
+  padding: 8px 10px;
+  border: 1px solid #ccc;
+}
+tr.addition td {
+  background-color: #e8f8e8;
+  color: #0a7a0a;
+}
+tr.deletion td {
+  background-color: #fde8e8;
+  color: #b00000;
+}
+tr.value td {
+  background-color: #fff7e6;
+  color: #b36b00;
+}
+pre {
+  margin: 0;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+.chart {
+  text-align: center;
+  margin-top: 20px;
+}
+</style>
+</head>
+<body>
+<h1>📊 CPI Response Comparison Dashboard</h1>
+<h2>🧩 Header Differences</h2><div class='chart'><img src='header_chart.png' width='400'/></div><table><tr><th>Type</th><th>Section</th><th>Details</th></tr><tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>content: Text</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>content: JSON</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>currentdate: 2025-10-31</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>sap_messageprocessinglogid: AGkEouwd4_WoOj0Wu21EqbUBej-C</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>sap_mplcorrelationid: AGkEouyT_QM63lUISp0VB_UlRJNu</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>sap_pregeneratedmplid: AGkEouy3GEmwh6tBctarSx7YDHCI</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>sap_messageprocessinglogid: AGkEouw6tUPzMq52RP14PpG5566X</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>sap_mplcorrelationid: AGkEouwoNq1aCZbFBqw90LHajhTm</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>sap_pregeneratedmplid: AGkEouyr4DhcVAKlsGEx05SJhkXS</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>testheader: FirstiFlow</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>testheader: SecondiFlow</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>x-correlationid: a30eb697-22e0-4b95-7813-a77bed788387</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>x-correlationid: 0492ff9a-a323-4d7d-7563-73a1e26f855f</pre></td></tr>
+<tr class='value'><td>Deletion</td><td>@@ -1,18 +1,19 @@</td><td><pre>x-vcap-request-id: a30eb697-22e0-4b95-7813-a77bed788387</pre></td></tr>
+<tr class='addition'><td>Addition</td><td>@@ -1,18 +1,19 @@</td><td><pre>x-vcap-request-id: 0492ff9a-a323-4d7d-7563-73a1e26f855f</pre></td></tr>
+</table><h2>💾 Body Differences</h2><div class='chart'><img src='body_chart.png' width='400'/></div><table><tr><th>Type</th><th>Section</th><th>Details</th></tr><tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']</td><td><pre></pre></td></tr>
+<tr class='addition'><td>Dictionary Item Added</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Dictionary Item Removed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Dictionary Item Removed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['CD_CU_ISO1']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']</td><td><pre></pre></td></tr>
+<tr class='value'><td>Values Changed</td><td>root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']</td><td><pre></pre></td></tr>
+</table>
+</body>
+</html>
