@@ -1,47 +1,53 @@
 --- results/headers_base.txt
 +++ results/headers_current.txt
-@@ -1,18 +1,18 @@
+@@ -1,18 +1,19 @@
  HTTP/1.1 200 OK
 
  cache-control: no-cache, no-store, max-age=0, must-revalidate
 
- content: Text
+-content: Text
 
--date: Thu, 30 Oct 2025 13:14:06 GMT
+-date: Fri, 31 Oct 2025 11:31:13 GMT
 
-+date: Thu, 30 Oct 2025 13:14:07 GMT
++content: JSON
+
++date: Fri, 31 Oct 2025 11:31:14 GMT
 
  expires: 0
 
  pragma: no-cache
 
--sap_messageprocessinglogid: AGkDZJ4oIZCjO3n273Bro1JvLgg5
+-sap_messageprocessinglogid: AGkEngEVMUUL_m3gf8Jp8Bip2Un2
 
--sap_mplcorrelationid: AGkDZJ7scpRRk9RxzvHVQ9LgpwYj
+-sap_mplcorrelationid: AGkEngEw_SJ7OY7aWplpLJhaxqC3
 
--sap_pregeneratedmplid: AGkDZJ6ekiz8lW9VfDHKeeqBruo4
+-sap_pregeneratedmplid: AGkEngF9Ve_Ug5Uc51I1QlnBqm95
 
-+sap_messageprocessinglogid: AGkDZJ9J-jriS6Q1pKkHUfQVn_d8
++sap_messageprocessinglogid: AGkEngKkWZgKujtxO96YI2_c-1eQ
 
-+sap_mplcorrelationid: AGkDZJ8b71ePbWR5VuBE9IvHwf1N
++sap_mplcorrelationid: AGkEngL0r46FcNOPGjd_nptBKwXP
 
-+sap_pregeneratedmplid: AGkDZJ--9bJVqEuFaEINdsfCvZz_
++sap_pregeneratedmplid: AGkEngIz_oZEGwFrtzL0nZ6EGKxs
 
  server: SAP
 
- testheader: FirstiFlow
+-testheader: FirstiFlow
+
++testheader: SecondiFlow
+
++today'sdate: 2025-10-31
 
  x-content-type-options: nosniff
 
--x-correlationid: ed6523b1-d65e-4ed2-7f2b-a32aa5a41881
+-x-correlationid: f85c2a8e-a08b-426f-5a7c-8c9393821b99
 
-+x-correlationid: fe2ee22e-eb78-4ecd-4e44-b65ca072d4d3
++x-correlationid: ae5ee590-a5c6-4ee9-72b9-262b5d2a973d
 
  x-frame-options: DENY
 
--x-vcap-request-id: ed6523b1-d65e-4ed2-7f2b-a32aa5a41881
+-x-vcap-request-id: f85c2a8e-a08b-426f-5a7c-8c9393821b99
 
-+x-vcap-request-id: fe2ee22e-eb78-4ecd-4e44-b65ca072d4d3
++x-vcap-request-id: ae5ee590-a5c6-4ee9-72b9-262b5d2a973d
 
  x-xss-protection: 1; mode=block
 

@@ -1,18 +1,19 @@
 HTTP/1.1 200 OK
 cache-control: no-cache, no-store, max-age=0, must-revalidate
-content: Text
-date: Thu, 30 Oct 2025 13:14:07 GMT
+content: JSON
+date: Fri, 31 Oct 2025 11:31:14 GMT
 expires: 0
 pragma: no-cache
-sap_messageprocessinglogid: AGkDZJ9J-jriS6Q1pKkHUfQVn_d8
-sap_mplcorrelationid: AGkDZJ8b71ePbWR5VuBE9IvHwf1N
-sap_pregeneratedmplid: AGkDZJ--9bJVqEuFaEINdsfCvZz_
+sap_messageprocessinglogid: AGkEngKkWZgKujtxO96YI2_c-1eQ
+sap_mplcorrelationid: AGkEngL0r46FcNOPGjd_nptBKwXP
+sap_pregeneratedmplid: AGkEngIz_oZEGwFrtzL0nZ6EGKxs
 server: SAP
-testheader: FirstiFlow
+testheader: SecondiFlow
+today'sdate: 2025-10-31
 x-content-type-options: nosniff
-x-correlationid: fe2ee22e-eb78-4ecd-4e44-b65ca072d4d3
+x-correlationid: ae5ee590-a5c6-4ee9-72b9-262b5d2a973d
 x-frame-options: DENY
-x-vcap-request-id: fe2ee22e-eb78-4ecd-4e44-b65ca072d4d3
+x-vcap-request-id: ae5ee590-a5c6-4ee9-72b9-262b5d2a973d
 x-xss-protection: 1; mode=block
 transfer-encoding: chunked
 strict-transport-security: max-age=31536000; includeSubDomains; preload;
