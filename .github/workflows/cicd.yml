@@ -103,8 +103,8 @@ jobs:
           print("✅ Token fetched and saved to results/oauth_token.txt")
           EOF
 
-      # -------------------- 🌐 Hit CPI iFlow (Old Mapping) --------------------
-      - name: Hit CPI iFlow (Old Mapping)
+      # -------------------- 🌐 Hit CPI iFlow  --------------------
+      - name: Hit CPI iFlow 
         run: |
           echo "📡 Fetching Response 1 (headers + body) from ${{ github.event.inputs.iflow_base_url }}"
           TOKEN=$(cat results/oauth_token.txt)
