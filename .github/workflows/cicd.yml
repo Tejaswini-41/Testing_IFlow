@@ -27,7 +27,7 @@ permissions:
 
 jobs:
   fetch_and_compare:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     environment:
       name: github-pages
 
@@ -37,12 +37,22 @@ jobs:
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_TOKEN }}
-
-      # -------------------- ⚙️ Dependencies --------------------
+          
+      # -------------------- ⚙️ Cache Python Dependencies --------------------
+      - name: Cache pip dependencies
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+            
+      # -------------------- 🐍 Install Dependencies --------------------
       - name: Install dependencies
         run: |
-          sudo apt-get update
+          sudo apt-get update -qq
           sudo apt-get install -y python3-pip jq
+          pip install --upgrade pip
           pip install simplejson requests deepdiff pandas plotly kaleido
 
       - name: Create results folder
@@ -195,13 +205,12 @@ jobs:
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
 
-      # -------------------- 🌐 Upload artifact for GitHub Pages --------------------
-      - name: Upload dashboard to GitHub Pages
+      # -------------------- 🌐 Upload & Deploy Dashboard --------------------
+      - name: Upload dashboard artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: results
+          path: results/diff_dashboard.html
 
-      # -------------------- 🚀 Deploy Dashboard --------------------
       - name: Deploy to GitHub Pages
         id: deploy
         uses: actions/deploy-pages@v4
