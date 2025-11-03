@@ -1,16 +1,20 @@
-HTTP/1.1 404 Not Found
+HTTP/1.1 200 OK
 cache-control: no-cache, no-store, max-age=0, must-revalidate
-content-language: en
-content-length: 431
-content-type: text/html;charset=utf-8
-date: Mon, 03 Nov 2025 09:05:07 GMT
+content: JSON
+currentdate: 2025-11-03
+date: Mon, 03 Nov 2025 13:12:20 GMT
 expires: 0
 pragma: no-cache
+sap_messageprocessinglogid: AGkIqjQLxR3OedHjsSy5NzaKpRBk
+sap_mplcorrelationid: AGkIqjT7v0o1-TdwF1w_NeVvPjpp
+sap_pregeneratedmplid: AGkIqjSp0E2BK1WuPK-u1kcz-Pur
 server: SAP
+testheader: SecondiFlow
 x-content-type-options: nosniff
-x-correlationid: 25c9b5da-ecf1-4b1c-42f7-aafe7d2c4ac6
+x-correlationid: 8b1cdee7-c0a4-4d2f-55cb-3c147d0b40c7
 x-frame-options: DENY
-x-vcap-request-id: 25c9b5da-ecf1-4b1c-42f7-aafe7d2c4ac6
+x-vcap-request-id: 8b1cdee7-c0a4-4d2f-55cb-3c147d0b40c7
 x-xss-protection: 1; mode=block
+transfer-encoding: chunked
 strict-transport-security: max-age=31536000; includeSubDomains; preload;
 
