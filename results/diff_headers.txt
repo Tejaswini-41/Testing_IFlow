@@ -1,56 +1,24 @@
 --- results/headers_base.txt
 +++ results/headers_current.txt
-@@ -1,18 +1,19 @@
- HTTP/1.1 200 OK
-
- cache-control: no-cache, no-store, max-age=0, must-revalidate
-
--content: Text
-
--date: Mon, 03 Nov 2025 08:56:55 GMT
-
-+content: JSON
-
-+currentdate: 2025-11-03
-
-+date: Mon, 03 Nov 2025 08:56:56 GMT
-
- expires: 0
-
+@@ -8,9 +8,9 @@
  pragma: no-cache
-
--sap_messageprocessinglogid: AGkIblcWU4s4pupimTQ8vB0bAfgo
-
--sap_mplcorrelationid: AGkIble6cqjSWtoRUDDjIsPR9da_
-
--sap_pregeneratedmplid: AGkIblfQ6k1N-r1lEo6EAvvJyGVf
-
-+sap_messageprocessinglogid: AGkIblgn6hgpe3MVW2V--v_cLQdR
-
-+sap_mplcorrelationid: AGkIblgz4X85xdCzq68JEeHsCu5w
-
-+sap_pregeneratedmplid: AGkIblggpF43ZeRNu2YKwmRVCv1F
 
  server: SAP
 
--testheader: FirstiFlow
-
-+testheader: SecondiFlow
-
  x-content-type-options: nosniff
 
--x-correlationid: f946dddd-7311-4837-4a4b-4dc1dac77cc0
+-x-correlationid: 88e23f53-2c0d-4eae-4d2e-7b2cd8c5d7a5
 
-+x-correlationid: a1cee70b-dbfc-42e7-71c7-8ac8b8609e23
++x-correlationid: 25c9b5da-ecf1-4b1c-42f7-aafe7d2c4ac6
 
  x-frame-options: DENY
 
--x-vcap-request-id: f946dddd-7311-4837-4a4b-4dc1dac77cc0
+-x-vcap-request-id: 88e23f53-2c0d-4eae-4d2e-7b2cd8c5d7a5
 
-+x-vcap-request-id: a1cee70b-dbfc-42e7-71c7-8ac8b8609e23
++x-vcap-request-id: 25c9b5da-ecf1-4b1c-42f7-aafe7d2c4ac6
 
  x-xss-protection: 1; mode=block
 
- transfer-encoding: chunked
-
  strict-transport-security: max-age=31536000; includeSubDomains; preload;
+
+ 
