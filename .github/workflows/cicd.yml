@@ -110,30 +110,17 @@ jobs:
           TOKEN=$(cat results/oauth_token.txt)
           AUTH_HEADER="Authorization: Bearer $TOKEN"
 
-          curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
-            -D results/headers_base.txt \
-            -o results/response_base.txt \
-            -H "$AUTH_HEADER" \
-            -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file1 }}
+          parallel ::: \
+            "curl -s --compressed -X POST '${{ github.event.inputs.iflow_base_url }}' \
+              -D results/headers_base.txt -o results/response_base.txt \
+              -H \"$AUTH_HEADER\" -H 'Content-Type: application/json' \
+              --data-binary @${{ github.event.inputs.payload_file1 }}" \
+            "curl -s --compressed -X POST '${{ github.event.inputs.iflow_current_url }}' \
+              -D results/headers_current.txt -o results/response_current.txt \
+              -H \"$AUTH_HEADER\" -H 'Content-Type: application/json' \
+              --data-binary @${{ github.event.inputs.payload_file2 }}"
 
-          echo "✅ Response 1 saved (headers_base.txt + response_base.txt)"
-
-      # -------------------- 🌐 Hit CPI iFlow (Current Mapping) --------------------
-      - name: Hit CPI iFlow (Current Mapping)
-        run: |
-          echo "📡 Fetching Response 2 (headers + body) from ${{ github.event.inputs.iflow_current_url }}"
-          TOKEN=$(cat results/oauth_token.txt)
-          AUTH_HEADER="Authorization: Bearer $TOKEN"
-
-          curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
-            -D results/headers_current.txt \
-            -o results/response_current.txt \
-            -H "$AUTH_HEADER" \
-            -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file2 }}
-
-          echo "✅ Response 2 saved (headers_current.txt + response_current.txt)"
+          echo "✅ Both responses fetched and saved."
 
       # -------------------- 🔍 Compare Responses and Headers --------------------
       - name: Compare headers and responses
