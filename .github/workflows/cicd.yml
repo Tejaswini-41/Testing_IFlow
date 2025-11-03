@@ -209,5 +209,9 @@ jobs:
       # -------------------- 🔗 Print Dashboard URL --------------------
       - name: Dashboard URL
         run: |
-          BASE_URL= "${{ steps.deploy.outputs.page_url }}/diff_dashboard.html"
+          BASE_URL="${{ steps.deploy.outputs.page_url }}"
+          BASE_URL="${BASE_URL%/}"  
+          URL="$BASE_URL/diff_dashboard.html"
+          echo "::notice title=Dashboard URL::$URL"
           echo "🎉 All done!"
+
