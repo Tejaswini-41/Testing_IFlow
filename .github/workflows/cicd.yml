@@ -206,10 +206,11 @@ jobs:
           git push
 
       # -------------------- 🌐 Upload & Deploy Dashboard --------------------
+      
       - name: Upload dashboard artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: results/diff_dashboard.html
+          path: results
 
       - name: Deploy to GitHub Pages
         id: deploy
