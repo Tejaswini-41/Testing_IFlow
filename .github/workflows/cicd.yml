@@ -209,5 +209,5 @@ jobs:
       # -------------------- 🔗 Print Dashboard URL --------------------
       - name: Dashboard URL
         run: |
-          BASE_URL="${{ steps.deploy.outputs.page_url }}"
+          BASE_URL= "${{ steps.deploy.outputs.page_url }}/diff_dashboard.html"
           echo "🎉 All done!"
