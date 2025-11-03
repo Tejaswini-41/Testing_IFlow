@@ -97,6 +97,12 @@ output_dir.mkdir(exist_ok=True)
 dashboard_html = output_dir / "diff_dashboard.html"
 dashboard_css = output_dir / "diff_dashboard.css"
 
+# Calculate logo path relative to script location (works for GitHub/workflows)
+script_dir = os.path.dirname(os.path.abspath(__file__))
+logo_path = os.path.join(script_dir, "assests", "syngenta_logo.jpg")
+# Calculate relative path from HTML output location to logo for browser
+logo_relative_path = os.path.relpath(logo_path, os.path.dirname(dashboard_html)).replace("\\", "/")
+
 if not os.path.exists(diff_file):
     print(f"Diff file not found: {diff_file}")
     sys.exit(1)
@@ -2083,7 +2089,11 @@ def render_json_with_highlight(obj, highlights, highlight_vals, context='base'):
                 key_html = f'  "{k}": '
                 # Value (recursively)
                 if value_override is not None:
-                    val_html = json.dumps(value_override, ensure_ascii=False)
+                    # Pretty render complex overrides (dict/list) to match View Responses formatting
+                    if isinstance(value_override, (dict, list)):
+                        val_html = _render(value_override, new_path)
+                    else:
+                        val_html = json.dumps(value_override, ensure_ascii=False)
                 else:
                     val_html = _render(v, new_path)
                 content = key_html + val_html + comma
@@ -2118,16 +2128,57 @@ def render_json_with_highlight(obj, highlights, highlight_vals, context='base'):
     return _render(obj)
 
 def render_json_side_by_side_diff(base_obj, current_obj, diff_data):
-    # Parse all path diffs
-    added, removed, changed, changed_old, changed_new = parse_deepdiff_paths(diff_data)
+    def str_path_to_tuple(path_str):
+        if not path_str:
+            return tuple()
+        parts = [p for p in path_str.split('/') if p != '']
+        # Keep as strings; list indices are unlikely here and safe as strings for highlighting
+        return tuple(parts)
+
+    MISSING = object()
+
+    def get_value_at_path(obj, path_tuple):
+        cur = obj
+        for key in path_tuple:
+            try:
+                cur = cur[key]
+            except Exception:
+                return MISSING
+        return cur
+
+    # Prefer our normalized field_changes to classify add/remove/change consistently
     highlights = {}
+    changed_old = {}
+    changed_new = {}
+    try:
+        for full_path in field_changes.keys():
+            path_tuple = str_path_to_tuple(full_path)
+            base_val = get_value_at_path(base_obj, path_tuple)
+            curr_val = get_value_at_path(current_obj, path_tuple)
+            base_missing = (base_val is MISSING)
+            curr_missing = (curr_val is MISSING)
+            if base_missing and not curr_missing:
+                highlights[path_tuple] = 'add'
+            elif curr_missing and not base_missing:
+                highlights[path_tuple] = 'remove'
+            else:
+                if base_val != curr_val:
+                    highlights[path_tuple] = 'change'
+                    changed_old[path_tuple] = base_val
+                    changed_new[path_tuple] = curr_val
+    except Exception:
+        # Fallback to DeepDiff parsing if something goes wrong
+        added, removed, changed, dd_old, dd_new = parse_deepdiff_paths(diff_data)
+        for path in added:
+            highlights[path] = 'add'
+        for path in removed:
+            highlights[path] = 'remove'
+        for path in changed:
+            highlights[path] = 'change'
+        changed_old = dd_old
+        changed_new = dd_new
+
     highlight_vals = {'old': changed_old, 'new': changed_new}
-    for path in added:
-        highlights[path] = 'add'
-    for path in removed:
-        highlights[path] = 'remove'
-    for path in changed:
-        highlights[path] = 'change'
     # Tables
     left = render_json_with_highlight(base_obj, highlights, highlight_vals, 'base')
     right = render_json_with_highlight(current_obj, highlights, highlight_vals, 'current')
@@ -2146,8 +2197,24 @@ html_content += """
         <!-- Compare Responses Section (Visual Side-by-Side JSON Diff + Download) -->
         <section id="compare" class="section">
             <div class="card full-width">
-                <div class="card-header" style="display: flex; align-items: center; justify-content: space-between;">
-                    <h2 class="card-title">Compare Responses</h2>
+                <div class="card-header" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <h2 class="card-title">Compare Responses</h2>
+                        <div class="legend" style="display:flex; align-items:center; gap: 12px; font-size: 0.9em; color:#475569;">
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#d1fae5; border-left:4px solid #21c65a; border-radius:3px;"></span>
+                                <span>Added</span>
+                            </div>
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e2; border-left:4px solid #f95b5b; border-radius:3px;"></span>
+                                <span>Removed</span>
+                            </div>
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e9; border-left:4px solid #eea236; border-radius:3px;"></span>
+                                <span>Modified</span>
+                            </div>
+                        </div>
+                    </div>
                     <button id="downloadDiffBtn" class="download-btn"><i class="fa fa-download"></i></button>
                 </div>
                 <div style='overflow-x:auto;padding:0 5px 15px 5px;'>
