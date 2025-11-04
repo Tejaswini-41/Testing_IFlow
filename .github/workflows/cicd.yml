@@ -11,7 +11,7 @@ on:
       payload_file2:
         description: 'Second Payload file name'
         required: false
-        default: 'payload2.json'
+        default: 'payload1.json'
         
       iflow_base_url:
         description: 'CPI Old Mapping Endpoint'
