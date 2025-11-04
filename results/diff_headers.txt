@@ -1,51 +1,33 @@
 --- results/headers_base.txt
 +++ results/headers_current.txt
-@@ -1,18 +1,19 @@
- HTTP/1.1 200 OK
+@@ -1,14 +1,14 @@
+ HTTP/1.1 500 Internal Server Error
 
  cache-control: no-cache, no-store, max-age=0, must-revalidate
 
--content: Text
+ content-type: text/plain;charset=ISO-8859-1
 
-+content: JSON
+-date: Tue, 04 Nov 2025 02:45:49 GMT
 
-+currentdate: 2025-11-03
-
- date: Mon, 03 Nov 2025 14:18:57 GMT
++date: Tue, 04 Nov 2025 02:45:50 GMT
 
  expires: 0
 
  pragma: no-cache
 
--sap_messageprocessinglogid: AGkIudH7-LZVnP9JREadLNeLYR9j
-
--sap_mplcorrelationid: AGkIudHozoNQysjbEgbkRqap8o-e
-
--sap_pregeneratedmplid: AGkIudGLlu5yhpflqvBIv6n9hOer
-
-+sap_messageprocessinglogid: AGkIudGhjDD5CSW1y7WGOTJV8Bmj
-
-+sap_mplcorrelationid: AGkIudGZIWOvPRZ8lAehC51LjOA0
-
-+sap_pregeneratedmplid: AGkIudFNn8_eYUt6Eb8NXNLHaNmt
-
  server: SAP
-
--testheader: FirstiFlow
-
-+testheader: SecondiFlow
 
  x-content-type-options: nosniff
 
--x-correlationid: 470880c5-9ffa-41f9-780e-9901c21710d8
+-x-correlationid: 5bb2eb58-64ec-469b-5f83-580aac6a710e
 
-+x-correlationid: 786b8b6f-b4c8-4686-6578-309c6f55b661
++x-correlationid: aa74ecb8-9de6-46b4-56a1-35b7f37b75dd
 
  x-frame-options: DENY
 
--x-vcap-request-id: 470880c5-9ffa-41f9-780e-9901c21710d8
+-x-vcap-request-id: 5bb2eb58-64ec-469b-5f83-580aac6a710e
 
-+x-vcap-request-id: 786b8b6f-b4c8-4686-6578-309c6f55b661
++x-vcap-request-id: aa74ecb8-9de6-46b4-56a1-35b7f37b75dd
 
  x-xss-protection: 1; mode=block
 

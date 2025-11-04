@@ -1,19 +1,14 @@
-HTTP/1.1 200 OK
+HTTP/1.1 500 Internal Server Error
 cache-control: no-cache, no-store, max-age=0, must-revalidate
-content: JSON
-currentdate: 2025-11-03
-date: Mon, 03 Nov 2025 14:18:57 GMT
+content-type: text/plain;charset=ISO-8859-1
+date: Tue, 04 Nov 2025 02:45:50 GMT
 expires: 0
 pragma: no-cache
-sap_messageprocessinglogid: AGkIudGhjDD5CSW1y7WGOTJV8Bmj
-sap_mplcorrelationid: AGkIudGZIWOvPRZ8lAehC51LjOA0
-sap_pregeneratedmplid: AGkIudFNn8_eYUt6Eb8NXNLHaNmt
 server: SAP
-testheader: SecondiFlow
 x-content-type-options: nosniff
-x-correlationid: 786b8b6f-b4c8-4686-6578-309c6f55b661
+x-correlationid: aa74ecb8-9de6-46b4-56a1-35b7f37b75dd
 x-frame-options: DENY
-x-vcap-request-id: 786b8b6f-b4c8-4686-6578-309c6f55b661
+x-vcap-request-id: aa74ecb8-9de6-46b4-56a1-35b7f37b75dd
 x-xss-protection: 1; mode=block
 transfer-encoding: chunked
 strict-transport-security: max-age=31536000; includeSubDomains; preload;
