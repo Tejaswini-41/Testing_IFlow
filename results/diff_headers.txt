@@ -1,21 +1,33 @@
 --- results/headers_base.txt
 +++ results/headers_current.txt
-@@ -8,9 +8,9 @@
+@@ -3,14 +3,14 @@
+ content-language: en
+
+ content-length: 431
+
+ content-type: text/html;charset=utf-8
+
+-date: Sat, 08 Nov 2025 10:13:59 GMT
+
++date: Sat, 08 Nov 2025 10:13:58 GMT
+
+ expires: 0
+
  pragma: no-cache
 
  server: SAP
 
  x-content-type-options: nosniff
 
--x-correlationid: c7e04fb7-6ce0-4495-7c37-fc6bcb1d1487
+-x-correlationid: 6184f557-e401-4e0d-448c-4dc1bfc85af4
 
-+x-correlationid: 1832e7ae-5748-466b-6628-6a4ae82e785a
++x-correlationid: 760236b9-af35-4e82-59e6-864c0fbe5274
 
  x-frame-options: DENY
 
--x-vcap-request-id: c7e04fb7-6ce0-4495-7c37-fc6bcb1d1487
+-x-vcap-request-id: 6184f557-e401-4e0d-448c-4dc1bfc85af4
 
-+x-vcap-request-id: 1832e7ae-5748-466b-6628-6a4ae82e785a
++x-vcap-request-id: 760236b9-af35-4e82-59e6-864c0fbe5274
 
  x-xss-protection: 1; mode=block
 
