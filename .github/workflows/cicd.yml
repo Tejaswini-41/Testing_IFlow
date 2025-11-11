@@ -3,22 +3,24 @@ name: CPI Response Compare
 on:
   workflow_dispatch:
     inputs:
-      payload_file1:
-        description: 'First Payload file name'
-        required: false
-        default: 'payload1.json'
-
-      payload_file2:
-        description: 'Second Payload file name'
-        required: false
-        default: 'payload2.json'
-        
-      iflow_base_url:
-        description: 'CPI Old Mapping Endpoint'
+      iflow_url:
+        description: 'CPI Mapping Endpoint'
         required: true
-      iflow_current_url:
-        description: 'CPI Current Mapping Endpoint'
+ 
+      payload_file:
+        description: 'Payload file name in repo root (e.g., requestpayload.json)'
+        required: false
+        default: 'requestpayload.json'
+ 
+      target_file_name:
+        description: 'Current response file name (saved under results/)'
         required: true
+        default: 'response_current.json'
+ 
+      upload_base_response_file:
+        description: 'Optional existing base response file name under results/ to compare against'
+        required: false
+ 
 
 permissions:
   contents: write
@@ -93,46 +95,58 @@ jobs:
           print("✅ Token fetched and saved to results/oauth_token.txt")
           EOF
 
-      # -------------------- 🌐 Hit CPI iFlow (Old Mapping) --------------------
-      - name: Hit CPI iFlow (Old Mapping)
+      # -------------------- 🌐 Hit CPI iFlow (Single Request) --------------------
+      - name: Hit CPI iFlow
         run: |
-          echo "📡 Fetching Response 1 (headers + body) from ${{ github.event.inputs.iflow_base_url }}"
+          echo "📡 Fetching response (headers + body) from ${{ github.event.inputs.iflow_url }}"
           TOKEN=$(cat results/oauth_token.txt)
           AUTH_HEADER="Authorization: Bearer $TOKEN"
+          TARGET_NAME="${{ github.event.inputs.target_file_name }}"
+          PAYLOAD_FILE="${{ github.event.inputs.payload_file }}"
+          CURRENT_HEADERS="results/headers_current.txt"
+          CURRENT_BODY="results/${TARGET_NAME}"
 
-          curl -s -X POST "${{ github.event.inputs.iflow_base_url }}" \
-            -D results/headers_base.txt \
-            -o results/response_base.txt \
+          if [ ! -f "$PAYLOAD_FILE" ]; then
+            echo "❌ Payload file '$PAYLOAD_FILE' not found in repository root."
+            exit 1
+          fi
+
+          echo "➡️ Using payload file: $PAYLOAD_FILE"
+
+          curl -s -X POST "${{ github.event.inputs.iflow_url }}" \
+            -D "$CURRENT_HEADERS" \
+            -o "$CURRENT_BODY" \
             -H "$AUTH_HEADER" \
             -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file1 }}
+            --data-binary @"$PAYLOAD_FILE"
 
-          echo "✅ Response 1 saved (headers_base.txt + response_base.txt)"
+          echo "✅ Response saved:"
+          echo " - $CURRENT_HEADERS"
+          echo " - $CURRENT_BODY"
 
-      # -------------------- 🌐 Hit CPI iFlow (Current Mapping) --------------------
-      - name: Hit CPI iFlow (Current Mapping)
+      # -------------------- 🔍 Determine Base and Compare --------------------
+      - name: Determine base response and compare
         run: |
-          echo "📡 Fetching Response 2 (headers + body) from ${{ github.event.inputs.iflow_current_url }}"
-          TOKEN=$(cat results/oauth_token.txt)
-          AUTH_HEADER="Authorization: Bearer $TOKEN"
-
-          curl -s -X POST "${{ github.event.inputs.iflow_current_url }}" \
-            -D results/headers_current.txt \
-            -o results/response_current.txt \
-            -H "$AUTH_HEADER" \
-            -H "Content-Type: application/json" \
-            --data-binary @${{ github.event.inputs.payload_file2 }}
-
-          echo "✅ Response 2 saved (headers_current.txt + response_current.txt)"
-
-      # -------------------- 🔍 Compare Responses and Headers --------------------
-      - name: Compare headers and responses
-        run: |
-          echo "🔍 Comparing response headers and body..."
+          echo "🔍 Determining base response and comparing..."
 
           python3 - <<'EOF'
-          import os, json, difflib
+          import os, json, difflib, shutil
           from deepdiff import DeepDiff
+          from pathlib import Path
+
+          RESULTS_DIR = Path("results")
+          RESULTS_DIR.mkdir(parents=True, exist_ok=True)
+
+          target_name = os.getenv("TARGET_NAME", "") or "${{ github.event.inputs.target_file_name }}"
+          uploaded_base_name = os.getenv("UPLOADED_BASE_NAME", "") or "${{ github.event.inputs.upload_base_response_file or '' }}"
+
+          current_body = RESULTS_DIR / target_name
+          current_headers = RESULTS_DIR / "headers_current.txt"
+
+          # Preferred base path if user specified/uploaded a base file name under results/
+          candidate_uploaded_base = RESULTS_DIR / uploaded_base_name if uploaded_base_name else None
+          # Fallback baseline location we manage automatically per target
+          managed_base = RESULTS_DIR / f"base_{target_name}"
 
           def compare_json(base_path, current_path, out_path):
               try:
@@ -160,21 +174,40 @@ jobs:
                   f.write("\n".join(diff))
               print(f"✅ Text diff (with +/-) saved to {out_path}")
 
-          # --- Compare Headers ---
-          compare_text("results/headers_base.txt", "results/headers_current.txt", "results/diff_headers.txt")
+          # Determine base path per rules:
+          base_path = None
+          if candidate_uploaded_base and candidate_uploaded_base.name and candidate_uploaded_base.exists():
+              base_path = candidate_uploaded_base
+              print(f"ℹ️ Using uploaded base file: {base_path}")
+          elif managed_base.exists():
+              base_path = managed_base
+              print(f"ℹ️ Using existing managed base file: {base_path}")
+          else:
+              # No base available: save current as new base for future comparisons
+              shutil.copyfile(current_body, managed_base)
+              print(f"🆕 No base found. Saved current as new base for future comparisons: {managed_base}")
+              # Produce empty diff file to indicate baseline creation
+              open(RESULTS_DIR / "diff.txt", "w", encoding="utf-8").write("Baseline created. No comparison performed on first run.")
+              # Also produce headers diff stub
+              open(RESULTS_DIR / "diff_headers.txt", "w", encoding="utf-8").write("Baseline created. No headers comparison performed on first run.")
+              # Exit early
+              raise SystemExit(0)
+
+          # --- Compare Headers (only one current set; diff stub since no prior headers tracked) ---
+          # If we later decide to manage a headers baseline, adapt similar to body baseline.
+          # For now, write a no-op info message.
+          with open(RESULTS_DIR / "diff_headers.txt", "w", encoding="utf-8") as f:
+              f.write("Headers baseline not tracked. Only current headers captured in results/headers_current.txt")
 
           # --- Compare Response Body ---
-          base_body = "results/response_base.txt"
-          current_body = "results/response_current.txt"
-
           try:
-              with open(base_body) as f:
+              with open(base_path) as f:
                   json.load(f)
               with open(current_body) as f:
                   json.load(f)
-              compare_json(base_body, current_body, "results/diff.txt")
+              compare_json(str(base_path), str(current_body), str(RESULTS_DIR / "diff.txt"))
           except Exception:
-              compare_text(base_body, current_body, "results/diff.txt")
+              compare_text(str(base_path), str(current_body), str(RESULTS_DIR / "diff.txt"))
           EOF
 
           echo "✅ Generated:"
