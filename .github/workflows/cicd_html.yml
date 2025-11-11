@@ -7,6 +7,9 @@ on:
         description: 'CPI Mapping Endpoint'
         required: true
 
+      target_file_name:
+        description: 'Current response file name (stored under results/)'
+        required: true    
 
 permissions:
   contents: write
@@ -49,9 +52,9 @@ jobs:
         run: |
           echo "🚀 Starting CPI iFlow Execution Logic..."
           URL="${{ github.event.inputs.iflow_url }}"
-          PAYLOAD_FILE="Payload.json"
-          BASE_FILE="results/response_base"
-          CURRENT_FILE="results/response_actual.txt"
+          PAYLOAD_FILE="upload/Payload.json"
+          BASE_FILE="results/response_base.txt"
+          CURRENT_FILE="results/${{ github.event.inputs.target_file_name }}"
 
           # ---- Case 1: First Run (No Base Exists) ----
           if [ ! -f "$BASE_FILE" ]; then
@@ -61,14 +64,14 @@ jobs:
               curl -s -X POST "$URL" \
                 -H "Content-Type: application/json" \
                 --data-binary "@$PAYLOAD_FILE" \
-                -o "results/$BASE_FILE"
+                -o "$BASE_FILE"
             else
               echo "⚠️ No payload found, sending empty JSON."
               echo '{}' > temp_payload.json
               curl -s -X POST "$URL" \
                 -H "Content-Type: application/json" \
                 --data-binary "@temp_payload.json" \
-                -o "results/$BASE_FILE"
+                -o "$BASE_FILE"
             fi
             echo "✅ Base response saved as $BASE_FILE"
             echo "first_run=true" >> $GITHUB_OUTPUT
@@ -78,18 +81,18 @@ jobs:
           # ---- Case 2: Subsequent Run (Base Exists) ----
           echo "🟠 Base compare file found. Proceeding with comparison run."
           if [ -f "$PAYLOAD_FILE" ]; then
-            echo "✅ Using payload from upload/$PAYLOAD_FILE"
+            echo "✅ Using payload from $PAYLOAD_FILE"
             curl -s -X POST "$URL" \
               -H "Content-Type: application/json" \
               --data-binary "@$PAYLOAD_FILE" \
-              -o "results/$CURRENT_FILE"
+              -o "$CURRENT_FILE"
           else
             echo "⚠️ No payload found, sending empty JSON."
             echo '{}' > temp_payload.json
             curl -s -X POST "$URL" \
               -H "Content-Type: application/json" \
               --data-binary "@temp_payload.json" \
-              -o "results/$CURRENT_FILE"
+              -o "$CURRENT_FILE"
           fi
           echo "✅ Current response saved as $CURRENT_FILE"
           echo "first_run=false" >> $GITHUB_OUTPUT
@@ -99,17 +102,13 @@ jobs:
         if: steps.cpi_logic.outputs.first_run == 'false'
         run: |
           echo "🔍 Comparing Base and Actual Responses..."
-          python3 - <<'PY'
+          python3 - <<'EOF'
           import json, difflib
           from deepdiff import DeepDiff
 
-          base = "results/response_base.txt"
-          current = "results/response_actual.txt"
-          diff_output = "results/diff.txt"
-
-          python3 - <<'EOF'
-          import os, json, difflib
-          from deepdiff import DeepDiff
+          base_path = "results/response_base.txt"
+          current_path = "results/${{ github.event.inputs.target_file_name }}"
+          diff_path = "results/diff.txt"
 
           def compare_json(base_path, current_path, out_path):
               try:
@@ -137,33 +136,23 @@ jobs:
                   f.write("\n".join(diff))
               print(f"✅ Text diff (with +/-) saved to {out_path}")
 
-          # --- Compare Headers ---
-          compare_text("results/headers_base.txt", "results/headers_current.txt", "results/diff_headers.txt")
-
-          # --- Compare Response Body ---
-          base_body = "results/response_base.txt"
-          current_body = "results/response_current.txt"
-
+          # Perform comparison
           try:
-              with open(base_body) as f:
-                  json.load(f)
-              with open(current_body) as f:
-                  json.load(f)
-              compare_json(base_body, current_body, "results/diff.txt")
+              with open(base_path) as f: json.load(f)
+              with open(current_path) as f: json.load(f)
+              compare_json(base_path, current_path, diff_path)
           except Exception:
-              compare_text(base_body, current_body, "results/diff.txt")
+              compare_text(base_path, current_path, diff_path)
           EOF
 
-          echo "✅ Generated:"
-          echo " - results/diff.txt (Response body diff)"
-          echo " - results/diff_headers.txt (Headers diff)"
+          echo "✅ Diff generated: results/diff.txt"
 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
         run: |
           python3 dashboard.py results/diff.txt
 
-      # -------------------- 🧾 Commit Results --------------------
+      # -------------------- 🧾 Commit & Upload --------------------
       - name: Commit & push results
         run: |
           git config user.name "github-actions[bot]"
@@ -172,22 +161,9 @@ jobs:
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
 
-      # -------------------- 🌐 Upload & Deploy Dashboard --------------------
-      
-      - name: Upload dashboard artifact
-        uses: actions/upload-pages-artifact@v3
+      # -------------------- 💾 Upload Report Artifact --------------------
+      - name: Upload HTML Diff Report
+        uses: actions/upload-artifact@v4
         with:
-          path: results
-
-      - name: Deploy to GitHub Pages
-        id: deploy
-        uses: actions/deploy-pages@v4
-
-      # -------------------- 🔗 Print Dashboard URL --------------------
-      - name: Dashboard URL
-        run: |
-          BASE_URL="${{ steps.deploy.outputs.page_url }}"
-          BASE_URL="${BASE_URL%/}"  
-          URL="$BASE_URL/diff_dashboard.html"
-          echo "::notice title=Dashboard URL::$URL"
-          echo "🎉 All done!"
+          name: CPI_Diff_Report
+          path: results/diff_dashboard.html
