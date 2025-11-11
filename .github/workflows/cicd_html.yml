@@ -3,23 +3,10 @@ name: CPI Response Compare
 on:
   workflow_dispatch:
     inputs:
-     
       iflow_url:
         description: 'CPI Mapping Endpoint'
         required: true
 
-      upload_payload_file:
-        description: 'Payload file name'
-        required: false
-        default: 'payload.json'  
-
-      target_file_name:
-        description: 'current response file name name'
-        required: true  
-
-      upload_file:
-        description: 'Prev version response (BaseResponse)'
-        required: false
 
 permissions:
   contents: write
@@ -34,94 +21,91 @@ jobs:
 
     steps:
       # -------------------- 📥 Checkout --------------------
-      - name: Checkout repository with PAT
+      - name: Checkout repository
         uses: actions/checkout@v4
         with:
-          token: ${{ secrets.PAT_TOKEN }}
-          
-      # -------------------- ⚙️ Cache Python Dependencies --------------------
-      - name: Cache pip dependencies
-        uses: actions/cache@v4
+          persist-credentials: true
+          fetch-depth: 0
+
+      # -------------------- 🐍 Setup Environment --------------------
+      - name: Setup Python
+        uses: actions/setup-python@v4
         with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-            
-      # -------------------- 🐍 Install Dependencies --------------------
-      - name: Install dependencies 
+          python-version: '3.10'
+
+      - name: Install dependencies
         run: |
           sudo apt-get update -qq
-          sudo apt-get install -y python3-pip jq
+          sudo apt-get install -y jq
           pip install --upgrade pip
-          pip install requests deepdiff pandas plotly
+          pip install requests deepdiff
 
-      - name: Create results folder
-        run: mkdir -p results
+      - name: Create folders
+        run: mkdir -p results upload
 
-      # -------------------- 🔐 Fetch OAuth Token --------------------
-      - name: Fetch OAuth Token
-        env:
-          TOKEN_URL: ${{ secrets.TOKEN_URL }}
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+      # -------------------- ⚙️ Core Logic --------------------
+      - name: CPI iFlow Execution Logic
+        id: cpi_logic
         run: |
-          echo "🔐 Fetching OAuth token from $TOKEN_URL ..."
-          python3 - <<'EOF'
-          import os, requests
+          echo "🚀 Starting CPI iFlow Execution Logic..."
+          URL="${{ github.event.inputs.iflow_url }}"
+          PAYLOAD_FILE="Payload.json"
+          BASE_FILE="results/response_base"
+          CURRENT_FILE="results/response_actual.txt"
 
-          token_url = os.getenv("TOKEN_URL")
-          client_id = os.getenv("CLIENT_ID")
-          client_secret = os.getenv("CLIENT_SECRET")
+          # ---- Case 1: First Run (No Base Exists) ----
+          if [ ! -f "$BASE_FILE" ]; then
+            echo "🟢 No base compare file found. First run detected."
+            if [ -f "$PAYLOAD_FILE" ]; then
+              echo "✅ Using payload from $PAYLOAD_FILE"
+              curl -s -X POST "$URL" \
+                -H "Content-Type: application/json" \
+                --data-binary "@$PAYLOAD_FILE" \
+                -o "results/$BASE_FILE"
+            else
+              echo "⚠️ No payload found, sending empty JSON."
+              echo '{}' > temp_payload.json
+              curl -s -X POST "$URL" \
+                -H "Content-Type: application/json" \
+                --data-binary "@temp_payload.json" \
+                -o "results/$BASE_FILE"
+            fi
+            echo "✅ Base response saved as $BASE_FILE"
+            echo "first_run=true" >> $GITHUB_OUTPUT
+            exit 0
+          fi
 
-          if not all([token_url, client_id, client_secret]):
-              print("❌ Missing secrets (TOKEN_URL, CLIENT_ID, CLIENT_SECRET).")
-              exit(1)
+          # ---- Case 2: Subsequent Run (Base Exists) ----
+          echo "🟠 Base compare file found. Proceeding with comparison run."
+          if [ -f "$PAYLOAD_FILE" ]; then
+            echo "✅ Using payload from upload/$PAYLOAD_FILE"
+            curl -s -X POST "$URL" \
+              -H "Content-Type: application/json" \
+              --data-binary "@$PAYLOAD_FILE" \
+              -o "results/$CURRENT_FILE"
+          else
+            echo "⚠️ No payload found, sending empty JSON."
+            echo '{}' > temp_payload.json
+            curl -s -X POST "$URL" \
+              -H "Content-Type: application/json" \
+              --data-binary "@temp_payload.json" \
+              -o "results/$CURRENT_FILE"
+          fi
+          echo "✅ Current response saved as $CURRENT_FILE"
+          echo "first_run=false" >> $GITHUB_OUTPUT
 
-          try:
-              resp = requests.post(
-                  token_url,
-                  data={"grant_type": "client_credentials"},
-                  auth=(client_id, client_secret)
-              )
-          except Exception as e:
-              print("❌ Token request failed:", e)
-              exit(1)
-
-          if resp.status_code != 200:
-              print(f"❌ Token request failed ({resp.status_code}):", resp.text)
-              exit(1)
-
-          token = resp.json().get("access_token")
-          if not token:
-              print("❌ No access_token found:", resp.text)
-              exit(1)
-
-          os.makedirs("results", exist_ok=True)
-          with open("results/oauth_token.txt", "w") as f:
-              f.write(token)
-
-          print("✅ Token fetched and saved to results/oauth_token.txt")
-          EOF
-
-      # -------------------- 🌐 Hit CPI iFlow  --------------------
-      - name: Hit CPI iFlow 
+      # -------------------- 🧩 Compare Only If Not First Run --------------------
+      - name: Compare Base and Actual Responses
+        if: steps.cpi_logic.outputs.first_run == 'false'
         run: |
-          echo "📡 Fetching Response 1 (headers + body) from ${{ github.event.inputs.iflow_url }}"
-          TOKEN=$(cat results/oauth_token.txt)
-          AUTH_HEADER="Authorization: Bearer $TOKEN"
+          echo "🔍 Comparing Base and Actual Responses..."
+          python3 - <<'PY'
+          import json, difflib
+          from deepdiff import DeepDiff
 
-            "curl -s --compressed -X POST '${{ github.event.inputs.iflow_url }}' \
-              -D results/${target_file_name}.txt -o results/${target_file_name}.txt \
-              -H \"$AUTH_HEADER\" -H 'Content-Type: application/json' \
-              --data-binary @${{ github.event.inputs.payload_file }}" \
-
-          echo "✅ Both responses fetched and saved."
-
-      # -------------------- 🔍 Compare Responses and Headers --------------------
-      - name: Compare headers and responses
-        run: |
-          echo "🔍 Comparing response headers and body..."
+          base = "results/response_base.txt"
+          current = "results/response_actual.txt"
+          diff_output = "results/diff.txt"
 
           python3 - <<'EOF'
           import os, json, difflib
@@ -207,4 +191,3 @@ jobs:
           URL="$BASE_URL/diff_dashboard.html"
           echo "::notice title=Dashboard URL::$URL"
           echo "🎉 All done!"
-
