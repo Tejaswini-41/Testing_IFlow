@@ -52,7 +52,7 @@ jobs:
         run: |
           echo "🚀 Starting CPI iFlow Execution Logic..."
           URL="${{ github.event.inputs.iflow_url }}"
-          PAYLOAD_FILE="upload/Payload.json"
+          PAYLOAD_FILE="Payload.json"
           BASE_FILE="results/response_base.txt"
           CURRENT_FILE="results/${{ github.event.inputs.target_file_name }}"
 
