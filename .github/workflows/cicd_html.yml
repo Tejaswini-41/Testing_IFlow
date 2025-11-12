@@ -166,4 +166,4 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: CPI_Diff_Report
-          path: results/diff_dashboard.html
+          path: results/
