@@ -1,81 +1,81 @@
 name: CPI Response Compare
-
+ 
 on:
   workflow_dispatch:
     inputs:
       iflow_url:
         description: 'CPI Mapping Endpoint'
         required: true
-
+ 
       target_file_name:
         description: 'Current response file name (stored under results/)'
-        required: true   
-
+        required: true  
+ 
       token:
         description: 'OAuth token from UI'
         required: true
-
+ 
       request_headers:
         description: 'Request headers JSON from UI (key:value object)'
         required: true
-
+ 
 permissions:
   contents: write
   pages: write
   id-token: write
-
+ 
 jobs:
   fetch_and_compare:
     runs-on: ubuntu-22.04
     environment:
       name: github-pages
-
+ 
     steps:
       - name: Checkout repository with PAT
         uses: actions/checkout@v4
         with:
           token: ${{ secrets.PAT_TOKEN }}
-
+ 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-
+ 
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
           sudo apt-get install -y jq
           pip install --upgrade pip
           pip install requests deepdiff plotly
-
+ 
       - name: Create folders
         run: mkdir -p results
-
+ 
       # -------------------- ⚙️ Core Logic --------------------
       - name: Execute CPI iFlow Logic
         id: cpi_logic
         run: |
           echo "🚀 Starting CPI iFlow Execution Logic..."
-
+ 
           URL="${{ github.event.inputs.iflow_url }}"
           TOKEN="${{ github.event.inputs.token }}"
           HEADERS_JSON='${{ github.event.inputs.request_headers }}'
-
+ 
           PAYLOAD_FILE="Payload.json"
           BASE_FILE="results/response_base.txt"
           CURRENT_FILE="results/${{ github.event.inputs.target_file_name }}"
-
+ 
           HEADERS_BASE="results/request_headers_base.txt"
           HEADERS_CURRENT="results/request_headers_current.txt"
-
+ 
           # Convert JSON headers to curl format
           echo "$HEADERS_JSON" | jq -r 'to_entries | .[] | "-H \"" + .key + ": " + .value + "\""' > curl_headers.txt
-
+ 
           # -------------------- FIRST RUN --------------------
-
+ 
           if [ ! -f "$BASE_FILE" ]; then
             echo "🟢 First run: No base file found."
-
+ 
             if [ -f "$PAYLOAD_FILE" ]; then
               curl -s -X POST "$URL" \
                 $(cat curl_headers.txt) \
@@ -92,18 +92,18 @@ jobs:
                 --data-binary "@temp_payload.json" \
                 -o "$BASE_FILE"
             fi
-
+ 
             # Save headers
             echo "$HEADERS_JSON" > "$HEADERS_BASE"
-
+ 
             echo "first_run=true" >> $GITHUB_OUTPUT
             exit 0
           fi
-
+ 
           # -------------------- NEXT RUNS --------------------
-
+ 
           echo "🟠 Base file exists: Running comparison."
-
+ 
           if [ -f "$PAYLOAD_FILE" ]; then
             curl -s -X POST "$URL" \
               $(cat curl_headers.txt) \
@@ -120,12 +120,12 @@ jobs:
               --data-binary "@temp_payload.json" \
               -o "$CURRENT_FILE"
           fi
-
+ 
           # Save current request headers
           echo "$HEADERS_JSON" > "$HEADERS_CURRENT"
-
+ 
           echo "first_run=false" >> $GITHUB_OUTPUT
-
+ 
       # -------------------- COMPARISON --------------------
       - name: Compare Base and Actual Responses + Headers
         if: steps.cpi_logic.outputs.first_run == 'false'
@@ -134,52 +134,52 @@ jobs:
           python3 - <<'EOF'
           import json, difflib
           from deepdiff import DeepDiff
-
+ 
           # -------------------- Files --------------------
           base_path = "results/response_base.txt"
           current_path = "results/${{ github.event.inputs.target_file_name }}"
           diff_path = "results/diff.txt"
-
+ 
           headers_base_path = "results/request_headers_base.txt"
           headers_current_path = "results/request_headers_current.txt"
           headers_diff_path = "results/diff_headers.txt"
-
+ 
           # -------------------- JSON Compare --------------------
-          
+         
           def compare_json(base_path, current_path, out_path):
               try:
                   with open(base_path) as f1, open(current_path) as f2:
                       base_data = json.load(f1)
                       current_data = json.load(f2)
-
+ 
                   diff = DeepDiff(base_data, current_data, ignore_order=True, verbose_level=2)
-
+ 
                   with open(out_path, 'w', encoding='utf-8') as f:
                       f.write(json.dumps(diff, indent=2, ensure_ascii=False))
-
+ 
                   print(f"✅ JSON diff saved to {out_path}")
               except Exception as e:
                   print(f"⚠️ JSON diff failed (fallback to text): {e}")
                   compare_text(base_path, current_path, out_path)
-
+ 
           # -------------------- Text Compare (fallback) --------------------
           def compare_text(base_path, current_path, out_path):
               with open(base_path) as f1, open(current_path) as f2:
                   base_lines = f1.readlines()
                   current_lines = f2.readlines()
-
+ 
               diff = list(difflib.unified_diff(
                   base_lines, current_lines,
                   fromfile=base_path,
                   tofile=current_path,
                   lineterm=""
               ))
-
+ 
               with open(out_path, "w", encoding="utf-8") as f:
                   f.write("\n".join(diff))
-
+ 
               print(f"✅ Text diff saved to {out_path}")
-
+ 
           # -------------------- Compare Response Body --------------------
           try:
               with open(base_path) as f: json.load(f)
@@ -187,32 +187,33 @@ jobs:
               compare_json(base_path, current_path, diff_path)
           except Exception:
               compare_text(base_path, current_path, diff_path)
-
+ 
           # -------------------- Compare Request Headers --------------------
           try:
               with open(headers_base_path) as f: base_h = json.load(f)
               with open(headers_current_path) as f: current_h = json.load(f)
-
+ 
               headers_diff = DeepDiff(base_h, current_h, ignore_order=True, verbose_level=2)
-
+ 
               with open(headers_diff_path, 'w', encoding='utf-8') as f:
                   f.write(json.dumps(headers_diff, indent=2, ensure_ascii=False))
-
+ 
               print(f"✅ Request headers diff saved to {headers_diff_path}")
-
+ 
           except Exception as e:
               print(f"⚠️ Header JSON diff failed, using text: {e}")
               compare_text(headers_base_path, headers_current_path, headers_diff_path)
-
+ 
           EOF
-
+ 
           echo "✅ Response and header diffs generated: results/diff.txt & results/diff_headers.txt"
-
+ 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
+        if: steps.cpi_logic.outputs.first_run == 'false'
         run: |
           python3 dashboard.py results/diff.txt
-
+ 
       # -------------------- 🧾 Commit & Upload --------------------
       - name: Commit & push results
         run: |
@@ -221,7 +222,7 @@ jobs:
           git add results/
           git commit -m "CPI responses and diff on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No changes to commit"
           git push
-
+ 
       # -------------------- 💾 Upload Report Artifact --------------------
       - name: Upload HTML Diff Report
         uses: actions/upload-artifact@v4
