@@ -1,16 +1,1 @@
-{
-  "values_changed": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_ROLE']": {
-      "new_value": "WE",
-      "old_value": "We"
-    },
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
-      "new_value": "UK",
-      "old_value": "PL"
-    },
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
-      "new_value": "London",
-      "old_value": "Pune"
-    }
-  }
-}
+{}
