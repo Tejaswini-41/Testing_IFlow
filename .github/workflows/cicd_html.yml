@@ -43,6 +43,7 @@ jobs:
           python-version: '3.10'
 
       # -------------------- 🐍 Install Dependencies --------------------
+
       - name: Install dependencies
         run: |
           sudo apt-get update -qq
@@ -74,6 +75,7 @@ jobs:
           echo "$HEADERS_JSON" | jq -r 'to_entries | .[] | "-H \"" + .key + ": " + .value + "\""' > curl_headers.txt
 
           # -------------------- FIRST RUN --------------------
+
           if [ ! -f "$BASE_FILE" ]; then
             echo "🟢 First run: No base file found."
 
@@ -102,6 +104,7 @@ jobs:
           fi
 
           # -------------------- NEXT RUNS --------------------
+
           echo "🟠 Base file exists: Running comparison."
 
           if [ -f "$PAYLOAD_FILE" ]; then
@@ -132,80 +135,86 @@ jobs:
         run: |
           echo "🔍 Comparing Base and Actual Responses AND Request Headers..."
           python3 - <<'EOF'
-import json, difflib
-from deepdiff import DeepDiff
+          import json, difflib
+          from deepdiff import DeepDiff
 
-base_path = "results/response_base.txt"
-current_path = "results/${{ github.event.inputs.target_file_name }}"
-diff_path = "results/diff.txt"
+          # -------------------- Files --------------------
+          base_path = "results/response_base.txt"
+          current_path = "results/${{ github.event.inputs.target_file_name }}"
+          diff_path = "results/diff.txt"
 
-headers_base_path = "results/request_headers_base.txt"
-headers_current_path = "results/request_headers_current.txt"
-headers_diff_path = "results/diff_headers.txt"
+          headers_base_path = "results/request_headers_base.txt"
+          headers_current_path = "results/request_headers_current.txt"
+          headers_diff_path = "results/diff_headers.txt"
 
-# -------------------- JSON Compare --------------------
-def compare_json(base_path, current_path, out_path):
-    try:
-        with open(base_path) as f1, open(current_path) as f2:
-            base_data = json.load(f1)
-            current_data = json.load(f2)
+          # -------------------- JSON Compare --------------------
 
-        diff = DeepDiff(base_data, current_data, ignore_order=True, verbose_level=2)
+          def compare_json(base_path, current_path, out_path):
+              try:
+                  with open(base_path) as f1, open(current_path) as f2:
+                      base_data = json.load(f1)
+                      current_data = json.load(f2)
 
-        with open(out_path, 'w', encoding='utf-8') as f:
-            f.write(json.dumps(diff, indent=2, ensure_ascii=False))
+                  diff = DeepDiff(base_data, current_data, ignore_order=True, verbose_level=2)
 
-        print(f"✅ JSON diff saved to {out_path}")
-    except Exception as e:
-        print(f"⚠️ JSON diff failed (fallback to text): {e}")
-        compare_text(base_path, current_path, out_path)
+                  with open(out_path, 'w', encoding='utf-8') as f:
+                      f.write(json.dumps(diff, indent=2, ensure_ascii=False))
 
-# -------------------- Text Compare --------------------
-def compare_text(base_path, current_path, out_path):
-    with open(base_path) as f1, open(current_path) as f2:
-        base_lines = f1.readlines()
-        current_lines = f2.readlines()
+                  print(f"✅ JSON diff saved to {out_path}")
+              except Exception as e:
+                  print(f"⚠️ JSON diff failed (fallback to text): {e}")
+                  compare_text(base_path, current_path, out_path)
 
-    diff = list(difflib.unified_diff(
-        base_lines, current_lines,
-        fromfile=base_path,
-        tofile=current_path,
-        lineterm=""
-    ))
+          # -------------------- Text Compare (fallback) --------------------
+          def compare_text(base_path, current_path, out_path):
+              with open(base_path) as f1, open(current_path) as f2:
+                  base_lines = f1.readlines()
+                  current_lines = f2.readlines()
 
-    with open(out_path, "w", encoding="utf-8") as f:
-        f.write("\n".join(diff))
+              diff = list(difflib.unified_diff(
+                  base_lines, current_lines,
+                  fromfile=base_path,
+                  tofile=current_path,
+                  lineterm=""
+              ))
 
-    print(f"✅ Text diff saved to {out_path}")
+              with open(out_path, "w", encoding="utf-8") as f:
+                  f.write("\n".join(diff))
 
-# -------------------- Compare Response Body --------------------
-try:
-    with open(base_path) as f: json.load(f)
-    with open(current_path) as f: json.load(f)
-    compare_json(base_path, current_path, diff_path)
-except Exception:
-    compare_text(base_path, current_path, diff_path)
+              print(f"✅ Text diff saved to {out_path}")
 
-# -------------------- Compare Request Headers --------------------
-try:
-    with open(headers_base_path) as f: base_h = json.load(f)
-    with open(headers_current_path) as f: current_h = json.load(f)
+          # -------------------- Compare Response Body --------------------
+          try:
+              with open(base_path) as f: json.load(f)
+              with open(current_path) as f: json.load(f)
+              compare_json(base_path, current_path, diff_path)
+          except Exception:
+              compare_text(base_path, current_path, diff_path)
 
-    headers_diff = DeepDiff(base_h, current_h, ignore_order=True, verbose_level=2)
+          # -------------------- Compare Request Headers --------------------
+          try:
+              with open(headers_base_path) as f: base_h = json.load(f)
+              with open(headers_current_path) as f: current_h = json.load(f)
 
-    with open(headers_diff_path, 'w', encoding='utf-8') as f:
-        f.write(json.dumps(headers_diff, indent=2, ensure_ascii=False))
+              headers_diff = DeepDiff(base_h, current_h, ignore_order=True, verbose_level=2)
 
-    print(f"✅ Request headers diff saved to {headers_diff_path}")
+              with open(headers_diff_path, 'w', encoding='utf-8') as f:
+                  f.write(json.dumps(headers_diff, indent=2, ensure_ascii=False))
 
-except Exception as e:
-    print(f"⚠️ Header JSON diff failed, using text: {e}")
-    compare_text(headers_base_path, headers_current_path, headers_diff_path)
-EOF
+              print(f"✅ Request headers diff saved to {headers_diff_path}")
+
+          except Exception as e:
+              print(f"⚠️ Header JSON diff failed, using text: {e}")
+              compare_text(headers_base_path, headers_current_path, headers_diff_path)
+
+          EOF
+
+          echo "✅ Response and header diffs generated: results/diff.txt & results/diff_headers.txt"
 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
-        run: python3 dashboard.py results/diff.txt
+        run: |
+          python3 dashboard.py results/diff.txt 
 
       # -------------------- 🧾 Commit & Upload --------------------
       - name: Commit & push results
