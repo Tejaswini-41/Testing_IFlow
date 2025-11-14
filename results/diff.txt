@@ -1,1 +1,12 @@
-{}
+{
+  "values_changed": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_ROLE']": {
+      "new_value": "We",
+      "old_value": "tejaswini durge"
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
+      "new_value": "PL",
+      "old_value": "India"
+    }
+  }
+}
