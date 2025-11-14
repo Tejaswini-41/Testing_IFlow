@@ -1,0 +1,963 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Variance Analysis Dashboard</title>
+    <link rel="stylesheet" href="diff_dashboard.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+ </head>
+ <body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="brand">
+              <div class="brand-icon" title="Toggle sidebar">
+                <i class="fa-solid fa-bars"></i>
+              </div>
+              <div style="display:flex;flex-direction:column;gap:2px;">
+                <span class="brand-text">SAP-Testing</span>
+              </div>
+            </div>
+            <nav class="nav">
+                <a class="nav-item active" href="#">
+                    <i class="fa-solid fa-table-columns"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a class="nav-item" href="#new">
+                    <i class="fa-solid fa-plus"></i>
+                    <span>New Fields</span>
+                </a>
+                <a class="nav-item" href="#modified">
+                    <i class="fa-solid fa-pen-to-square"></i>
+                    <span>Modified Fields</span>
+                </a>
+                <a class="nav-item" href="#removed">
+                    <i class="fa-solid fa-eraser"></i>
+                    <span>Removed Fields</span>
+                </a>
+                <a class="nav-item" href="#compare">
+                    <i class="fa-solid fa-code-compare"></i>
+                    <span>Compare Responses</span>
+                </a>
+                <a class="nav-item" href="#payloads">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <span>View Responses</span>
+                </a>
+                <a id="nav-header" class="nav-item">
+                    <i class="fa-solid fa-code"></i>
+                    <span>Header</span>
+                    <i class="fa-solid fa-chevron-right caret"></i>
+                </a>
+                <div id="nav-header-submenu" class="nav-submenu">
+                    <a class="nav-subitem" href="#header-new"><i class="fa-solid fa-square-plus"></i><span>New Header</span></a>
+                    <a class="nav-subitem" href="#header-modified"><i class="fa-solid fa-wand-magic-sparkles"></i><span>Modified Header</span></a>
+                    <a class="nav-subitem" href="#header-removed"><i class="fa-solid fa-trash-can"></i><span>Removed Header</span></a>
+                </div>
+            </nav>
+        </aside>
+        <main class="container">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-content">
+                <div>
+                    <h1>Variance Analysis Dashboard</h1>
+                    <p class="header-subtitle">Comprehensive comparison of configuration changes</p>
+                </div>
+                <div class="timestamp">
+                  
+               </div>
+            </div>
+        </div>
+
+        <!-- Statistics Cards (Dashboard Section) -->
+        <section id="dashboard" class="section active">
+        <div class="dashboard-grid">
+            <div class="stat-card total">
+                <div class="stat-label">Total Changes</div>
+                <div class="stat-value">25</div>
+            </div>
+            <div class="stat-card new">
+                <div class="stat-label">New Fields</div>
+                <div class="stat-value">21</div>
+            </div>
+            <div class="stat-card modified">
+                <div class="stat-label">Modified Fields</div>
+                <div class="stat-value">2</div>
+            </div>
+            <div class="stat-card removed">
+                <div class="stat-label">Removed Fields</div>
+                <div class="stat-value">2</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+            <!-- Summary Chart -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Change Distribution</h2>
+                </div>
+                <div class="chart-container">
+                    <div>                        <script type="text/javascript">window.PlotlyConfig = {MathJaxConfig: 'local'};</script>
+        <script charset="utf-8" src="https://cdn.plot.ly/plotly-3.2.0.min.js" integrity="sha256-iZ2u/oU2wf/vDbl/ChcX93WgbBRSBvUO6N413hDz7xM=" crossorigin="anonymous"></script>                <div id="pieChart" class="plotly-graph-div" style="height:300px; width:100%;"></div>            <script type="text/javascript">                window.PLOTLYENV=window.PLOTLYENV || {};                                if (document.getElementById("pieChart")) {                    Plotly.newPlot(                        "pieChart",                        [{"hole":0.6,"hovertemplate":"\u003cb\u003e%{label}\u003c\u002fb\u003e\u003cbr\u003eCount: %{value}\u003cbr\u003ePercentage: %{percent}\u003cextra\u003e\u003c\u002fextra\u003e","labels":["New Fields","Modified Fields","Removed Fields"],"marker":{"colors":["#4CAF50","#FF9800","#F44336"]},"textinfo":"label+percent","textposition":"outside","values":[21,2,2],"type":"pie"}],                        {"template":{"data":{"barpolar":[{"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"barpolar"}],"bar":[{"error_x":{"color":"#2a3f5f"},"error_y":{"color":"#2a3f5f"},"marker":{"line":{"color":"white","width":0.5},"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"bar"}],"carpet":[{"aaxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"baxis":{"endlinecolor":"#2a3f5f","gridcolor":"#C8D4E3","linecolor":"#C8D4E3","minorgridcolor":"#C8D4E3","startlinecolor":"#2a3f5f"},"type":"carpet"}],"choropleth":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"choropleth"}],"contourcarpet":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"contourcarpet"}],"contour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"contour"}],"heatmap":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"heatmap"}],"histogram2dcontour":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2dcontour"}],"histogram2d":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"histogram2d"}],"histogram":[{"marker":{"pattern":{"fillmode":"overlay","size":10,"solidity":0.2}},"type":"histogram"}],"mesh3d":[{"colorbar":{"outlinewidth":0,"ticks":""},"type":"mesh3d"}],"parcoords":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"parcoords"}],"pie":[{"automargin":true,"type":"pie"}],"scatter3d":[{"line":{"colorbar":{"outlinewidth":0,"ticks":""}},"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatter3d"}],"scattercarpet":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattercarpet"}],"scattergeo":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergeo"}],"scattergl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattergl"}],"scattermapbox":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermapbox"}],"scattermap":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scattermap"}],"scatterpolargl":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolargl"}],"scatterpolar":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterpolar"}],"scatter":[{"fillpattern":{"fillmode":"overlay","size":10,"solidity":0.2},"type":"scatter"}],"scatterternary":[{"marker":{"colorbar":{"outlinewidth":0,"ticks":""}},"type":"scatterternary"}],"surface":[{"colorbar":{"outlinewidth":0,"ticks":""},"colorscale":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"type":"surface"}],"table":[{"cells":{"fill":{"color":"#EBF0F8"},"line":{"color":"white"}},"header":{"fill":{"color":"#C8D4E3"},"line":{"color":"white"}},"type":"table"}]},"layout":{"annotationdefaults":{"arrowcolor":"#2a3f5f","arrowhead":0,"arrowwidth":1},"autotypenumbers":"strict","coloraxis":{"colorbar":{"outlinewidth":0,"ticks":""}},"colorscale":{"diverging":[[0,"#8e0152"],[0.1,"#c51b7d"],[0.2,"#de77ae"],[0.3,"#f1b6da"],[0.4,"#fde0ef"],[0.5,"#f7f7f7"],[0.6,"#e6f5d0"],[0.7,"#b8e186"],[0.8,"#7fbc41"],[0.9,"#4d9221"],[1,"#276419"]],"sequential":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]],"sequentialminus":[[0.0,"#0d0887"],[0.1111111111111111,"#46039f"],[0.2222222222222222,"#7201a8"],[0.3333333333333333,"#9c179e"],[0.4444444444444444,"#bd3786"],[0.5555555555555556,"#d8576b"],[0.6666666666666666,"#ed7953"],[0.7777777777777778,"#fb9f3a"],[0.8888888888888888,"#fdca26"],[1.0,"#f0f921"]]},"colorway":["#636efa","#EF553B","#00cc96","#ab63fa","#FFA15A","#19d3f3","#FF6692","#B6E880","#FF97FF","#FECB52"],"font":{"color":"#2a3f5f"},"geo":{"bgcolor":"white","lakecolor":"white","landcolor":"white","showlakes":true,"showland":true,"subunitcolor":"#C8D4E3"},"hoverlabel":{"align":"left"},"hovermode":"closest","mapbox":{"style":"light"},"paper_bgcolor":"white","plot_bgcolor":"white","polar":{"angularaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""},"bgcolor":"white","radialaxis":{"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":""}},"scene":{"xaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"yaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"},"zaxis":{"backgroundcolor":"white","gridcolor":"#DFE8F3","gridwidth":2,"linecolor":"#EBF0F8","showbackground":true,"ticks":"","zerolinecolor":"#EBF0F8"}},"shapedefaults":{"line":{"color":"#2a3f5f"}},"ternary":{"aaxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"baxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""},"bgcolor":"white","caxis":{"gridcolor":"#DFE8F3","linecolor":"#A2B1C6","ticks":""}},"title":{"x":0.05},"xaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2},"yaxis":{"automargin":true,"gridcolor":"#EBF0F8","linecolor":"#EBF0F8","ticks":"","title":{"standoff":15},"zerolinecolor":"#EBF0F8","zerolinewidth":2}}},"margin":{"l":20,"r":20,"t":20,"b":20},"title":{"text":""},"height":300,"showlegend":false},                        {"displayModeBar": false, "responsive": true}                    )                };            </script>        </div>
+                </div>
+            </div>
+
+            <!-- Quick Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h2 class="card-title">Quick Insights</h2>
+                </div>
+                <div style="padding: 20px 0;">
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">CHANGE RATE</div>
+                        <div style="font-size: 1.5em; font-weight: 700; color: #FF9800;">
+                            8% Modified
+                        </div>
+                    </div>
+                    <div style="margin-bottom: 20px;">
+                        <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">DATA QUALITY</div>
+                        <div style="font-size: 1.5em; font-weight: 700; color: #4CAF50;">
+                            92% Additions
+                        </div>
+                    </div>
+                    <div>
+                        <div style="font-size: 0.85em; color: #888; margin-bottom: 8px;">REMOVED FIELDS</div>
+                        <div style="font-size: 1.5em; font-weight: 700; color: #F44336;">
+                            8% Removed
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </section>
+
+        
+
+        <!-- New Fields -->
+        <section id="new" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">New Fields</h2>
+                <span class="badge badge-new">21 items</span>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Field Name</th>
+                        <th style="width: 60%;">New Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+            <tr class="new-row" data-row-id="new-0" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">POSTL_CODE</div></td>
+                <td><span class="value new-value">PO:411789</span></td>
+            </tr>
+        
+        <tr id='row-path-new-0' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_PARTNERS/item/POSTL_CODE</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-1" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">TELEPHONE</div></td>
+                <td><span class="value new-value">0124-24356823</span></td>
+            </tr>
+        
+        <tr id='row-path-new-1' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_PARTNERS/item/TELEPHONE</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-2" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">LANGU</div></td>
+                <td><span class="value new-value">EN</span></td>
+            </tr>
+        
+        <tr id='row-path-new-2' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_PARTNERS/item/LANGU</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-3" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">ADDR_TYPE</div></td>
+                <td><span class="value new-value">Commercial</span></td>
+            </tr>
+        
+        <tr id='row-path-new-3' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_PARTNERS/item/ADDR_TYPE</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-4" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">ZZSORECORDID</div></td>
+                <td><span class="value new-value">Constant</span></td>
+            </tr>
+        
+        <tr id='row-path-new-4' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/I_EXTENSION_IN/ZZSORECORDID</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-5" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">DOC_NUMBER</div></td>
+                <td><span class="value new-value">20251114</span></td>
+            </tr>
+        
+        <tr id='row-path-new-5' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/I_ORDER_HEADER_IN/DOC_NUMBER</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-6" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">ITEM_CATEG</div></td>
+                <td><span class="value new-value">Fertilizers</span></td>
+            </tr>
+        
+        <tr id='row-path-new-6' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/ITEM_CATEG</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-7" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">T_UNIT_ISO</div></td>
+                <td><span class="value new-value">ISO_UNIT_TEST</span></td>
+            </tr>
+        
+        <tr id='row-path-new-7' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/T_UNIT_ISO</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-8" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">PLANT</div></td>
+                <td><span class="value new-value">Santa Monica</span></td>
+            </tr>
+        
+        <tr id='row-path-new-8' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/PLANT</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-9" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">BATCH</div></td>
+                <td><span class="value new-value">112514</span></td>
+            </tr>
+        
+        <tr id='row-path-new-9' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/BATCH</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-10" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">STORE_LOC</div></td>
+                <td><span class="value new-value">Basel, Switzerland</span></td>
+            </tr>
+        
+        <tr id='row-path-new-10' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/STORE_LOC</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-11" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">BILL_DATE</div></td>
+                <td><span class="value new-value">20251114172840</span></td>
+            </tr>
+        
+        <tr id='row-path-new-11' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/BILL_DATE</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-12" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">SHORT_TEXT</div></td>
+                <td><span class="value new-value">Order to be placed once customer is unblocked</span></td>
+            </tr>
+        
+        <tr id='row-path-new-12' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/SHORT_TEXT</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-13" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">REQ_DATE</div></td>
+                <td><span class="value new-value">2025-11-14</span></td>
+            </tr>
+        
+        <tr id='row-path-new-13' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/REQ_DATE</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-14" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">PO_ITM_NO</div></td>
+                <td><span class="value new-value">9999</span></td>
+            </tr>
+        
+        <tr id='row-path-new-14' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/PO_ITM_NO</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-15" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">ITM_NUMBER</div></td>
+                <td><span class="value new-value">9864324639</span></td>
+            </tr>
+        
+        <tr id='row-path-new-15' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/ITM_NUMBER</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-16" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">CUST_MAT</div></td>
+                <td><span class="value new-value">ABCDEFGH</span></td>
+            </tr>
+        
+        <tr id='row-path-new-16' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/CUST_MAT</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-17" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">PO_METHOD</div></td>
+                <td><span class="value new-value">Invoice</span></td>
+            </tr>
+        
+        <tr id='row-path-new-17' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/PO_METHOD</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-18" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">BILL_BLOCK</div></td>
+                <td><span class="value new-value">Bill block test</span></td>
+            </tr>
+        
+        <tr id='row-path-new-18' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/BILL_BLOCK</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-19" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">REASON_REJ</div></td>
+                <td><span class="value new-value">Order is Rejected due to customer being blocked</span></td>
+            </tr>
+        
+        <tr id='row-path-new-19' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/REASON_REJ</span></td></tr>
+        
+            <tr class="new-row" data-row-id="new-20" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">CURRENCY</div></td>
+                <td><span class="value new-value">INR</span></td>
+            </tr>
+        
+        <tr id='row-path-new-20' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_ITEMS_IN/item/CURRENCY</span></td></tr>
+        
+                </tbody>
+            </table>
+
+        </div>
+        </section>
+
+        <!-- Modified Fields -->
+        <section id="modified" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">Modified Fields</h2>
+                <span class="badge badge-modified">2 items</span>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Field Name</th>
+                        <th style="width: 32%;">Previous Value</th>
+                        <th style="width: 33%;">New Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+            <tr class="modified-row" data-row-id="mod-0" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">COUNTRY</div></td>
+                <td><span class="value old-value">PL</span></td>
+                <td><span class="value new-value">Poland</span></td>
+            </tr>
+        
+        <tr id='row-path-mod-0' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_PARTNERS/item/COUNTRY</span></td></tr>
+        
+            <tr class="modified-row" data-row-id="mod-1" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">CITY</div></td>
+                <td><span class="value old-value">Pune</span></td>
+                <td><span class="value new-value">Pune(IN)</span></td>
+            </tr>
+        
+        <tr id='row-path-mod-1' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/C_ORDER_PARTNERS/item/CITY</span></td></tr>
+        
+                </tbody>
+            </table>
+
+        </div>
+        </section>
+
+        <!-- New Headers -->
+        <section id="header-new" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">New Headers</h2>
+                <span class="badge badge-new">0 items</span>
+            </div>
+
+            <div class="empty-state"><p>No new headers detected</p></div>
+
+        </div>
+        </section>
+
+        <!-- Modified Headers -->
+        <section id="header-modified" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">Modified Headers</h2>
+                <span class="badge badge-modified">0 items</span>
+            </div>
+
+            <div class="empty-state"><p>No modified headers detected</p></div>
+
+        </div>
+        </section>
+
+        <!-- Removed Headers -->
+        <section id="header-removed" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">Removed Headers</h2>
+                <span class="badge badge-removed">0 items</span>
+            </div>
+
+            <div class="empty-state"><p>No removed headers detected</p></div>
+
+        </div>
+        </section>
+
+        <!-- Removed Fields -->
+        <section id="removed" class="section">
+        <div class="card full-width">
+            <div class="card-header">
+                <h2 class="card-title">Removed Fields</h2>
+                <span class="badge badge-removed">2 items</span>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 40%;">Field Name</th>
+                        <th style="width: 60%;">Removed Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+            <tr class="removed-row" data-row-id="removed-0" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">SALES_ORG</div></td>
+                <td><span class="value old-value">0135</span></td>
+            </tr>
+        
+        <tr id='row-path-removed-0' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/I_ORDER_HEADER_IN/SALES_ORG</span></td></tr>
+        
+            <tr class="removed-row" data-row-id="removed-1" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">CD_CU_ISO1</div></td>
+                <td><span class="value old-value">GBP</span></td>
+            </tr>
+        
+        <tr id='row-path-removed-1' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>ns1:ZSD_BAPI_SALESORDER_SIMULATE/I_ORDER_HEADER_IN/CD_CU_ISO1</span></td></tr>
+        
+                </tbody>
+            </table>
+
+        </div>
+        </section>
+
+        <!-- Compare Responses Section (Visual Side-by-Side JSON Diff + Download) -->
+        <section id="compare" class="section">
+            <div class="card full-width">
+                <div class="card-header" style="display: flex; align-items: flex-start; justify-content: space-between; gap: 12px;">
+                    <div style="display:flex; flex-direction:column; gap:8px;">
+                        <h2 class="card-title">Compare Responses</h2>
+                        <div class="legend" style="display:flex; align-items:center; gap: 12px; font-size: 0.9em; color:#475569;">
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#d1fae5; border-left:4px solid #21c65a; border-radius:3px;"></span>
+                                <span>Added</span>
+                            </div>
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e2; border-left:4px solid #f95b5b; border-radius:3px;"></span>
+                                <span>Removed</span>
+                            </div>
+                            <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e9; border-left:4px solid #eea236; border-radius:3px;"></span>
+                                <span>Modified</span>
+                            </div>
+                        </div>
+                    </div>
+                    <button id="downloadDiffBtn" class="download-btn"><i class="fa fa-download"></i></button>
+                </div>
+                <div style='overflow-x:auto;padding:0 5px 15px 5px;'>
+<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #fee2e9 !important; border-left: 4px solid #eea236 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style><table class="diff-table-json" style="width:100%;table-layout:fixed"><tr><td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">{
+  "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
+  "C_ORDER_ITEMS_IN": {
+  "item": {
+  "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+  "MATERIAL": "230952",
+  "REQ_QTY": "3000",
+  "SALES_UNIT": "IGB",
+  "TARGET_QTY": "3000"
+}
+},
+  "C_ORDER_PARTNERS": {
+  "item": {
+<span class="diff-mod">  "CITY": "Pune",</span>
+<span class="diff-mod">  "COUNTRY": "PL",</span>
+  "PARTN_NUMB": "4717357",
+  "PARTN_ROLE": "We"
+}
+},
+  "I_CUSTOM_HEADER_IN": {
+  "CUSTOM_HEADER_ID": "0a69O000000F3yTQAS"
+},
+  "I_EXTENSION_IN": {
+  "TAXK1": "1"
+},
+  "I_ORDER_HEADER_IN": {
+<span class="diff-del">  "CD_CU_ISO1": "GBP",</span>
+  "CD_CU_ISO2": "",
+  "CD_TYPE1": "",
+  "CD_TYPE2": "ZDR3",
+  "CD_VALUE1": "0",
+  "CD_VALUE2": "0",
+  "DISTR_CHAN": "02",
+  "DIVISION": "02",
+  "DOC_TYPE": "ZDPP",
+  "PMNTTRMS": "0600",
+  "PURCH_NO": "UK Cart",
+<span class="diff-del">  "SALES_ORG": "0135"</span>
+}
+}
+}</pre></td><td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">{
+  "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
+  "C_ORDER_ITEMS_IN": {
+  "item": {
+<span class="diff-add">  "BATCH": "112514",</span>
+<span class="diff-add">  "BILL_BLOCK": "Bill block test",</span>
+<span class="diff-add">  "BILL_DATE": "20251114172840",</span>
+<span class="diff-add">  "CURRENCY": "INR",</span>
+  "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+<span class="diff-add">  "CUST_MAT": "ABCDEFGH",</span>
+<span class="diff-add">  "ITEM_CATEG": "Fertilizers",</span>
+<span class="diff-add">  "ITM_NUMBER": "9864324639",</span>
+  "MATERIAL": "230952",
+<span class="diff-add">  "PLANT": "Santa Monica",</span>
+<span class="diff-add">  "PO_ITM_NO": "9999",</span>
+<span class="diff-add">  "PO_METHOD": "Invoice",</span>
+<span class="diff-add">  "REASON_REJ": "Order is Rejected due to customer being blocked",</span>
+<span class="diff-add">  "REQ_DATE": "2025-11-14",</span>
+  "REQ_QTY": "3000",
+  "SALES_UNIT": "IGB",
+<span class="diff-add">  "SHORT_TEXT": "Order to be placed once customer is unblocked",</span>
+<span class="diff-add">  "STORE_LOC": "Basel, Switzerland",</span>
+  "TARGET_QTY": "3000",
+<span class="diff-add">  "T_UNIT_ISO": "ISO_UNIT_TEST"</span>
+}
+},
+  "C_ORDER_PARTNERS": {
+  "item": {
+<span class="diff-add">  "ADDR_TYPE": "Commercial",</span>
+<span class="diff-mod">  "CITY": "Pune(IN)",</span>
+<span class="diff-mod">  "COUNTRY": "Poland",</span>
+<span class="diff-add">  "LANGU": "EN",</span>
+  "PARTN_NUMB": "4717357",
+  "PARTN_ROLE": "We",
+<span class="diff-add">  "POSTL_CODE": "PO:411789",</span>
+<span class="diff-add">  "TELEPHONE": "0124-24356823"</span>
+}
+},
+  "I_CUSTOM_HEADER_IN": {
+  "CUSTOM_HEADER_ID": "0a69O000000F3yTQAS"
+},
+  "I_EXTENSION_IN": {
+  "TAXK1": "1",
+<span class="diff-add">  "ZZSORECORDID": "Constant"</span>
+},
+  "I_ORDER_HEADER_IN": {
+  "CD_CU_ISO2": "",
+  "CD_TYPE1": "",
+  "CD_TYPE2": "ZDR3",
+  "CD_VALUE1": "0",
+  "CD_VALUE2": "0",
+  "DISTR_CHAN": "02",
+  "DIVISION": "02",
+<span class="diff-add">  "DOC_NUMBER": "20251114",</span>
+  "DOC_TYPE": "ZDPP",
+  "PMNTTRMS": "0600",
+  "PURCH_NO": "UK Cart"
+}
+}
+}</pre></td></tr></table>
+                </div>
+            </div>
+        </section>
+
+        <!-- View Payloads Section -->
+        <section id="payloads" class="section">
+            <div class="card full-width">
+                <div class="card-header">
+                    <div class="payload-toggle">
+                        <button class="toggle-btn active" data-payload="current">
+                            <i class="fa-solid fa-file-code"></i> New Response
+                        </button>
+                        <button class="toggle-btn" data-payload="base">
+                            <i class="fa-solid fa-file-lines"></i> Old Response 
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Current Payload (shown by default) -->
+                <div class="payload-box active" id="currentPayloadBox">
+                    <pre class="payload-content">{
+  &quot;ns1:ZSD_BAPI_SALESORDER_SIMULATE&quot;: {
+    &quot;C_ORDER_ITEMS_IN&quot;: {
+      &quot;item&quot;: {
+        &quot;BATCH&quot;: &quot;112514&quot;,
+        &quot;BILL_BLOCK&quot;: &quot;Bill block test&quot;,
+        &quot;BILL_DATE&quot;: &quot;20251114172840&quot;,
+        &quot;CURRENCY&quot;: &quot;INR&quot;,
+        &quot;CUSTOM_ITEM_ID&quot;: &quot;0a99O000000if13QAA&quot;,
+        &quot;CUST_MAT&quot;: &quot;ABCDEFGH&quot;,
+        &quot;ITEM_CATEG&quot;: &quot;Fertilizers&quot;,
+        &quot;ITM_NUMBER&quot;: &quot;9864324639&quot;,
+        &quot;MATERIAL&quot;: &quot;230952&quot;,
+        &quot;PLANT&quot;: &quot;Santa Monica&quot;,
+        &quot;PO_ITM_NO&quot;: &quot;9999&quot;,
+        &quot;PO_METHOD&quot;: &quot;Invoice&quot;,
+        &quot;REASON_REJ&quot;: &quot;Order is Rejected due to customer being blocked&quot;,
+        &quot;REQ_DATE&quot;: &quot;2025-11-14&quot;,
+        &quot;REQ_QTY&quot;: &quot;3000&quot;,
+        &quot;SALES_UNIT&quot;: &quot;IGB&quot;,
+        &quot;SHORT_TEXT&quot;: &quot;Order to be placed once customer is unblocked&quot;,
+        &quot;STORE_LOC&quot;: &quot;Basel, Switzerland&quot;,
+        &quot;TARGET_QTY&quot;: &quot;3000&quot;,
+        &quot;T_UNIT_ISO&quot;: &quot;ISO_UNIT_TEST&quot;
+      }
+    },
+    &quot;C_ORDER_PARTNERS&quot;: {
+      &quot;item&quot;: {
+        &quot;ADDR_TYPE&quot;: &quot;Commercial&quot;,
+        &quot;CITY&quot;: &quot;Pune(IN)&quot;,
+        &quot;COUNTRY&quot;: &quot;Poland&quot;,
+        &quot;LANGU&quot;: &quot;EN&quot;,
+        &quot;PARTN_NUMB&quot;: &quot;4717357&quot;,
+        &quot;PARTN_ROLE&quot;: &quot;We&quot;,
+        &quot;POSTL_CODE&quot;: &quot;PO:411789&quot;,
+        &quot;TELEPHONE&quot;: &quot;0124-24356823&quot;
+      }
+    },
+    &quot;I_CUSTOM_HEADER_IN&quot;: {
+      &quot;CUSTOM_HEADER_ID&quot;: &quot;0a69O000000F3yTQAS&quot;
+    },
+    &quot;I_EXTENSION_IN&quot;: {
+      &quot;TAXK1&quot;: &quot;1&quot;,
+      &quot;ZZSORECORDID&quot;: &quot;Constant&quot;
+    },
+    &quot;I_ORDER_HEADER_IN&quot;: {
+      &quot;CD_CU_ISO2&quot;: &quot;&quot;,
+      &quot;CD_TYPE1&quot;: &quot;&quot;,
+      &quot;CD_TYPE2&quot;: &quot;ZDR3&quot;,
+      &quot;CD_VALUE1&quot;: &quot;0&quot;,
+      &quot;CD_VALUE2&quot;: &quot;0&quot;,
+      &quot;DISTR_CHAN&quot;: &quot;02&quot;,
+      &quot;DIVISION&quot;: &quot;02&quot;,
+      &quot;DOC_NUMBER&quot;: &quot;20251114&quot;,
+      &quot;DOC_TYPE&quot;: &quot;ZDPP&quot;,
+      &quot;PMNTTRMS&quot;: &quot;0600&quot;,
+      &quot;PURCH_NO&quot;: &quot;UK Cart&quot;
+    }
+  }
+}</pre>
+                </div>
+                
+                <!-- Base Payload (hidden by default) -->
+                <div class="payload-box" id="basePayloadBox" style="display: none;">
+                    <pre class="payload-content">{
+  &quot;ns1:ZSD_BAPI_SALESORDER_SIMULATE&quot;: {
+    &quot;C_ORDER_ITEMS_IN&quot;: {
+      &quot;item&quot;: {
+        &quot;CUSTOM_ITEM_ID&quot;: &quot;0a99O000000if13QAA&quot;,
+        &quot;MATERIAL&quot;: &quot;230952&quot;,
+        &quot;REQ_QTY&quot;: &quot;3000&quot;,
+        &quot;SALES_UNIT&quot;: &quot;IGB&quot;,
+        &quot;TARGET_QTY&quot;: &quot;3000&quot;
+      }
+    },
+    &quot;C_ORDER_PARTNERS&quot;: {
+      &quot;item&quot;: {
+        &quot;CITY&quot;: &quot;Pune&quot;,
+        &quot;COUNTRY&quot;: &quot;PL&quot;,
+        &quot;PARTN_NUMB&quot;: &quot;4717357&quot;,
+        &quot;PARTN_ROLE&quot;: &quot;We&quot;
+      }
+    },
+    &quot;I_CUSTOM_HEADER_IN&quot;: {
+      &quot;CUSTOM_HEADER_ID&quot;: &quot;0a69O000000F3yTQAS&quot;
+    },
+    &quot;I_EXTENSION_IN&quot;: {
+      &quot;TAXK1&quot;: &quot;1&quot;
+    },
+    &quot;I_ORDER_HEADER_IN&quot;: {
+      &quot;CD_CU_ISO1&quot;: &quot;GBP&quot;,
+      &quot;CD_CU_ISO2&quot;: &quot;&quot;,
+      &quot;CD_TYPE1&quot;: &quot;&quot;,
+      &quot;CD_TYPE2&quot;: &quot;ZDR3&quot;,
+      &quot;CD_VALUE1&quot;: &quot;0&quot;,
+      &quot;CD_VALUE2&quot;: &quot;0&quot;,
+      &quot;DISTR_CHAN&quot;: &quot;02&quot;,
+      &quot;DIVISION&quot;: &quot;02&quot;,
+      &quot;DOC_TYPE&quot;: &quot;ZDPP&quot;,
+      &quot;PMNTTRMS&quot;: &quot;0600&quot;,
+      &quot;PURCH_NO&quot;: &quot;UK Cart&quot;,
+      &quot;SALES_ORG&quot;: &quot;0135&quot;
+    }
+  }
+}</pre>
+                </div>
+                <div style='padding-top:18px;text-align:right;'>
+                    <button id='compareBtn' style="background:var(--gradient-warning);color:#fff;padding:10px 20px;border:none;border-radius:7px;cursor:pointer;font-weight:600;font-size:1em;box-shadow:0 2px 10px rgba(102,126,234,0.06);">Compare Responses</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- Footer -->
+
+        <footer class="footer">
+            <p>Generated by Diff Analysis Tool | Data processed: 25 changes across 3 categories</p>
+        </footer>
+
+        </main>
+    </div>
+    <script>
+      (function() {
+        const navItems = document.querySelectorAll('.nav .nav-item');
+        const sections = document.querySelectorAll('.section');
+        const layoutEl = document.querySelector('.layout');
+        const sidebarEl = document.querySelector('.sidebar');
+        
+        function showSection(targetId) {
+          sections.forEach(section => {
+            section.classList.remove('active');
+          });
+          
+          const targetSection = document.getElementById(targetId);
+          if (targetSection) {
+            targetSection.classList.add('active');
+          }
+          
+          navItems.forEach(nav => {
+            nav.classList.remove('active');
+            const href = nav.getAttribute('href');
+            if ((targetId === 'dashboard' && href === '#') || 
+                (href === '#' + targetId)) {
+              nav.classList.add('active');
+            }
+          });
+          
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+        
+        navItems.forEach(navItem => {
+          navItem.addEventListener('click', function(e) {
+            e.preventDefault();
+            const href = this.getAttribute('href');
+            let sectionId = 'dashboard';
+            if (href && href !== '#') {
+              sectionId = href.substring(1);
+            }
+            showSection(sectionId);
+            history.replaceState(null, '', href || '#dashboard');
+          });
+        });
+
+        // Header dropdown toggle
+        const headerNav = document.getElementById('nav-header');
+        const headerSubmenu = document.getElementById('nav-header-submenu');
+        if (headerNav && headerSubmenu) {
+          headerNav.addEventListener('click', function(e) {
+            // Toggle submenu open/close, but still allow navigation to #header if desired
+            headerSubmenu.classList.toggle('show');
+            headerNav.classList.toggle('expanded');
+          });
+          // Submenu item clicks should also update active state
+          headerSubmenu.querySelectorAll('a').forEach(item => {
+            item.addEventListener('click', function(e) {
+              const href = this.getAttribute('href') || '#header';
+              const sectionId = href.substring(1);
+              showSection(sectionId);
+              history.replaceState(null, '', href);
+            });
+          });
+        }
+
+        // Sidebar collapse toggle on logo
+        const brandIconEl = document.querySelector('.brand-icon');
+        if (brandIconEl && layoutEl && sidebarEl) {
+          brandIconEl.addEventListener('click', function(e) {
+            e.stopPropagation();
+            sidebarEl.classList.toggle('collapsed');
+            layoutEl.classList.toggle('collapsed');
+            this.title = sidebarEl.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar';
+            const icon = this.querySelector('i');
+            if (icon) {
+              if (sidebarEl.classList.contains('collapsed')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-angles-right');
+              } else {
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-angles-right');
+              }
+            }
+          });
+        }
+        
+        const chartDiv = document.getElementById('pieChart');
+        if (chartDiv) {
+          function handleChartClick(label) {
+            let targetSection = 'dashboard';
+            if (label === 'New Fields') targetSection = 'new';
+            else if (label === 'Modified Fields') targetSection = 'modified';
+            else if (label === 'Removed Fields') targetSection = 'removed';
+            showSection(targetSection);
+            history.replaceState(null, '', '#' + targetSection);
+          }
+
+          if (typeof chartDiv.on === 'function') {
+            chartDiv.on('plotly_click', function(data) {
+              const label = (data && data.points && data.points[0] && data.points[0].label) || '';
+              handleChartClick(label);
+            });
+          } else {
+            chartDiv.addEventListener('plotly_click', function(evt) {
+              const detail = evt.detail || {};
+              const label = (detail && detail.points && detail.points[0] && detail.points[0].label) || '';
+              handleChartClick(label);
+            });
+          }
+        }
+        
+        const initialHash = window.location.hash;
+        if (initialHash && initialHash.length > 1) {
+          const initialSection = initialHash.substring(1);
+          showSection(initialSection);
+        } else {
+          showSection('dashboard');
+        }
+        
+        // Payload Toggle
+        const toggleBtns = document.querySelectorAll('.toggle-btn');
+        const currentPayloadBox = document.getElementById('currentPayloadBox');
+        const basePayloadBox = document.getElementById('basePayloadBox');
+
+        toggleBtns.forEach(btn => {
+          btn.addEventListener('click', function() {
+            const payloadType = this.getAttribute('data-payload');
+            toggleBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            if (payloadType === 'current') {
+              currentPayloadBox.style.display = 'block';
+              basePayloadBox.style.display = 'none';
+            } else {
+              currentPayloadBox.style.display = 'none';
+              basePayloadBox.style.display = 'block';
+            }
+          });
+        });
+
+        const compareBtn = document.getElementById('compareBtn');
+        if(compareBtn) {
+          compareBtn.addEventListener('click', function() {
+            showSection('compare');
+            history.replaceState(null, '', '#compare');
+          });
+        }
+        
+        
+        // ========== CONSOLIDATED: Toggle Field Path for All Row Types ==========
+        function setupRowToggle(rowSelector) {
+          const rows = document.querySelectorAll(rowSelector);
+          
+          rows.forEach(row => {
+            row.addEventListener('click', function(e) {
+              // Don't trigger if clicking on a value span
+              if (e.target.classList.contains('value')) return;
+              
+              const rowId = this.getAttribute('data-row-id');
+              const pathElement = document.getElementById('row-path-' + rowId);
+              
+              // Get the row type class (e.g., 'new-row', 'modified-row', 'removed-row')
+              const rowClass = this.classList[0];
+              
+              // Close all other path rows within the same table body
+              const tbody = this.closest('tbody');
+              if (tbody) {
+                tbody.querySelectorAll('.field-path-row.visible').forEach(tag => {
+                  if (tag.id !== 'row-path-' + rowId) {
+                    tag.classList.remove('visible');
+                  }
+                });
+              }
+              
+              // Remove active class from all rows in this section
+              rows.forEach(r => r.classList.remove('active'));
+              
+              // Toggle current path
+              if (pathElement) {
+                const isVisible = pathElement.classList.contains('visible');
+                
+                if (isVisible) {
+                  pathElement.classList.remove('visible');
+                  this.classList.remove('active');
+                } else {
+                  pathElement.classList.add('visible');
+                  this.classList.add('active');
+                }
+              }
+            });
+          });
+        }
+
+        // Apply to all three row types
+        setupRowToggle('.new-row');
+        setupRowToggle('.removed-row');
+        setupRowToggle('.modified-row');
+        
+      })();
+    </script>
+    
+    <script>window._dashboardDiffData = {"dictionary_item_added": {"root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']": "PO:411789", "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']": "0124-24356823", "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']": "EN", "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']": "Commercial", "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_EXTENSION_IN']['ZZSORECORDID']": "Constant", "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251114"}, "dictionary_item_removed": {"root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']": "0135", "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['CD_CU_ISO1']": "GBP"}, "values_changed": {"root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']": {"new_value": {"CUSTOM_ITEM_ID": "0a99O000000if13QAA", "ITM_NUMBER": "9864324639", "PO_ITM_NO": "9999", "MATERIAL": "230952", "CUST_MAT": "ABCDEFGH", "BATCH": "112514", "REASON_REJ": "Order is Rejected due to customer being blocked", "BILL_BLOCK": "Bill block test", "BILL_DATE": "20251114172840", "PLANT": "Santa Monica", "STORE_LOC": "Basel, Switzerland", "TARGET_QTY": "3000", "REQ_QTY": "3000", "SALES_UNIT": "IGB", "ITEM_CATEG": "Fertilizers", "SHORT_TEXT": "Order to be placed once customer is unblocked", "REQ_DATE": "2025-11-14", "PO_METHOD": "Invoice", "CURRENCY": "INR", "T_UNIT_ISO": "ISO_UNIT_TEST"}, "old_value": {"CUSTOM_ITEM_ID": "0a99O000000if13QAA", "MATERIAL": "230952", "TARGET_QTY": "3000", "REQ_QTY": "3000", "SALES_UNIT": "IGB"}}, "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {"new_value": "Poland", "old_value": "PL"}, "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {"new_value": "Pune(IN)", "old_value": "Pune"}}};</script>
+
+    <script>
+      // ========== NATIVE BROWSER SAVE DIALOG ==========
+      document.getElementById('downloadDiffBtn').addEventListener('click', async function() {
+        const section = document.querySelector('#compare .card.full-width');
+        if (!section) return;
+        
+        const clone = section.cloneNode(true);
+        const btn = clone.querySelector('.download-btn');
+        if (btn) btn.remove();
+        
+        const htmlDoc = '<!DOCTYPE html>\n' +
+          '<html>\n' +
+          '<head>\n' +
+          '  <meta charset="UTF-8">\n' +
+          '  <title>Compare Responses - Diff Report</title>\n' +
+          '  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">\n' +
+          '  <style>\n' +
+          '    body { font-family: \'Inter\', sans-serif; background: #f7f6fa; margin: 0; padding: 32px; }\n' +
+          '    .card { background: #fff; border-radius: 16px; padding: 24px; max-width: 1100px; margin: 0 auto; box-shadow: 0 2px 12px rgba(90,90,160,0.07); }\n' +
+          '    .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; padding-bottom: 16px; border-bottom: 2px solid #f0f0f0; }\n' +
+          '    .card-title { font-size: 2em; font-weight: 700; margin-bottom: 16px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }\n' +
+          '    .diff-table-json { width: 100%; table-layout: fixed; border-spacing: 0; border-collapse: collapse; }\n' +
+          '    .diff-table-json td { vertical-align: top; background: white; padding: 8px; }\n' +
+          '    .diff-add { background: #d1fae5; }\n' +
+          '    .diff-del { background: #fee2e2; }\n' +
+          '    .diff-mod { background: #ffeeba !important; border-left: 4px solid #eea236 !important; }\n' +
+          '    pre { font-family: \'Courier New\', monospace; margin: 0; overflow-x: auto; font-size: 0.99em; padding: 0; }\n' +
+          '  </style>\n' +
+          '</head>\n' +
+          '<body>' + clone.outerHTML + '</body>\n' +
+          '</html>';
+        
+        const blob = new Blob([htmlDoc], { type: 'text/html' });
+        
+        // ========== CHECK IF FILE SYSTEM ACCESS API IS SUPPORTED ==========
+        if ('showSaveFilePicker' in window) {
+          try {
+            // Modern browsers - shows native file picker
+            const handle = await window.showSaveFilePicker({
+              suggestedName: 'compare-responses-' + new Date().toISOString().slice(0,10) + '.html',
+              types: [{
+                description: 'HTML Files',
+                accept: { 'text/html': ['.html'] }
+              }]
+            });
+            
+            const writable = await handle.createWritable();
+            await writable.write(blob);
+            await writable.close();
+            
+            alert('✅ File saved successfully!');
+          } catch (err) {
+            if (err.name !== 'AbortError') {
+              console.error('Save failed:', err);
+              fallbackDownload(blob);
+            }
+          }
+        } else {
+          // Fallback for older browsers
+          fallbackDownload(blob);
+        }
+      });
+
+      // Fallback download method
+      function fallbackDownload(blob) {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'compare-responses-' + new Date().toISOString().slice(0,10) + '.html';
+        a.click();
+        setTimeout(() => URL.revokeObjectURL(url), 500);
+      }
+      </script>
+ </body>
+</html>
