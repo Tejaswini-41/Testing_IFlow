@@ -3,7 +3,6 @@ name: CPI Response Compare
 on:
   workflow_dispatch:
     inputs:
-     
       iflow_url:
         description: 'CPI Mapping Endpoint'
         required: true
@@ -20,6 +19,7 @@ on:
       upload_file:
         description: 'Prev version response (BaseResponse)'
         required: false
+    
 
 permissions:
   contents: write
