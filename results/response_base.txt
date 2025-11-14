@@ -8,7 +8,7 @@
         "TARGET_QTY": "3000",
 
 
-        "SALES_UNIT": "IGB",
+        "SALES_UNIT": "IGB"
       }
     },
     "C_ORDER_PARTNERS": {
