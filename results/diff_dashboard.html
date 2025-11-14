@@ -265,8 +265,47 @@
                 
                 <!-- Current Payload (shown by default) -->
                 <div class="payload-box active" id="currentPayloadBox">
-                    <pre class="payload-content"># Current payload file not found
-# Expected location: results/response_current.txt</pre>
+                    <pre class="payload-content">{
+  &quot;ns1:ZSD_BAPI_SALESORDER_SIMULATE&quot;: {
+    &quot;C_ORDER_ITEMS_IN&quot;: {
+      &quot;item&quot;: {
+        &quot;CUSTOM_ITEM_ID&quot;: &quot;0a99O000000if13QAA&quot;,
+        &quot;MATERIAL&quot;: &quot;230952&quot;,
+        &quot;REQ_QTY&quot;: &quot;3000&quot;,
+        &quot;SALES_UNIT&quot;: &quot;IGB&quot;,
+        &quot;TARGET_QTY&quot;: &quot;3000&quot;
+      }
+    },
+    &quot;C_ORDER_PARTNERS&quot;: {
+      &quot;item&quot;: {
+        &quot;CITY&quot;: &quot;Pune&quot;,
+        &quot;COUNTRY&quot;: &quot;PL&quot;,
+        &quot;PARTN_NUMB&quot;: &quot;4717357&quot;,
+        &quot;PARTN_ROLE&quot;: &quot;We&quot;
+      }
+    },
+    &quot;I_CUSTOM_HEADER_IN&quot;: {
+      &quot;CUSTOM_HEADER_ID&quot;: &quot;0a69O000000F3yTQAS&quot;
+    },
+    &quot;I_EXTENSION_IN&quot;: {
+      &quot;TAXK1&quot;: &quot;1&quot;
+    },
+    &quot;I_ORDER_HEADER_IN&quot;: {
+      &quot;CD_CU_ISO1&quot;: &quot;GBP&quot;,
+      &quot;CD_CU_ISO2&quot;: &quot;&quot;,
+      &quot;CD_TYPE1&quot;: &quot;&quot;,
+      &quot;CD_TYPE2&quot;: &quot;ZDR3&quot;,
+      &quot;CD_VALUE1&quot;: &quot;0&quot;,
+      &quot;CD_VALUE2&quot;: &quot;0&quot;,
+      &quot;DISTR_CHAN&quot;: &quot;02&quot;,
+      &quot;DIVISION&quot;: &quot;02&quot;,
+      &quot;DOC_TYPE&quot;: &quot;ZDPP&quot;,
+      &quot;PMNTTRMS&quot;: &quot;0600&quot;,
+      &quot;PURCH_NO&quot;: &quot;UK Cart&quot;,
+      &quot;SALES_ORG&quot;: &quot;0135&quot;
+    }
+  }
+}</pre>
                 </div>
                 
                 <!-- Base Payload (hidden by default) -->
