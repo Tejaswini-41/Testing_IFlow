@@ -213,6 +213,7 @@ jobs:
 
       # -------------------- 📊 Generate Diff Dashboard --------------------
       - name: Generate Diff Dashboard
+        if: steps.cpi_logic.outputs.first_run == 'false'
         run: |
           python3 dashboard.py results/diff.txt 
 
