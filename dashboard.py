@@ -686,23 +686,37 @@ body {
 .sidebar-toggle:hover { background: rgba(102, 126, 234, 0.18); transform: translateY(-1px); }
 .sidebar.collapsed .sidebar-toggle { margin: 0; }
 
-.brand-logo {
-  width: 60px;
-  height: 55px;
-  object-fit: contain;
-  border-radius: 10px;
+.brand-icon {
+  width: 44px;
+  height: 44px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 12px;
   background: #ffffff;
-  padding: 6px;
+  color: #5568d3;
+  font-size: 1.25em;
   box-shadow: 0 1px 2px rgba(0,0,0,0.06);
   cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
 }
 
-/* Shrink logo when sidebar is collapsed */
-.sidebar.collapsed .brand-logo {
-  width: 36px;
-  height: 36px;
-  padding: 4px;
-  border-radius: 8px;
+.brand-icon:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 10px rgba(102, 126, 234, 0.18);
+  background: rgba(255,255,255,0.95);
+}
+
+.brand-icon i {
+  pointer-events: none;
+}
+
+/* Shrink icon when sidebar is collapsed */
+.sidebar.collapsed .brand-icon {
+  width: 32px;
+  height: 32px;
+  border-radius: 10px;
+  font-size: 1.1em;
 }
 
 .brand-text {
@@ -1632,7 +1646,9 @@ html_content = f"""<!DOCTYPE html>
     <div class="layout">
         <aside class="sidebar">
             <div class="brand">
-              <img src="syngenta_logo.jpg" alt="Syngenta Logo" class="brand-logo" title="Collapse sidebar">
+              <div class="brand-icon" title="Toggle sidebar">
+                <i class="fa-solid fa-bars"></i>
+              </div>
               <div style="display:flex;flex-direction:column;gap:2px;">
                 <span class="brand-text">SAP-Testing</span>
               </div>
@@ -2345,13 +2361,23 @@ html_content += """
         }
 
         // Sidebar collapse toggle on logo
-        const brandLogoEl = document.querySelector('.brand-logo');
-        if (brandLogoEl && layoutEl && sidebarEl) {
-          brandLogoEl.addEventListener('click', function(e) {
+        const brandIconEl = document.querySelector('.brand-icon');
+        if (brandIconEl && layoutEl && sidebarEl) {
+          brandIconEl.addEventListener('click', function(e) {
             e.stopPropagation();
             sidebarEl.classList.toggle('collapsed');
             layoutEl.classList.toggle('collapsed');
             this.title = sidebarEl.classList.contains('collapsed') ? 'Expand sidebar' : 'Collapse sidebar';
+            const icon = this.querySelector('i');
+            if (icon) {
+              if (sidebarEl.classList.contains('collapsed')) {
+                icon.classList.remove('fa-bars');
+                icon.classList.add('fa-angles-right');
+              } else {
+                icon.classList.add('fa-bars');
+                icon.classList.remove('fa-angles-right');
+              }
+            }
           });
         }
         
