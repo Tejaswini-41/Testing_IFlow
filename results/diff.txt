@@ -1,6 +1,6 @@
 --- results/response_base.txt
 +++ results/response_current.txt
-@@ -1,41 +1 @@
+@@ -1,43 +1 @@
 -{
 
 -  "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
@@ -17,6 +17,10 @@
 
 -        "TARGET_QTY": "3000",
 
+-
+
+-
+
 -        "SALES_UNIT": "IGB",
 
 -      }
@@ -27,7 +31,7 @@
 
 -      "item": {
 
--        "CITY": "London",
+-        "CITY": "Londo",
 
 -        "COUNTRY": "UK",
 
