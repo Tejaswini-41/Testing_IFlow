@@ -375,6 +375,7 @@ for full_path, changes in field_changes.items():
 
 # Create summary metrics
 total_changes = len(new_fields) + len(modified_fields) + len(removed_fields)
+no_changes = total_changes == 0
 
 logger.info(f"Diff parsing complete:")
 logger.info(f"  - New fields: {len(new_fields)}")
@@ -382,10 +383,9 @@ logger.info(f"  - Modified fields: {len(modified_fields)}")
 logger.info(f"  - Removed fields: {len(removed_fields)}")
 logger.info(f"  - Total changes: {total_changes}")
 
-if total_changes == 0:
+if no_changes:
     logger.warning("No differences found in the comparison")
-    print("No differences found.")
-    sys.exit(0)
+    print("No differences found. Generating summary dashboard.")
 
 # ===================== HEADERS DIFF PARSING (results/diff_headers.txt) =====================
 headers_diff_file = "results/diff_headers.txt"
