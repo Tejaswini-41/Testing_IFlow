@@ -4,14 +4,14 @@
       {
         "partn_role": "AG",
         "partn_numb": "4717357",
-        "country": "PL",
-        "city": "Pune"
+        "country": "UK",
+        "city": "London"
       },
       {
-        "partn_role": "We",
+        "partn_role": "WE",
         "partn_numb": "4717357",
-        "country": "PL",
-        "city": "Pune"
+        "country": "UK",
+        "city": "London"
       }
     ]
   },
@@ -47,3 +47,7 @@
     "distr_chan": "02"
   }
 }
+
+
+ 
+
