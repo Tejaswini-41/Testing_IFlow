@@ -6,12 +6,14 @@
         "MATERIAL": "230952",
         "REQ_QTY": "3000",
         "TARGET_QTY": "3000",
+
+
         "SALES_UNIT": "IGB",
       }
     },
     "C_ORDER_PARTNERS": {
       "item": {
-        "CITY": "London",
+        "CITY": "Londo",
         "COUNTRY": "UK",
         "PARTN_NUMB": "4717357",
         "PARTN_ROLE": "WE"
