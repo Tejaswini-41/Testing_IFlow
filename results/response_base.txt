@@ -5,8 +5,8 @@
         "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
         "MATERIAL": "230952",
         "REQ_QTY": "3000",
+        "TARGET_QTY": "3000",
         "SALES_UNIT": "IGB",
-        "TARGET_QTY": "3000"
       }
     },
     "C_ORDER_PARTNERS": {
