@@ -1,4 +1,4 @@
-name: CPI Response Compare
+name: CPI IS workflow
 
 on:
   workflow_dispatch:
