@@ -83,7 +83,6 @@ jobs:
               curl -s -X POST "$URL" \
                 $(cat curl_headers.txt) \
                 -H "Authorization: Bearer $TOKEN" \
-                -H "Content-Type: application/json" \
                 --data-binary "@$PAYLOAD_FILE" \
                 -o "$BASE_FILE"
             else
@@ -91,7 +90,6 @@ jobs:
               curl -s -X POST "$URL" \
                 $(cat curl_headers.txt) \
                 -H "Authorization: Bearer $TOKEN" \
-                -H "Content-Type: application/json" \
                 --data-binary "@temp_payload.json" \
                 -o "$BASE_FILE"
             fi
@@ -111,7 +109,6 @@ jobs:
             curl -s -X POST "$URL" \
               $(cat curl_headers.txt) \
               -H "Authorization: Bearer $TOKEN" \
-              -H "Content-Type: application/json" \
               --data-binary "@$PAYLOAD_FILE" \
               -o "$CURRENT_FILE"
           else
@@ -119,7 +116,6 @@ jobs:
             curl -s -X POST "$URL" \
               $(cat curl_headers.txt) \
               -H "Authorization: Bearer $TOKEN" \
-              -H "Content-Type: application/json" \
               --data-binary "@temp_payload.json" \
               -o "$CURRENT_FILE"
           fi
