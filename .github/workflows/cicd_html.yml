@@ -83,11 +83,13 @@ jobs:
             echo "$HEADERS_JSON"
             exit 1
           fi
-      
-          # Convert JSON → curl format
+
+          # Convert JSON → curl format (safe quoting)
           echo "$HEADERS_JSON" | jq -r '
-            to_entries | .[] | "-H \(.key + \": \" + .value)"
+            to_entries[] 
+            | "-H \"" + .key + ": " + .value + "\""
           ' > curl_headers.txt
+
       
           echo "🟢 Headers prepared"
       
