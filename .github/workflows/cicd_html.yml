@@ -88,7 +88,7 @@ jobs:
           echo "🟢 JSON is valid"
 
           echo "🪵 DEBUG: Converting headers to curl format..."
-          echo "$HEADERS_JSON" | jq -r 'to_entries | .[] | "-H \"" + .key + ": " + .value + "\""' > curl_headers.txt
+          echo "$HEADERS_JSON" | jq -r 'to_entries | .[] | "-H \(.key + \": \" + .value)"' > curl_headers.txt
 
           echo "🪵 DEBUG: Contents of curl_headers.txt:"
           cat curl_headers.txt || echo "(file not found!)"
