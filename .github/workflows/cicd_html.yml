@@ -59,92 +59,79 @@ jobs:
         id: cpi_logic
         run: |
           echo "🚀 Starting CPI iFlow Execution Logic..."
-      
+          
           URL="${{ github.event.inputs.iflow_url }}"
           TOKEN="${{ github.event.inputs.token }}"
           HEADERS_JSON='${{ github.event.inputs.request_headers }}'
-      
+          
           PAYLOAD_FILE="Payload.json"
           BASE_FILE="results/response_base.txt"
-          CURRENT_FILE="results/${{ github.event.inputs.target_file_name }}"
-      
+          CURRENT_FILE="results/response_current.txt"
+          
           HEADERS_BASE="results/request_headers_base.txt"
           HEADERS_CURRENT="results/request_headers_current.txt"
-      
+          
           echo "📝 Preparing headers..."
-      
-          # Remove old header file
+          
           rm -f curl_headers.txt
-      
-          # Validate JSON
+          
           echo "$HEADERS_JSON" | jq . >/dev/null 2>&1
           if [ $? -ne 0 ]; then
             echo "❌ ERROR: request_headers is NOT valid JSON!"
             echo "$HEADERS_JSON"
             exit 1
           fi
-
-          # Convert JSON → curl format (safe quoting)
+          
           echo "$HEADERS_JSON" | jq -r '
             to_entries[] 
             | "-H \"" + .key + ": " + .value + "\""
           ' > curl_headers.txt
-
-      
+          
           echo "🟢 Headers prepared"
-      
+          
           # -------------------- FIRST RUN --------------------
           if [ ! -f "$BASE_FILE" ]; then
             echo "🟢 First run: No base file found."
-      
+          
             if [ -f "$PAYLOAD_FILE" ]; then
-              curl -s -X POST "$URL" \
+              curl -v --fail-with-body -X POST "$URL" \
                 $(cat curl_headers.txt) \
                 -H "Authorization: Bearer $TOKEN" \
                 --data-binary "@$PAYLOAD_FILE" \
                 -o "$BASE_FILE"
             else
               echo '{}' > temp_payload.json
-              curl -s -X POST "$URL" \
+              curl -v --fail-with-body -X POST "$URL" \
                 $(cat curl_headers.txt) \
                 -H "Authorization: Bearer $TOKEN" \
                 --data-binary "@temp_payload.json" \
                 -o "$BASE_FILE"
             fi
-      
+          
             if [ $? -ne 0 ]; then
               echo "❌ CURL FAILED in FIRST RUN"
               exit 6
             fi
-      
+          
             echo "$HEADERS_JSON" > "$HEADERS_BASE"
             echo "first_run=true" >> $GITHUB_OUTPUT
             exit 0
           fi
-      
+          
           # -------------------- NEXT RUNS --------------------
           echo "🟠 Base file found. Comparing..."
-      
-          if [ -f "$PAYLOAD_FILE" ]; then
-            curl -s -X POST "$URL" \
-              $(cat curl_headers.txt) \
-              -H "Authorization: Bearer $TOKEN" \
-              --data-binary "@$PAYLOAD_FILE" \
-              -o "$CURRENT_FILE"
-          else
-            echo '{}' > temp_payload.json
-            curl -s -X POST "$URL" \
-              $(cat curl_headers.txt) \
-              -H "Authorization: Bearer $TOKEN" \
-              --data-binary "@temp_payload.json" \
-              -o "$CURRENT_FILE"
-          fi
-      
+          
+          curl -v --fail-with-body -X POST "$URL" \
+            $(cat curl_headers.txt) \
+            -H "Authorization: Bearer $TOKEN" \
+            --data-binary "@$PAYLOAD_FILE" \
+            -o "$CURRENT_FILE"
+          
           if [ $? -ne 0 ]; then
             echo "❌ CURL FAILED in NEXT RUN"
             exit 6
           fi
-      
+          
           echo "$HEADERS_JSON" > "$HEADERS_CURRENT"
           echo "first_run=false" >> $GITHUB_OUTPUT
 
