@@ -1,4 +1,4 @@
-name: CPI IS workflow
+name: CPI Response Compare
 
 on:
   workflow_dispatch:
@@ -58,84 +58,102 @@ jobs:
       - name: Execute CPI iFlow Logic
         id: cpi_logic
         run: |
-          echo "🚀 Starting CPI iFlow Execution Logic..."
-          
-          URL="${{ github.event.inputs.iflow_url }}"
-          TOKEN="${{ github.event.inputs.token }}"
-          HEADERS_JSON='${{ github.event.inputs.request_headers }}'
-          
-          PAYLOAD_FILE="Payload.json"
-          BASE_FILE="results/response_base.txt"
-          CURRENT_FILE="results/response_current.txt"
-          
-          HEADERS_BASE="results/request_headers_base.txt"
-          HEADERS_CURRENT="results/request_headers_current.txt"
-          
-          echo "📝 Preparing headers..."
-          
-          rm -f curl_headers.txt
-          
-          echo "$HEADERS_JSON" | jq . >/dev/null 2>&1
-          if [ $? -ne 0 ]; then
-            echo "❌ ERROR: request_headers is NOT valid JSON!"
-            echo "$HEADERS_JSON"
-            exit 1
-          fi
-          
-          echo "$HEADERS_JSON" | jq -r '
-            to_entries[] 
-            | "-H \"" + .key + ": " + .value + "\""
-          ' > curl_headers.txt
-          
-          echo "🟢 Headers prepared"
-          
-          # -------------------- FIRST RUN --------------------
-          if [ ! -f "$BASE_FILE" ]; then
-            echo "🟢 First run: No base file found."
-          
-            if [ -f "$PAYLOAD_FILE" ]; then
-              curl -v --fail-with-body -X POST "$URL" \
-                $(cat curl_headers.txt) \
-                -H "Authorization: Bearer $TOKEN" \
-                --data-binary "@$PAYLOAD_FILE" \
-                -o "$BASE_FILE"
-            else
-              echo '{}' > temp_payload.json
-              curl -v --fail-with-body -X POST "$URL" \
-                $(cat curl_headers.txt) \
-                -H "Authorization: Bearer $TOKEN" \
-                --data-binary "@temp_payload.json" \
-                -o "$BASE_FILE"
-            fi
-          
-            if [ $? -ne 0 ]; then
-              echo "❌ CURL FAILED in FIRST RUN"
-              exit 6
-            fi
-          
-            echo "$HEADERS_JSON" > "$HEADERS_BASE"
-            echo "first_run=true" >> $GITHUB_OUTPUT
-            exit 0
-          fi
-          
-          # -------------------- NEXT RUNS --------------------
-          echo "🟠 Base file found. Comparing..."
-          
-          curl -v --fail-with-body -X POST "$URL" \
-            $(cat curl_headers.txt) \
-            -H "Authorization: Bearer $TOKEN" \
-            --data-binary "@$PAYLOAD_FILE" \
-            -o "$CURRENT_FILE"
-          
-          if [ $? -ne 0 ]; then
-            echo "❌ CURL FAILED in NEXT RUN"
-            exit 6
-          fi
-          
-          echo "$HEADERS_JSON" > "$HEADERS_CURRENT"
-          echo "first_run=false" >> $GITHUB_OUTPUT
+          python3 - <<'PYEOF'
+          import os, json, sys
+          import requests
+          from pathlib import Path
 
-
+          # Read inputs
+          url = "${{ github.event.inputs.iflow_url }}"
+          token = "${{ github.event.inputs.token }}"
+          headers_json_str = r'''${{ github.event.inputs.request_headers }}'''
+          target_file = "${{ github.event.inputs.target_file_name }}"
+          
+          payload_file = Path("Payload.json")
+          base_file = Path("results/response_base.txt")
+          current_file = Path(f"results/{target_file}")
+          
+          headers_base = Path("results/request_headers_base.txt")
+          headers_current = Path("results/request_headers_current.txt")
+          
+          print("🚀 Starting CPI iFlow Execution Logic...")
+          print(f"URL: {url}")
+          print(f"Token: {'*' * min(8, len(token))}...")
+          print(f"Headers JSON string: {headers_json_str[:100]}...")
+          
+          # Parse headers
+          try:
+              headers_dict = json.loads(headers_json_str) if headers_json_str.strip() else {}
+              print(f"✅ Parsed headers: {list(headers_dict.keys())}")
+          except json.JSONDecodeError as e:
+              print(f"❌ Failed to parse headers JSON: {e}")
+              print(f"Raw headers input: {headers_json_str}")
+              headers_dict = {}
+          
+          # Build final headers
+          headers_dict["Authorization"] = f"Bearer {token}"
+          if "Content-Type" not in headers_dict:
+              headers_dict["Content-Type"] = "application/json"
+          
+          print(f"Final headers to send: {list(headers_dict.keys())}")
+          
+          # Load payload
+          if payload_file.exists():
+              try:
+                  payload = json.loads(payload_file.read_text(encoding="utf-8"))
+                  print(f"✅ Loaded payload from {payload_file}")
+              except Exception as e:
+                  print(f"⚠️ Failed to parse payload, using empty object: {e}")
+                  payload = {}
+          else:
+              print(f"⚠️ Payload file not found, using empty object")
+              payload = {}
+          
+          # First run check
+          if not base_file.exists():
+              print("🟢 First run: No base file found.")
+              try:
+                  resp = requests.post(url, json=payload, headers=headers_dict, timeout=60)
+                  print(f"Response status: {resp.status_code}")
+                  print(f"Response headers: {dict(resp.headers)}")
+                  
+                  if resp.status_code >= 400:
+                      print(f"❌ API returned error status {resp.status_code}")
+                      print(f"Response body: {resp.text[:500]}")
+                      sys.exit(1)
+                  
+                  base_file.parent.mkdir(parents=True, exist_ok=True)
+                  base_file.write_text(resp.text, encoding="utf-8")
+                  headers_base.write_text(json.dumps(headers_dict, indent=2), encoding="utf-8")
+                  
+                  print(f"✅ Base response saved to {base_file}")
+                  print("first_run=true", file=open(os.environ["GITHUB_OUTPUT"], "a"))
+                  sys.exit(0)
+              except requests.exceptions.RequestException as e:
+                  print(f"❌ Request failed: {e}")
+                  sys.exit(1)
+          
+          # Subsequent runs
+          print("🟠 Base file exists: Running comparison.")
+          try:
+              resp = requests.post(url, json=payload, headers=headers_dict, timeout=60)
+              print(f"Response status: {resp.status_code}")
+              
+              if resp.status_code >= 400:
+                  print(f"❌ API returned error status {resp.status_code}")
+                  print(f"Response body: {resp.text[:500]}")
+                  sys.exit(1)
+              
+              current_file.parent.mkdir(parents=True, exist_ok=True)
+              current_file.write_text(resp.text, encoding="utf-8")
+              headers_current.write_text(json.dumps(headers_dict, indent=2), encoding="utf-8")
+              
+              print(f"✅ Current response saved to {current_file}")
+              print("first_run=false", file=open(os.environ["GITHUB_OUTPUT"], "a"))
+          except requests.exceptions.RequestException as e:
+              print(f"❌ Request failed: {e}")
+              sys.exit(1)
+          PYEOF
 
       # -------------------- COMPARISON --------------------
       - name: Compare Base and Actual Responses + Headers
