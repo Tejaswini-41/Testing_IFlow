@@ -1,8 +1,0 @@
-{
-  "values_changed": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
-      "new_value": "London",
-      "old_value": "Londo"
-    }
-  }
-}
