@@ -71,30 +71,82 @@ jobs:
           HEADERS_BASE="results/request_headers_base.txt"
           HEADERS_CURRENT="results/request_headers_current.txt"
 
-          # Convert JSON headers to curl format
+          echo "------------------------------------------"
+          echo "🪵 DEBUG: RAW HEADERS_JSON INPUT:"
+          echo "$HEADERS_JSON"
+          echo "------------------------------------------"
+
+          echo "🪵 DEBUG: Checking JSON validity..."
+          echo "$HEADERS_JSON" | jq . >/dev/null 2>&1
+          if [ $? -ne 0 ]; then
+            echo "❌ ERROR: request_headers is NOT valid JSON!"
+            echo "❌ The value received was:"
+            echo "$HEADERS_JSON"
+            exit 1
+          fi
+
+          echo "🟢 JSON is valid"
+
+          echo "🪵 DEBUG: Converting headers to curl format..."
           echo "$HEADERS_JSON" | jq -r 'to_entries | .[] | "-H \"" + .key + ": " + .value + "\""' > curl_headers.txt
 
-          # -------------------- FIRST RUN --------------------
+          echo "🪵 DEBUG: Contents of curl_headers.txt:"
+          cat curl_headers.txt || echo "(file not found!)"
 
+          echo "------------------------------------------"
+          echo "🧩 FINAL HEADERS PREPARED FOR CURL:"
+          cat curl_headers.txt
+          echo "------------------------------------------"
+
+          echo "🪵 DEBUG: Printing CURL command (not running yet):"
+          echo "curl -s -X POST \"$URL\" \\
+            \$(cat curl_headers.txt) \\
+            -H \"Authorization: Bearer [HIDDEN]\" \\
+            --data-binary \"@$PAYLOAD_FILE\" \\
+            -o \"$BASE_FILE\""
+
+          echo "------------------------------------------"
+          echo "🪵 DEBUG: STARTING EXECUTION"
+          echo "------------------------------------------"
+
+          # -------------------- FIRST RUN --------------------
           if [ ! -f "$BASE_FILE" ]; then
             echo "🟢 First run: No base file found."
 
             if [ -f "$PAYLOAD_FILE" ]; then
-              curl -s -X POST "$URL" \
+              echo "🪵 DEBUG: Using payload file: $PAYLOAD_FILE"
+
+              curl -v -X POST "$URL" \
                 $(cat curl_headers.txt) \
                 -H "Authorization: Bearer $TOKEN" \
                 --data-binary "@$PAYLOAD_FILE" \
                 -o "$BASE_FILE"
+
+              EXIT_CODE=$?
+              echo "🪵 DEBUG: curl exit code = $EXIT_CODE"
+              if [ $EXIT_CODE -ne 0 ]; then
+                echo "❌ CURL FAILED in FIRST RUN"
+                exit 6
+              fi
             else
+              echo "⚠️ No payload file found. Using {}"
               echo '{}' > temp_payload.json
-              curl -s -X POST "$URL" \
+
+              curl -v -X POST "$URL" \
                 $(cat curl_headers.txt) \
                 -H "Authorization: Bearer $TOKEN" \
                 --data-binary "@temp_payload.json" \
                 -o "$BASE_FILE"
+
+              EXIT_CODE=$?
+              echo "🪵 DEBUG: curl exit code = $EXIT_CODE"
+              if [ $EXIT_CODE -ne 0 ]; then
+                echo "❌ CURL FAILED in FIRST RUN"
+                exit 6
+              fi
             fi
 
-            # Save headers
+            echo "🪵 DEBUG: Saving base headers file"
             echo "$HEADERS_JSON" > "$HEADERS_BASE"
 
             echo "first_run=true" >> $GITHUB_OUTPUT
@@ -102,28 +154,46 @@ jobs:
           fi
 
           # -------------------- NEXT RUNS --------------------
-
           echo "🟠 Base file exists: Running comparison."
 
           if [ -f "$PAYLOAD_FILE" ]; then
-            curl -s -X POST "$URL" \
+            echo "🪵 DEBUG: Using payload file: $PAYLOAD_FILE"
+
+            curl -v -X POST "$URL" \
               $(cat curl_headers.txt) \
               -H "Authorization: Bearer $TOKEN" \
               --data-binary "@$PAYLOAD_FILE" \
               -o "$CURRENT_FILE"
+
+            EXIT_CODE=$?
+            echo "🪵 DEBUG: curl exit code = $EXIT_CODE"
+            if [ $EXIT_CODE -ne 0 ]; then
+              echo "❌ CURL FAILED in NEXT RUN"
+              exit 6
+            fi
           else
-            echo '{}' > temp_payload.json
-            curl -s -X POST "$URL" \
+            echo "{}" > temp_payload.json
+            echo "⚠️ Missing payload file, using {}"
+
+            curl -v -X POST "$URL" \
               $(cat curl_headers.txt) \
               -H "Authorization: Bearer $TOKEN" \
               --data-binary "@temp_payload.json" \
               -o "$CURRENT_FILE"
+
+            EXIT_CODE=$?
+            echo "🪵 DEBUG: curl exit code = $EXIT_CODE"
+            if [ $EXIT_CODE -ne 0 ]; then
+              echo "❌ CURL FAILED in NEXT RUN"
+              exit 6
+            fi
           fi
 
-          # Save current request headers
+          echo "🪵 DEBUG: Saving current headers file"
           echo "$HEADERS_JSON" > "$HEADERS_CURRENT"
 
           echo "first_run=false" >> $GITHUB_OUTPUT
+
 
       # -------------------- COMPARISON --------------------
       - name: Compare Base and Actual Responses + Headers
