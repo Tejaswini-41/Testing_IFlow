@@ -19,6 +19,11 @@ on:
         description: 'Request headers JSON from UI (key:value object)'
         required: true
 
+      http_method:
+        description: 'HTTP method to use for the request (GET, POST, PUT, PATCH, DELETE)'
+        required: false
+        default: 'POST'
+
 permissions:
   contents: write
   pages: write
@@ -31,7 +36,6 @@ jobs:
       name: github-pages
 
     steps:
-      # -------------------- 📥 Checkout --------------------
       - name: Checkout repository with PAT
         uses: actions/checkout@v4
         with:
@@ -41,8 +45,6 @@ jobs:
         uses: actions/setup-python@v4
         with:
           python-version: '3.10'
-
-      # -------------------- 🐍 Install Dependencies --------------------
 
       - name: Install dependencies
         run: |
@@ -54,8 +56,8 @@ jobs:
       - name: Create folders
         run: mkdir -p results
 
-      # -------------------- ⚙️ Core Logic --------------------
-      - name: Execute CPI iFlow Logic (Simplified)
+      # -------------------- ⚙️ Core Logic (dynamic method) --------------------
+      - name: Execute CPI iFlow Logic (Dynamic HTTP Method)
         id: cpi_logic
         run: |
           python3 - <<'PYEOF'
@@ -65,86 +67,97 @@ jobs:
 
           print("🚀 Starting CPI iFlow Execution Logic...")
 
-          # ----------- INPUTS -----------
+          # Inputs from workflow_dispatch
           url = "${{ github.event.inputs.iflow_url }}"
           token = "${{ github.event.inputs.token }}"
           headers_input = r'''${{ github.event.inputs.request_headers }}'''
+          method = "${{ github.event.inputs.http_method }}".upper() or "POST"
           target_filename = "${{ github.event.inputs.target_file_name }}"
 
           payload_file = Path("Payload.json")
           base_response_file = Path("results/response_base.txt")
           current_response_file = Path(f"results/{target_filename}")
-
           base_headers_file = Path("results/request_headers_base.txt")
           current_headers_file = Path("results/request_headers_current.txt")
 
-          # ----------- HEADERS -----------
-          print("\n📌 Parsing Headers from Input...")
+          print(f"\n📌 Requested method: {method}")
+
+          # Parse headers JSON
           try:
               user_headers = json.loads(headers_input) if headers_input.strip() else {}
           except json.JSONDecodeError:
-              print("❌ Invalid JSON. Using empty headers.")
+              print("❌ Invalid headers JSON. Using empty headers.")
               user_headers = {}
 
-          # Add mandatory headers
-          user_headers.setdefault("Content-Type", "application/json")
+          # Ensure Content-Type default if not present
+          if not any(k.lower() == "content-type" for k in user_headers):
+              user_headers["Content-Type"] = "application/json"
+
+          # Add Authorization header from token (frontend supplies token)
           user_headers["Authorization"] = f"Bearer {token}"
 
-          print(f"🔹 Final headers used: {list(user_headers.keys())}")
+          print(f"🔹 Final headers keys: {list(user_headers.keys())}")
 
-          # ----------- PAYLOAD -----------
-          print("\n📌 Loading Payload...")
+          # Load payload if present and valid JSON
+          payload = None
           if payload_file.exists():
               try:
                   payload = json.loads(payload_file.read_text())
-                  print("✅ Payload loaded")
-              except:
-                  print("⚠️ Payload is invalid JSON. Using empty payload")
-                  payload = {}
+                  print("✅ Payload loaded from Payload.json")
+              except Exception as e:
+                  print("⚠️ Payload.json exists but is not valid JSON. Ignoring payload. Error:", e)
+                  payload = None
           else:
-              print("⚠️ No Payload.json found. Using empty payload")
-              payload = {}
+              print("ℹ️ No Payload.json found in repo (it's optional for GET/DELETE).")
 
-          # ----------- FUNCTION TO CALL API -----------
+          # Decide whether method supports a body
+          methods_with_body = {"POST", "PUT", "PATCH"}
+          send_body = method in methods_with_body
+
+          # Prepare request kwargs
+          request_kwargs = {
+              "headers": user_headers,
+              "timeout": 60
+          }
+          if send_body and payload is not None:
+              request_kwargs["json"] = payload
+
+          # API call wrapper
           def call_cpi():
               try:
-                  response = requests.post(url, json=payload, headers=user_headers, timeout=60)
-                  print(f"📥 Response Status: {response.status_code}")
-                  return response
+                  resp = requests.request(method, url, **request_kwargs)
+                  print(f"📥 Response Status: {resp.status_code}")
+                  return resp
               except requests.exceptions.RequestException as e:
                   print(f"❌ API call failed: {e}")
                   sys.exit(1)
 
-          # ----------- FIRST RUN (NO BASE FILE) -----------
+          # First run (no base saved)
           if not base_response_file.exists():
-              print("\n🟢 First Run Detected (No base response file)\n")
-              response = call_cpi()
-
-              if response.status_code >= 400:
-                  print(f"❌ API error: {response.text[:300]}")
+              print("\n🟢 First Run Detected (no base response file)\n")
+              resp = call_cpi()
+              if resp.status_code >= 400:
+                  print("❌ API returned error:", resp.status_code, resp.text[:500])
                   sys.exit(1)
-
-              base_response_file.parent.mkdir(exist_ok=True, parents=True)
-              base_response_file.write_text(response.text)
+              base_response_file.parent.mkdir(parents=True, exist_ok=True)
+              base_response_file.write_text(resp.text)
               base_headers_file.write_text(json.dumps(user_headers, indent=2))
-
-              print("✅ Base response saved.")
+              print("✅ Base response saved to results/response_base.txt")
+              # set output to indicate first run
               print("first_run=true", file=open(os.environ["GITHUB_OUTPUT"], "a"))
               sys.exit(0)
 
-          # ----------- SUBSEQUENT RUNS -----------
-          print("\n🟠 Base file found. Comparing...\n")
-          response = call_cpi()
-
-          if response.status_code >= 400:
-              print(f"❌ API error: {response.text[:300]}")
+          # Subsequent runs: save current response and continue
+          print("\n🟠 Base response exists. Executing request and saving current response...\n")
+          resp = call_cpi()
+          if resp.status_code >= 400:
+              print("❌ API returned error:", resp.status_code, resp.text[:500])
               sys.exit(1)
 
           current_response_file.parent.mkdir(parents=True, exist_ok=True)
-          current_response_file.write_text(response.text)
+          current_response_file.write_text(resp.text)
           current_headers_file.write_text(json.dumps(user_headers, indent=2))
-
-          print("✅ Current response saved.")
+          print(f"✅ Current response saved to results/{target_filename}")
           print("first_run=false", file=open(os.environ["GITHUB_OUTPUT"], "a"))
           PYEOF
 
