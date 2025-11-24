@@ -129,17 +129,28 @@ jobs:
               print("ℹ️ No Payload.json found in repo (it's optional for GET/DELETE).")
 
 
-                    # Decide whether method supports a body
-          methods_with_body = {"POST", "PUT", "PATCH"}
-          send_body = method in methods_with_body
+                    # Decide whether to send a body:
+          # POST/PUT/PATCH always send payload when present
+          # GET sends payload only if file exists
+          # DELETE never sends body
+          send_body = False
+
+          if method in {"POST", "PUT", "PATCH"}:
+              send_body = True
+          elif method == "GET":
+              send_body = payload is not None  # send payload only if file exists
+          elif method == "DELETE":
+              send_body = False
 
           # Prepare request kwargs
           request_kwargs = {
               "headers": user_headers,
               "timeout": 60
           }
+
           if send_body and payload is not None:
               request_kwargs["json"] = payload
+
 
       
 
