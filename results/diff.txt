@@ -5,7 +5,7 @@
     "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']": "EN",
     "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']": "Commercial",
     "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_EXTENSION_IN']['ZZSORECORDID']": "Constant",
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251117"
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251124"
   },
   "dictionary_item_removed": {
     "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']": "0135",
@@ -19,10 +19,10 @@
         "PO_ITM_NO": "9999",
         "MATERIAL": "230952",
         "CUST_MAT": "ABCDEFGH",
-        "BATCH": "112517",
+        "BATCH": "112524",
         "REASON_REJ": "Order is Rejected due to customer being blocked",
         "BILL_BLOCK": "Bill block test",
-        "BILL_DATE": "20251117130239",
+        "BILL_DATE": "20251124122602",
         "PLANT": "Santa Monica",
         "STORE_LOC": "Basel, Switzerland",
         "TARGET_QTY": "3000",
@@ -30,7 +30,7 @@
         "SALES_UNIT": "IGB",
         "ITEM_CATEG": "Fertilizers",
         "SHORT_TEXT": "Order to be placed once customer is unblocked",
-        "REQ_DATE": "2025-11-17",
+        "REQ_DATE": "2025-11-24",
         "PO_METHOD": "Invoice",
         "CURRENCY": "INR",
         "T_UNIT_ISO": "ISO_UNIT_TEST"
