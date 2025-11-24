@@ -81,6 +81,8 @@ jobs:
           headers_input = r'''${{ github.event.inputs.request_headers }}'''
           method = "${{ github.event.inputs.http_method }}".upper() or "POST"
           target_filename = "${{ github.event.inputs.target_file_name }}"
+          auth_type = "${{ github.event.inputs.auth_type }}".lower()
+
 
           payload_file = Path("Payload.json")
           base_response_file = Path("results/response_base.txt")
