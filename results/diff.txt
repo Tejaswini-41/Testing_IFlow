@@ -22,7 +22,7 @@
         "BATCH": "112524",
         "REASON_REJ": "Order is Rejected due to customer being blocked",
         "BILL_BLOCK": "Bill block test",
-        "BILL_DATE": "20251124124711",
+        "BILL_DATE": "20251124134857",
         "PLANT": "Santa Monica",
         "STORE_LOC": "Basel, Switzerland",
         "TARGET_QTY": "3000",
