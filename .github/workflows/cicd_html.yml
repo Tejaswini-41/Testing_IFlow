@@ -23,6 +23,12 @@ on:
         description: 'HTTP method to use for the request (GET, POST, PUT, PATCH, DELETE)'
         required: false
         default: 'POST'
+        
+      auth_type:
+        description: 'Authorization type (oauth or basic)'
+        required: true
+        default: 'oauth'
+
 
 permissions:
   contents: write
@@ -61,9 +67,11 @@ jobs:
         id: cpi_logic
         run: |
           python3 - <<'PYEOF'
-          import json, sys, os
+          import json, sys, os, base64
           import requests
           from pathlib import Path
+         
+
 
           print("🚀 Starting CPI iFlow Execution Logic...")
 
@@ -94,7 +102,15 @@ jobs:
               user_headers["Content-Type"] = "application/json"
 
           # Add Authorization header from token (frontend supplies token)
-          user_headers["Authorization"] = f"Bearer {token}"
+          # Add Authorization header based on auth_type
+          if auth_type == "basic":
+              # token expected as "username:password"
+              basic_b64 = base64.b64encode(token.encode("utf-8")).decode("utf-8")
+              user_headers["Authorization"] = f"Basic {basic_b64}"
+              print("✅ Using Basic Auth")
+          else:
+              user_headers["Authorization"] = f"Bearer {token}"
+              print("✅ Using Bearer (OAuth) Auth")
 
           print(f"🔹 Final headers keys: {list(user_headers.keys())}")
 
@@ -111,28 +127,19 @@ jobs:
               print("ℹ️ No Payload.json found in repo (it's optional for GET/DELETE).")
 
 
-          # Decide whether to send a body:
-          # POST/PUT/PATCH always send payload when present
-          # GET sends payload only if file exists
-          # DELETE never sends body
-          send_body = False
-
-          if method in {"POST", "PUT", "PATCH"}:
-              send_body = True
-          elif method == "GET":
-              send_body = payload is not None  # send payload only if file exists
-          elif method == "DELETE":
-              send_body = False
+                    # Decide whether method supports a body
+          methods_with_body = {"POST", "PUT", "PATCH"}
+          send_body = method in methods_with_body
 
           # Prepare request kwargs
           request_kwargs = {
               "headers": user_headers,
               "timeout": 60
           }
-
           if send_body and payload is not None:
               request_kwargs["json"] = payload
 
+      
 
           # API call wrapper
           def call_cpi():
