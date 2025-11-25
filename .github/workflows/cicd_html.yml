@@ -117,8 +117,9 @@ jobs:
           print(f"🔹 Final headers keys: {list(user_headers.keys())}")
 
           # Load payload if present and valid JSON
+                   # Load payload if present and valid JSON (IGNORED for GET)
           payload = None
-          if payload_file.exists():
+          if method != "GET" and payload_file.exists():
               try:
                   payload = json.loads(payload_file.read_text())
                   print("✅ Payload loaded from Payload.json")
@@ -126,23 +127,23 @@ jobs:
                   print("⚠️ Payload.json exists but is not valid JSON. Ignoring payload. Error:", e)
                   payload = None
           else:
-              print("ℹ️ No Payload.json found in repo (it's optional for GET/DELETE).")
+              if method == "GET":
+                  print("ℹ️ GET method selected – ignoring any existing Payload.json (no request body will be sent).")
+              else:
+                  print("ℹ️ No Payload.json found in repo (it's optional).")
 
-
-                    # Decide whether to send a body:
-          # POST/PUT/PATCH always send payload when present
-          # GET sends payload only if file exists
           # Decide whether method supports a body
-              methods_with_body = {"POST", "PUT", "PATCH"}
-              send_body = method in methods_with_body
-              
-              # Prepare request kwargs
-              request_kwargs = {
-                  "headers": user_headers,
-                  "timeout": 60
-              }
-              if send_body and payload is not None:
-                  request_kwargs["json"] = payload
+          methods_with_body = {"POST", "PUT", "PATCH"}
+          send_body = method in methods_with_body
+
+          # Prepare request kwargs
+          request_kwargs = {
+              "headers": user_headers,
+              "timeout": 60
+          }
+          if send_body and payload is not None:
+              request_kwargs["json"] = payload
+
     
 
           # API call wrapper
