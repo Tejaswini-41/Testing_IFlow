@@ -223,28 +223,44 @@ jobs:
           base_text = base_path.read_text(encoding='utf-8', errors='ignore')
           current_text = current_path.read_text(encoding='utf-8', errors='ignore')
 
+          base_stripped = base_text.lstrip()
+          current_stripped = current_text.lstrip()
+
           mode = "text"      # default
           base_obj = None
           current_obj = None
 
-          # -------------------- Try JSON first --------------------
+          print("ℹ️ First 80 chars of base response:", repr(base_stripped[:80]))
+          print("ℹ️ First 80 chars of current response:", repr(current_stripped[:80]))
+
+          # -------------------- Try JSON (based on simple heuristic) --------------------
           try:
-              base_obj = json.loads(base_text)
-              current_obj = json.loads(current_text)
-              mode = "json"
-              print("🧩 Detected JSON responses – using JSON comparison.")
+              if base_stripped.startswith(('{', '[')) and current_stripped.startswith(('{', '[')):
+                  base_obj = json.loads(base_text)
+                  current_obj = json.loads(current_text)
+                  mode = "json"
+                  print("🧩 Detected JSON responses – using JSON comparison.")
+              else:
+                  print("ℹ️ Bodies do not look like JSON (no leading { or [).")
           except Exception as e:
               print(f"ℹ️ JSON parsing failed, will try XML: {e}")
+              mode = "text"
+              base_obj = current_obj = None
 
-          # -------------------- If not JSON, try XML --------------------
+          # -------------------- If not JSON, try XML (based on simple heuristic) --------------------
           if mode != "json":
               try:
-                  base_obj = xmltodict.parse(base_text)
-                  current_obj = xmltodict.parse(current_text)
-                  mode = "xml"
-                  print("📄 Detected XML responses – using XML comparison.")
+                  if base_stripped.startswith('<') and current_stripped.startswith('<'):
+                      base_obj = xmltodict.parse(base_text)
+                      current_obj = xmltodict.parse(current_text)
+                      mode = "xml"
+                      print("📄 Detected XML responses – using XML comparison.")
+                  else:
+                      print("ℹ️ Bodies do not look like XML (no leading <).")
               except Exception as e:
                   print(f"ℹ️ XML parsing failed, will use text diff: {e}")
+                  mode = "text"
+                  base_obj = current_obj = None
 
           # -------------------- Compute diff based on detected mode --------------------
           if mode in ("json", "xml"):
@@ -257,7 +273,7 @@ jobs:
               print(f"✅ {mode.upper()} diff saved to {diff_path}")
           else:
               # fallback: pure text diff
-              print("⚠️ Neither JSON nor XML detected; using text diff.")
+              print("⚠️ Neither JSON nor XML reliably detected/parsed; using text diff.")
               write_text_diff(base_path, current_path, diff_path)
 
           # -------------------- Compare Request Headers (JSON) --------------------
