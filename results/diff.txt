@@ -1,51 +1,55 @@
 {
+  "dictionary_item_added": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['POSTL_CODE']": "PO:411789",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['TELEPHONE']": "0124-24356823",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['LANGU']": "EN",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['ADDR_TYPE']": "Commercial",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_EXTENSION_IN']['ZZSORECORDID']": "Constant",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['DOC_NUMBER']": "20251125"
+  },
+  "dictionary_item_removed": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['SALES_ORG']": "0135",
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['I_ORDER_HEADER_IN']['CD_CU_ISO1']": "GBP"
+  },
   "values_changed": {
-    "root": {
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']": {
       "new_value": {
-        "status": "GET request successful",
-        "time": "2025-11-25T08:30:37+0000"
+        "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+        "ITM_NUMBER": "9864324639",
+        "PO_ITM_NO": "9999",
+        "MATERIAL": "230952",
+        "CUST_MAT": "ABCDEFGH",
+        "BATCH": "112525",
+        "REASON_REJ": "Order is Rejected due to customer being blocked",
+        "BILL_BLOCK": "Bill block test",
+        "BILL_DATE": "20251125142822",
+        "PLANT": "Santa Monica",
+        "STORE_LOC": "Basel, Switzerland",
+        "TARGET_QTY": "3000",
+        "REQ_QTY": "3000",
+        "SALES_UNIT": "IGB",
+        "ITEM_CATEG": "Fertilizers",
+        "SHORT_TEXT": "Order to be placed once customer is unblocked",
+        "REQ_DATE": "2025-11-25",
+        "PO_METHOD": "Invoice",
+        "CURRENCY": "INR",
+        "T_UNIT_ISO": "ISO_UNIT_TEST"
       },
       "old_value": {
-        "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
-          "C_ORDER_ITEMS_IN": {
-            "item": {
-              "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
-              "MATERIAL": "230952",
-              "TARGET_QTY": "3000",
-              "REQ_QTY": "3000",
-              "SALES_UNIT": "IGB"
-            }
-          },
-          "C_ORDER_PARTNERS": {
-            "item": {
-              "PARTN_ROLE": "WE",
-              "PARTN_NUMB": "4717357",
-              "COUNTRY": "UK",
-              "CITY": "London"
-            }
-          },
-          "I_CUSTOM_HEADER_IN": {
-            "CUSTOM_HEADER_ID": "0a69O000000F3yTQAS"
-          },
-          "I_EXTENSION_IN": {
-            "TAXK1": "1"
-          },
-          "I_ORDER_HEADER_IN": {
-            "DOC_TYPE": "ZDPP",
-            "SALES_ORG": "0135",
-            "DISTR_CHAN": "02",
-            "DIVISION": "02",
-            "PURCH_NO": "UK Cart",
-            "PMNTTRMS": "0600",
-            "CD_TYPE1": "",
-            "CD_VALUE1": "0",
-            "CD_CU_ISO1": "GBP",
-            "CD_TYPE2": "ZDR3",
-            "CD_VALUE2": "0",
-            "CD_CU_ISO2": ""
-          }
-        }
+        "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+        "MATERIAL": "230952",
+        "TARGET_QTY": "3000",
+        "REQ_QTY": "3000",
+        "SALES_UNIT": "IGB"
       }
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
+      "new_value": "United Kingdom",
+      "old_value": "UK"
+    },
+    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['CITY']": {
+      "new_value": "London(UK)",
+      "old_value": "London"
     }
   }
 }
