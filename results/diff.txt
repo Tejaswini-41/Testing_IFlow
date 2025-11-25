@@ -1,8 +1,1 @@
-{
-  "values_changed": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_ITEMS_IN']['item']['BILL_DATE']": {
-      "new_value": "20251125152957",
-      "old_value": "20251125152845"
-    }
-  }
-}
+{}
