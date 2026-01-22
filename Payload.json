@@ -2,17 +2,16 @@
   "order_partners": {
     "item": [
       {
-        "partn_role": "AGGGG",
-        "partn_numb": "2135778",
-        "country": "Mexico",
+        "partn_role": "AG",
+        "partn_numb": "4717357",
+        "country": "PL",
         "city": "Pune"
       },
       {
-        "partn_role": "Tejaswini durge",
-        "partn_numb": "123",
-        "country": "India",
-        "country2": "USA",
-        "city": "Mumbai"
+        "partn_role": "We",
+        "partn_numb": "4717357",
+        "country": "PL",
+        "city": "Pune"
       }
     ]
   },
@@ -33,17 +32,16 @@
     ]
   },
   "order_header": {
-    "currency": "GBOP",
+    "currency": "GBP",
     "cd_value_promo": "0",
     "cd_type_promo": "ZDR3",
-    "cd_value_freight": "09",
-    "cd_type_freight1": "",
-    "cd_type_freight_4": "",
+    "cd_value_freight": "0",
+    "cd_type_freight": "",
     "custom_header_id": "0a69O000000F3yTQAS",
-    "custom_header_id2": "0a69O000000F3yS",
     "customer_tax": "1",
     "sales_org": "0135",
     "pmnttrms": "0600",
+    "purch_no": "UK Cart",
     "doc_type": "ZDPP",
     "division": "02",
     "distr_chan": "02"
