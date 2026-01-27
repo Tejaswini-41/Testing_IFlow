@@ -1,16 +1,1 @@
-{
-  "values_changed": {
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_ROLE']": {
-      "new_value": "Tejaswini",
-      "old_value": "We"
-    },
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['PARTN_NUMB']": {
-      "new_value": "123",
-      "old_value": "4717357"
-    },
-    "root['ns1:ZSD_BAPI_SALESORDER_SIMULATE']['C_ORDER_PARTNERS']['item']['COUNTRY']": {
-      "new_value": "India",
-      "old_value": "PL"
-    }
-  }
-}
+{}
