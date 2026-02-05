@@ -1,0 +1,162 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "type": "object",
+  "required": ["order_header", "order_items", "order_partners"],
+  "properties": {
+    "order_header": {
+      "type": "object",
+      "required": [
+        "sales_org",
+        "distr_chan",
+        "division",
+        "doc_type",
+        "currency",
+        "customer_group",
+        "pmnttrms",
+        "purch_no",
+        "custom_header_id",
+        "cd_type_freight",
+        "cd_value_freight",
+        "cd_type_promo",
+        "cd_value_promo"
+      ],
+      "properties": {
+        "sales_org": {
+          "type": "string",
+          "description": "Sales organization code",
+          "maxLength": 4
+        },
+        "distr_chan": {
+          "type": "string",
+          "description": "Distribution channel",
+          "maxLength": 2
+        },
+        "division": {
+          "type": "string",
+          "description": "Division code",
+          "maxLength": 2
+        },
+        "doc_type": {
+          "type": "string",
+          "description": "Document type",
+          "maxLength": 4
+        },
+        "currency": {
+          "type": "string",
+          "description": "Currency code (ISO 4217)",
+          "pattern": "^[A-Z]{3}$"
+        },
+        "customer_group": {
+          "type": "string",
+          "description": "Customer group code",
+          "maxLength": 2
+        },
+        "pmnttrms": {
+          "type": "string",
+          "description": "Payment terms code",
+          "maxLength": 4
+        },
+        "purch_no": {
+          "type": "string",
+          "description": "Purchase order number or reference"
+        },
+        "custom_header_id": {
+          "type": "string",
+          "description": "Custom header identifier"
+        },
+        "cd_type_freight": {
+          "type": "string",
+          "description": "Freight condition type code"
+        },
+        "cd_value_freight": {
+          "type": "string",
+          "description": "Freight condition value",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "cd_type_promo": {
+          "type": "string",
+          "description": "Promotion condition type code"
+        },
+        "cd_value_promo": {
+          "type": "string",
+          "description": "Promotion condition value",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$"
+        },
+        "customer_tax": {
+          "type": ["string", "null"],
+          "description": "Customer tax identifier"
+        }
+      }
+    },
+    "order_items": {
+      "type": "object",
+      "required": ["item"],
+      "properties": {
+        "item": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["custom_item_id", "material", "target_qty", "sales_unit"],
+            "properties": {
+              "custom_item_id": {
+                "type": "string",
+                "description": "Custom item identifier"
+              },
+              "material": {
+                "type": "string",
+                "description": "Material number",
+                "maxLength": 18
+              },
+              "target_qty": {
+                "type": "string",
+                "description": "Target quantity",
+                "pattern": "^[0-9]+(\\.[0-9]+)?$"
+              },
+              "sales_unit": {
+                "type": "string",
+                "description": "Sales unit of measure",
+                "maxLength": 3
+              }
+            }
+          }
+        }
+      }
+    },
+    "order_partners": {
+      "type": "object",
+      "required": ["item"],
+      "properties": {
+        "item": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["partn_role", "partn_numb", "country", "city"],
+            "properties": {
+              "partn_role": {
+                "type": "string",
+                "description": "Partner role code (e.g., AG=Sold-to, WE=Ship-to)",
+                "maxLength": 2
+              },
+              "partn_numb": {
+                "type": "string",
+                "description": "Partner number",
+                "maxLength": 10
+              },
+              "country": {
+                "type": "string",
+                "description": "Country code (ISO 3166-1 alpha-2)",
+                "pattern": "^[A-Z]{2}$"
+              },
+              "city": {
+                "type": "string",
+                "description": "City name"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
