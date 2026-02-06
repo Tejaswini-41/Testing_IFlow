@@ -263,7 +263,83 @@
                     <button id="downloadDiffBtn" class="download-btn"><i class="fa fa-download"></i></button>
                 </div>
                 <div style='overflow-x:auto;padding:0 5px 15px 5px;'>
-<div class="empty-state"><b>Could not render JSON diff:</b> Expecting value: line 1 column 1 (char 0)</div>
+<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #fee2e9 !important; border-left: 4px solid #eea236 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style><table class="diff-table-json" style="width:100%;table-layout:fixed"><tr><td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">{
+  "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
+  "C_ORDER_ITEMS_IN": {
+  "item": {
+  "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+  "MATERIAL": "230952",
+  "REQ_QTY": "3000",
+  "SALES_UNIT": "IGB",
+  "TARGET_QTY": "3000"
+}
+},
+  "C_ORDER_PARTNERS": {
+  "item": {
+  "CITY": "Mumbai",
+  "COUNTRY": "India",
+  "PARTN_NUMB": "123",
+  "PARTN_ROLE": "Tejaswini durge"
+}
+},
+  "I_CUSTOM_HEADER_IN": {
+  "CUSTOM_HEADER_ID": "0a69O000000F3yTQAS"
+},
+  "I_EXTENSION_IN": {
+  "TAXK1": "1"
+},
+  "I_ORDER_HEADER_IN": {
+  "CD_CU_ISO1": "GBOP",
+  "CD_CU_ISO2": "",
+  "CD_TYPE2": "ZDR3",
+  "CD_VALUE1": "09",
+  "CD_VALUE2": "0",
+  "DISTR_CHAN": "02",
+  "DIVISION": "02",
+  "DOC_TYPE": "ZDPP",
+  "PMNTTRMS": "0600",
+  "SALES_ORG": "0135"
+}
+}
+}</pre></td><td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">{
+  "ns1:ZSD_BAPI_SALESORDER_SIMULATE": {
+  "C_ORDER_ITEMS_IN": {
+  "item": {
+  "CUSTOM_ITEM_ID": "0a99O000000if13QAA",
+  "MATERIAL": "230952",
+  "REQ_QTY": "3000",
+  "SALES_UNIT": "IGB",
+  "TARGET_QTY": "3000"
+}
+},
+  "C_ORDER_PARTNERS": {
+  "item": {
+  "CITY": "Mumbai",
+  "COUNTRY": "India",
+  "PARTN_NUMB": "123",
+  "PARTN_ROLE": "Tejaswini durge"
+}
+},
+  "I_CUSTOM_HEADER_IN": {
+  "CUSTOM_HEADER_ID": "0a69O000000F3yTQAS"
+},
+  "I_EXTENSION_IN": {
+  "TAXK1": "1"
+},
+  "I_ORDER_HEADER_IN": {
+  "CD_CU_ISO1": "GBOP",
+  "CD_CU_ISO2": "",
+  "CD_TYPE2": "ZDR3",
+  "CD_VALUE1": "09",
+  "CD_VALUE2": "0",
+  "DISTR_CHAN": "02",
+  "DIVISION": "02",
+  "DOC_TYPE": "ZDPP",
+  "PMNTTRMS": "0600",
+  "SALES_ORG": "0135"
+}
+}
+}</pre></td></tr></table>
                 </div>
             </div>
         </section>
@@ -284,8 +360,45 @@
                 
                 <!-- Current Payload (shown by default) -->
                 <div class="payload-box active" id="currentPayloadBox">
-                    <pre class="payload-content"># Current payload file not found
-# Expected location: results/response_current.txt</pre>
+                    <pre class="payload-content">{
+  &quot;ns1:ZSD_BAPI_SALESORDER_SIMULATE&quot;: {
+    &quot;C_ORDER_ITEMS_IN&quot;: {
+      &quot;item&quot;: {
+        &quot;CUSTOM_ITEM_ID&quot;: &quot;0a99O000000if13QAA&quot;,
+        &quot;MATERIAL&quot;: &quot;230952&quot;,
+        &quot;REQ_QTY&quot;: &quot;3000&quot;,
+        &quot;SALES_UNIT&quot;: &quot;IGB&quot;,
+        &quot;TARGET_QTY&quot;: &quot;3000&quot;
+      }
+    },
+    &quot;C_ORDER_PARTNERS&quot;: {
+      &quot;item&quot;: {
+        &quot;CITY&quot;: &quot;Mumbai&quot;,
+        &quot;COUNTRY&quot;: &quot;India&quot;,
+        &quot;PARTN_NUMB&quot;: &quot;123&quot;,
+        &quot;PARTN_ROLE&quot;: &quot;Tejaswini durge&quot;
+      }
+    },
+    &quot;I_CUSTOM_HEADER_IN&quot;: {
+      &quot;CUSTOM_HEADER_ID&quot;: &quot;0a69O000000F3yTQAS&quot;
+    },
+    &quot;I_EXTENSION_IN&quot;: {
+      &quot;TAXK1&quot;: &quot;1&quot;
+    },
+    &quot;I_ORDER_HEADER_IN&quot;: {
+      &quot;CD_CU_ISO1&quot;: &quot;GBOP&quot;,
+      &quot;CD_CU_ISO2&quot;: &quot;&quot;,
+      &quot;CD_TYPE2&quot;: &quot;ZDR3&quot;,
+      &quot;CD_VALUE1&quot;: &quot;09&quot;,
+      &quot;CD_VALUE2&quot;: &quot;0&quot;,
+      &quot;DISTR_CHAN&quot;: &quot;02&quot;,
+      &quot;DIVISION&quot;: &quot;02&quot;,
+      &quot;DOC_TYPE&quot;: &quot;ZDPP&quot;,
+      &quot;PMNTTRMS&quot;: &quot;0600&quot;,
+      &quot;SALES_ORG&quot;: &quot;0135&quot;
+    }
+  }
+}</pre>
                 </div>
                 
                 <!-- Base Payload (hidden by default) -->
