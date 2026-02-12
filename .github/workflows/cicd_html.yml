@@ -155,6 +155,15 @@ jobs:
               resp = call_cpi()
               if resp.status_code >= 400:
                   print("❌ API returned error:", resp.status_code, resp.text[:500])
+                  # Save error response
+                  error_file = Path("results/error_response.txt")
+                  error_file.parent.mkdir(parents=True, exist_ok=True)
+                  error_data = {
+                      "status_code": resp.status_code,
+                      "timestamp": str(Path("results/error_response.txt").parent),
+                      "error_message": resp.text[:2000] if resp.text else "No response body"
+                  }
+                  error_file.write_text(json.dumps(error_data, indent=2))
                   sys.exit(1)
               base_response_file.parent.mkdir(parents=True, exist_ok=True)
               base_response_file.write_text(resp.text)
