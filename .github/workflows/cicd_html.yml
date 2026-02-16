@@ -186,6 +186,15 @@ jobs:
           print("first_run=false", file=open(os.environ["GITHUB_OUTPUT"], "a"))
           PYEOF
 
+      - name: Commit error response if API failed
+        if: steps.cpi_logic.outputs.api_error == 'true'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/error_response.txt
+          git commit -m "API Error Response - Status ${{ steps.cpi_logic.outputs.api_status }} on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No error file to commit"
+          git push
+        
       # -------------------- COMPARISON --------------------
       - name: Compare Base and Actual Responses + Headers (auto JSON/XML)
         if: steps.cpi_logic.outputs.first_run == 'false'
