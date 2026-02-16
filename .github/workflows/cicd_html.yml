@@ -65,6 +65,7 @@ jobs:
       # -------------------- ⚙️ Core Logic (dynamic method) --------------------
       - name: Execute CPI iFlow Logic (Dynamic HTTP Method)
         id: cpi_logic
+        continue-on-error: true
         run: |
           python3 - <<'PYEOF'
           import json, sys, os, base64
@@ -154,17 +155,25 @@ jobs:
               print("\n🟢 First Run Detected (no base response file)\n")
               resp = call_cpi()
               if resp.status_code >= 400:
-                  print("❌ API returned error:", resp.status_code, resp.text[:500])
-                  # Save error response
-                  error_file = Path("results/error_response.txt")
-                  error_file.parent.mkdir(parents=True, exist_ok=True)
-                  error_data = {
-                      "status_code": resp.status_code,
-                      "timestamp": str(Path("results/error_response.txt").parent),
-                      "error_message": resp.text[:2000] if resp.text else "No response body"
-                  }
-                  error_file.write_text(json.dumps(error_data, indent=2))
-                  sys.exit(1)
+                error_msg = resp.text[:2000] if resp.text else "No response body"
+
+                error_file = Path("results/error_response.txt")
+                error_file.parent.mkdir(parents=True, exist_ok=True)
+
+                error_data = {
+                    "status_code": resp.status_code,
+                    "error_message": error_msg
+                }
+
+                error_file.write_text(json.dumps(error_data, indent=2))
+
+                # end info to GitHub Actions (not to console)
+                with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                    f.write("api_error=true\n")
+                    f.write(f"api_status={resp.status_code}\n")
+
+                print("⚠️ API error detected. Workflow will continue to commit error response.")   
+
               base_response_file.parent.mkdir(parents=True, exist_ok=True)
               base_response_file.write_text(resp.text)
               base_headers_file.write_text(json.dumps(user_headers, indent=2))
@@ -177,7 +186,20 @@ jobs:
           resp = call_cpi()
           if resp.status_code >= 400:
               print("❌ API returned error:", resp.status_code, resp.text[:500])
-              sys.exit(1)
+              # Save error response
+              error_file = Path("results/error_response.txt")
+              error_file.parent.mkdir(parents=True, exist_ok=True)
+              error_data = {
+                  "status_code": resp.status_code,
+                  "timestamp": str(Path("results/error_response.txt").parent),
+                  "error_message": resp.text[:2000] if resp.text else "No response body"
+              }
+              error_file.write_text(json.dumps(error_data, indent=2))
+              print("⚠️ Error response saved to results/error_response.txt")
+              print("api_error=true", file=open(os.environ["GITHUB_OUTPUT"], "a"))
+              print(f"api_status={resp.status_code}", file=open(os.environ["GITHUB_OUTPUT"], "a"))
+              sys.exit(0)
+
 
           current_response_file.parent.mkdir(parents=True, exist_ok=True)
           current_response_file.write_text(resp.text)
@@ -185,7 +207,8 @@ jobs:
           print(f"✅ Current response saved to results/{target_filename}")
           print("first_run=false", file=open(os.environ["GITHUB_OUTPUT"], "a"))
           PYEOF
-
+        
+        
       - name: Commit error response if API failed
         if: steps.cpi_logic.outputs.api_error == 'true'
         run: |
@@ -194,7 +217,7 @@ jobs:
           git add results/error_response.txt
           git commit -m "API Error Response - Status ${{ steps.cpi_logic.outputs.api_status }} on $(date +'%Y-%m-%d %H:%M:%S')" || echo "No error file to commit"
           git push
-        
+
       # -------------------- COMPARISON --------------------
       - name: Compare Base and Actual Responses + Headers (auto JSON/XML)
         if: steps.cpi_logic.outputs.first_run == 'false'
