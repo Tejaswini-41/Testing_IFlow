@@ -28,7 +28,10 @@ on:
         description: 'Authorization type (oauth or basic)'
         required: true
         default: 'oauth'
-
+      comparison_mode:
+        description: 'Whether to do base/current comparison or just return response'
+        required: false
+        default: 'false'
 
 permissions:
   contents: write
@@ -159,6 +162,42 @@ jobs:
               except requests.exceptions.RequestException as e:
                   print(f"❌ API call failed: {e}")
                   sys.exit(1)
+                  
+          # ✅ Check if this is simple mode (non-comparison)
+          comparison_mode = "${{ github.event.inputs.comparison_mode }}" == "true"
+
+          if not comparison_mode:
+              # Simple mode: just execute and save response
+              print("\n📋 Simple execution mode (no comparison)\n")
+              resp = call_cpi()
+              
+              if resp.status_code >= 400:
+                  # Save error
+                  error_file = Path("results/error_response.txt")
+                  error_file.parent.mkdir(parents=True, exist_ok=True)
+                  error_data = {
+                      "status_code": resp.status_code,
+                      "error_message": resp.text[:2000] if resp.text else "No response body"
+                  }
+                  error_file.write_text(json.dumps(error_data, indent=2))
+                  with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                      f.write("api_error=true\n")
+                      f.write(f"api_status={resp.status_code}\n")
+                  print("⚠️ API error detected. Workflow will continue to commit error response.")
+                  sys.exit(0)
+              
+              # Save successful response
+              response_file = Path("results/simple_response.txt")
+              response_file.parent.mkdir(parents=True, exist_ok=True)
+              response_file.write_text(resp.text)
+              
+              with open(os.environ["GITHUB_OUTPUT"], "a") as f:
+                  f.write("simple_mode=true\n")
+              
+              print("✅ Response saved to results/simple_response.txt")
+              sys.exit(0)
+
+          # If we get here, it's comparison mode (existing logic continues)
 
           # First run (no base saved)
           if not base_response_file.exists():
