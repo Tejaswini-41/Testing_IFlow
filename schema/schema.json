@@ -1,148 +1,221 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "type": "object",
-  "required": [
-    "order_partners",
-    "order_items",
-    "order_header"
-  ],
+  "required": ["Data"],
   "properties": {
-    "order_partners": {
+    "Data": {
       "type": "object",
-      "required": [
-        "item"
-      ],
+      "required": ["TrackingID", "SenderBusinessSystem", "Customer1", "Customer2PresentFlag"],
       "properties": {
-        "item": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "partn_role",
-              "partn_numb",
-              "country",
-              "city"
-            ],
-            "properties": {
-              "partn_role": {
-                "type": "string"
-              },
-              "partn_numb": {
-                "type": "string"
-              },
-              "country": {
-                "type": "string"
-              },
-              "country2": {
-                "type": "string"
-              },
-              "city": {
-                "type": "string"
+        "TrackingID": {
+          "type": "string",
+          "pattern": "^[0-9]+$"
+        },
+        "SenderBusinessSystem": {
+          "type": "string"
+        },
+        "Customer1": {
+          "type": "object",
+          "required": ["Identification", "BPID", "LegalName", "Country", "City", "Region", "Street", "HouseNumber", "PostalCode", "Language", "PhoneNumber", "Email", "IsAcctLinkageSource", "TargetSourceSystem", "BusinessUnit", "SalesArea", "PersonaType", "NaturalPersonFlag", "TransportationZone", "CompanyCodeData", "GlobalRelationshipData", "ControlForm", "TaxNumber"],
+          "properties": {
+            "Identification": {
+              "type": "object",
+              "required": ["item"],
+              "properties": {
+                "item": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["SourceSystemID", "SourceSystem"],
+                    "properties": {
+                      "SourceSystemID": {
+                        "type": "string"
+                      },
+                      "SourceSystem": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
               }
             },
-            "additionalProperties": false
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    "order_items": {
-      "type": "object",
-      "required": [
-        "item"
-      ],
-      "properties": {
-        "item": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "custom_item_id",
-              "target_qty",
-              "sales_unit",
-              "material"
-            ],
-            "properties": {
-              "custom_item_id": {
-                "type": "string"
-              },
-              "target_qty": {
-                "type": "string"
-              },
-              "sales_unit": {
-                "type": "string"
-              },
-              "material": {
-                "type": "string"
+            "BPID": {
+              "type": "string"
+            },
+            "LegalName": {
+              "type": "string"
+            },
+            "Country": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            },
+            "City": {
+              "type": "string"
+            },
+            "Region": {
+              "type": "string"
+            },
+            "Street": {
+              "type": "string"
+            },
+            "HouseNumber": {
+              "type": "string"
+            },
+            "PostalCode": {
+              "type": "string"
+            },
+            "Language": {
+              "type": "string",
+              "pattern": "^[A-Z]{2}$"
+            },
+            "PhoneNumber": {
+              "type": "string"
+            },
+            "Email": {
+              "type": "string",
+              "format": "email"
+            },
+            "IsAcctLinkageSource": {
+              "type": "boolean"
+            },
+            "TargetSourceSystem": {
+              "type": "string"
+            },
+            "BusinessUnit": {
+              "type": "string"
+            },
+            "SalesArea": {
+              "type": "object",
+              "required": ["item"],
+              "properties": {
+                "item": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["SalesOrg", "DistributionChannel", "Division"],
+                    "properties": {
+                      "SalesOrg": {
+                        "type": "string"
+                      },
+                      "DistributionChannel": {
+                        "type": "string"
+                      },
+                      "Division": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
               }
             },
-            "additionalProperties": false
+            "PersonaType": {
+              "type": "string"
+            },
+            "NaturalPersonFlag": {
+              "type": "boolean"
+            },
+            "TransportationZone": {
+              "type": "string"
+            },
+            "CompanyCodeData": {
+              "type": "object",
+              "required": ["item"],
+              "properties": {
+                "item": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["CompanyCode"],
+                    "properties": {
+                      "CompanyCode": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "GlobalRelationshipData": {
+              "type": "object",
+              "required": ["item"],
+              "properties": {
+                "item": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["GlobalRelationshipType", "GlobalRelationship_BPID"],
+                    "properties": {
+                      "GlobalRelationshipType": {
+                        "type": "string"
+                      },
+                      "GlobalRelationship_BPID": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "ControlForm": {
+              "type": "object",
+              "required": ["IsOrderingAccount", "IsGoodsDelivered", "IsInvoiceFormReceived", "IsPayerAccount", "DomesticOrExport", "IsPrevalidated", "IsPartyReceivingFinance"],
+              "properties": {
+                "IsOrderingAccount": {
+                  "type": "string",
+                  "enum": ["True", "False"]
+                },
+                "IsGoodsDelivered": {
+                  "type": "string",
+                  "enum": ["True", "False"]
+                },
+                "IsInvoiceFormReceived": {
+                  "type": "string",
+                  "enum": ["True", "False"]
+                },
+                "IsPayerAccount": {
+                  "type": "string",
+                  "enum": ["True", "False"]
+                },
+                "DomesticOrExport": {
+                  "type": "string",
+                  "enum": ["DOMESTIC", "EXPORT"]
+                },
+                "IsPrevalidated": {
+                  "type": "string"
+                },
+                "IsPartyReceivingFinance": {
+                  "type": "string",
+                  "enum": ["True", "False"]
+                }
+              }
+            },
+            "TaxNumber": {
+              "type": "object",
+              "required": ["item"],
+              "properties": {
+                "item": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["TaxType", "TaxID"],
+                    "properties": {
+                      "TaxType": {
+                        "type": "string"
+                      },
+                      "TaxID": {
+                        "type": "string"
+                      }
+                    }
+                  }
+                }
+              }
+            }
           }
+        },
+        "Customer2PresentFlag": {
+          "type": "boolean"
         }
-      },
-      "additionalProperties": false
-    },
-    "order_header": {
-      "type": "object",
-      "required": [
-        "currency",
-        "cd_value_promo",
-        "cd_type_promo",
-        "cd_value_freight",
-        "custom_header_id",
-        "customer_tax",
-        "sales_org",
-        "pmnttrms",
-        "doc_type",
-        "division",
-        "distr_chan"
-      ],
-      "properties": {
-        "currency": {
-          "type": "string"
-        },
-        "cd_value_promo": {
-          "type": "string"
-        },
-        "cd_type_promo": {
-          "type": "string"
-        },
-        "cd_value_freight": {
-          "type": "string"
-        },
-        "cd_type_freight1": {
-          "type": "string"
-        },
-        "cd_type_freight_4": {
-          "type": "string"
-        },
-        "custom_header_id": {
-          "type": "string"
-        },
-        "custom_header_id2": {
-          "type": "string"
-        },
-        "customer_tax": {
-          "type": "string"
-        },
-        "sales_org": {
-          "type": "string"
-        },
-        "pmnttrms": {
-          "type": "string"
-        },
-        "doc_type": {
-          "type": "string"
-        },
-        "division": {
-          "type": "string"
-        },
-        "distr_chan": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
+      }
     }
-  },
-  "additionalProperties": false
+  }
 }
