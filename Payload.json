@@ -1,80 +1,51 @@
 {
-  "Data": {
-    "TrackingID": "000003972",
-    "SenderBusinessSystem": "Magento",
-    "Customer1": {
-      "Identification": {
-        "item": [
-          {
-            "SourceSystemID": "001bh00000Oy7goAAB",
-            "SourceSystem": "SFDC"
-          }
-        ]
+  "order_partners": {
+    "item": [
+      {
+        "partn_role": "AGGGG",
+        "partn_numb": "2135778",
+        "country": "Mexico",
+        "city": "Pune"
       },
-      "BPID": "",
-      "LegalName": "MDS POLAND SP. Z O.O.",
-      "Country": "PL",
-      "City": "Golub-Dobrzyń",
-      "Region": "",
-      "Street": "Ceglana",
-      "HouseNumber": "3/362",
-      "PostalCode": "87-400",
-      "Language": "PL",
-      "PhoneNumber":"606123456",
-      "Email": "tomek@vlct.com",
-      "IsAcctLinkageSource": false,
-      "TargetSourceSystem": "S4",
-      
-      "BusinessUnit": "BU01",
-      "SalesArea": {
-        "item": [
-          {
-            "SalesOrg": "7060",
-            "DistributionChannel": "02",
-            "Division": "02"
-          }
-        ]
-      },
-      "PersonaType": "ZZPT003",
-      "NaturalPersonFlag": false,
-      "TransportationZone": "PL05",
-      "CompanyCodeData": {
-        "item": [
-          {
-            "CompanyCode": "7060"
-          }
-        ]
-      },
-      "GlobalRelationshipData": {
-        "item": [
-          {
-            "GlobalRelationshipType": "ZG",
-            "GlobalRelationship_BPID": "EP86002535"
-          }
-        ]
-      },
-      "ControlForm": {
-        "IsOrderingAccount": "True",
-        "IsGoodsDelivered": "True",
-        "IsInvoiceFormReceived": "True",
-        "IsPayerAccount": "True",
-        "DomesticOrExport": "DOMESTIC",
-        "IsPrevalidated": "X",
-        "IsPartyReceivingFinance": "False"
-      },
-      "TaxNumber": {
-        "item": [
-            {
-                "TaxType": "0",
-                "TaxID": "PL5030082927"
-            },
-            {
-                "TaxType": "1",
-                "TaxID": "5030082927"
-            }
-        ]
+      {
+        "partn_role": "Tejaswini durge",
+        "partn_numb": "123",
+        "country": "India",
+        "country2": "USA",
+        "city": "Mumbai"
       }
-    },
-    "Customer2PresentFlag": false
+    ]
+  },
+  "order_items": {
+    "item": [
+      {
+        "custom_item_id": "0a99O000000iezRQAQ",
+        "target_qty": "2",
+        "sales_unit": "IGB",
+        "material": "230951"
+      },
+      {
+        "custom_item_id": "0a99O000000if13QAA",
+        "target_qty": "3",
+        "sales_unit": "IGB",
+        "material": "230952"
+      }
+    ]
+  },
+  "order_header": {
+    "currency": "GBOP",
+    "cd_value_promo": "0",
+    "cd_type_promo": "ZDR3",
+    "cd_value_freight": "09",
+    "cd_type_freight1": "",
+    "cd_type_freight_4": "",
+    "custom_header_id": "0a69O000000F3yTQAS",
+    "custom_header_id2": "0a69O000000F3yS",
+    "customer_tax": "1",
+    "sales_org": "0135",
+    "pmnttrms": "0600",
+    "doc_type": "ZDPP",
+    "division": "02",
+    "distr_chan": "02"
   }
 }
