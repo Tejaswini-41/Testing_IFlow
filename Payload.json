@@ -1,148 +1,51 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "type": "object",
-  "required": [
-    "order_partners",
-    "order_items",
-    "order_header"
-  ],
-  "properties": {
-    "order_partners": {
-      "type": "object",
-      "required": [
-        "item"
-      ],
-      "properties": {
-        "item": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "partn_role",
-              "partn_numb",
-              "country",
-              "city"
-            ],
-            "properties": {
-              "partn_role": {
-                "type": "string"
-              },
-              "partn_numb": {
-                "type": "string"
-              },
-              "country": {
-                "type": "string"
-              },
-              "country2": {
-                "type": "string"
-              },
-              "city": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
-          }
-        }
+  "order_partners": {
+    "item": [
+      {
+        "partn_role": "AGGGG",
+        "partn_numb": "2135778",
+        "country": "Mexico",
+        "city": "Pune"
       },
-      "additionalProperties": false
-    },
-    "order_items": {
-      "type": "object",
-      "required": [
-        "item"
-      ],
-      "properties": {
-        "item": {
-          "type": "array",
-          "items": {
-            "type": "object",
-            "required": [
-              "custom_item_id",
-              "target_qty",
-              "sales_unit",
-              "material"
-            ],
-            "properties": {
-              "custom_item_id": {
-                "type": "string"
-              },
-              "target_qty": {
-                "type": "string"
-              },
-              "sales_unit": {
-                "type": "string"
-              },
-              "material": {
-                "type": "string"
-              }
-            },
-            "additionalProperties": false
-          }
-        }
-      },
-      "additionalProperties": false
-    },
-    "order_header": {
-      "type": "object",
-      "required": [
-        "currency",
-        "cd_value_promo",
-        "cd_type_promo",
-        "cd_value_freight",
-        "custom_header_id",
-        "customer_tax",
-        "sales_org",
-        "pmnttrms",
-        "doc_type",
-        "division",
-        "distr_chan"
-      ],
-      "properties": {
-        "currency": {
-          "type": "string"
-        },
-        "cd_value_promo": {
-          "type": "string"
-        },
-        "cd_type_promo": {
-          "type": "string"
-        },
-        "cd_value_freight": {
-          "type": "string"
-        },
-        "cd_type_freight1": {
-          "type": "string"
-        },
-        "cd_type_freight_4": {
-          "type": "string"
-        },
-        "custom_header_id": {
-          "type": "string"
-        },
-        "custom_header_id2": {
-          "type": "string"
-        },
-        "customer_tax": {
-          "type": "string"
-        },
-        "sales_org": {
-          "type": "string"
-        },
-        "pmnttrms": {
-          "type": "string"
-        },
-        "doc_type": {
-          "type": "string"
-        },
-        "division": {
-          "type": "string"
-        },
-        "distr_chan": {
-          "type": "string"
-        }
-      },
-      "additionalProperties": false
-    }
+      {
+        "partn_role": "Tejaswini durge",
+        "partn_numb": "123",
+        "country": "India",
+        "country2": "USA",
+        "city": "Mumbai"
+      }
+    ]
   },
-  "additionalProperties": false
+  "order_items": {
+    "item": [
+      {
+        "custom_item_id": "0a99O000000iezRQAQ",
+        "target_qty": "2",
+        "sales_unit": "IGB",
+        "material": "230951"
+      },
+      {
+        "custom_item_id": "0a99O000000if13QAA",
+        "target_qty": "3",
+        "sales_unit": "IGB",
+        "material": "230952"
+      }
+    ]
+  },
+  "order_header": {
+    "currency": "GBOP",
+    "cd_value_promo": "0",
+    "cd_type_promo": "ZDR3",
+    "cd_value_freight": "09",
+    "cd_type_freight1": "",
+    "cd_type_freight_4": "",
+    "custom_header_id": "0a69O000000F3yTQAS",
+    "custom_header_id2": "0a69O000000F3yS",
+    "customer_tax": "1",
+    "sales_org": "0135",
+    "pmnttrms": "0600",
+    "doc_type": "ZDPP",
+    "division": "02",
+    "distr_chan": "02"
+  }
 }
