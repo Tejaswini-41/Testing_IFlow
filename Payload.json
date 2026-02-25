@@ -20,8 +20,8 @@
       "HouseNumber": "3/362",
       "PostalCode": "87-400",
       "Language": "PL",
-      "PhoneNumber":"606123456",
-      "Email": "tomek@vlct.com",
+      "PhoneNumber":"ishwari",
+      "Email": "testing",
       "IsAcctLinkageSource": false,
       "TargetSourceSystem": "S4",
       
@@ -66,11 +66,11 @@
         "item": [
             {
                 "TaxType": "0",
-                "TaxID": "PL5030082927"
+                "TaxID": "changed"
             },
             {
                 "TaxType": "1",
-                "TaxID": "5030082927"
+                "TaxID": "changed"
             }
         ]
       }
