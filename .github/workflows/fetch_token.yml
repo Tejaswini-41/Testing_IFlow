@@ -54,6 +54,23 @@ jobs:
                   data="grant_type=client_credentials",
                   timeout=30
               )
+              print(f"Try 1 (Basic header) status: {resp.status_code}")
+              
+              if resp.status_code != 200:
+                  # Try 2: Credentials in body instead
+                  resp = requests.post(
+                      token_url,
+                      headers={
+                          "Content-Type": "application/x-www-form-urlencoded"
+                      },
+                      data={
+                          "grant_type": "client_credentials",
+                          "client_id": client_id,
+                          "client_secret": client_secret
+                      },
+                      timeout=30
+                  )
+                  print(f"Try 2 (body credentials) status: {resp.status_code}")
               if resp.status_code != 200:
                   result = {
                       "error": f"HTTP {resp.status_code}: {resp.text[:300]}"
