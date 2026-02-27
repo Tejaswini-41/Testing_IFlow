@@ -1,0 +1,97 @@
+name: Fetch OAuth Token
+
+on:
+  workflow_dispatch:
+    inputs:
+      token_url:
+        description: 'OAuth Token URL'
+        required: true
+      client_id:
+        description: 'Client ID'
+        required: true
+      client_secret:
+        description: 'Client Secret'
+        required: true
+
+permissions:
+  contents: write
+
+jobs:
+  fetch_token:
+    runs-on: ubuntu-22.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.PAT_TOKEN }}
+
+      - name: Fetch OAuth Token
+        run: |
+          python3 - <<'PYEOF'
+          import requests
+          import base64
+          import json
+          from pathlib import Path
+
+          token_url = "${{ github.event.inputs.token_url }}"
+          client_id = "${{ github.event.inputs.client_id }}"
+          client_secret = "${{ github.event.inputs.client_secret }}"
+
+          print(f"🔐 Fetching token from: {token_url}")
+
+          try:
+              creds_b64 = base64.b64encode(
+                  f"{client_id}:{client_secret}".encode()
+              ).decode()
+
+              resp = requests.post(
+                  token_url,
+                  headers={
+                      "Content-Type": "application/x-www-form-urlencoded",
+                      "Authorization": f"Basic {creds_b64}"
+                  },
+                  data="grant_type=client_credentials",
+                  timeout=30
+              )
+
+              if resp.status_code != 200:
+                  result = {
+                      "error": f"HTTP {resp.status_code}: {resp.text[:300]}"
+                  }
+                  print(f"❌ Token fetch failed: {result['error']}")
+              else:
+                  data = resp.json()
+                  access_token = data.get("access_token", "")
+                  if not access_token:
+                      result = {"error": "No access_token in response"}
+                  else:
+                      result = {"access_token": access_token}
+                      print("✅ Token fetched successfully!")
+
+          except Exception as e:
+              result = {"error": str(e)}
+              print(f"❌ Exception: {e}")
+
+          Path("results").mkdir(exist_ok=True)
+          Path("results/fetched_token.txt").write_text(json.dumps(result))
+          PYEOF
+
+      - name: Commit token result
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add results/fetched_token.txt
+          git commit -m "Fetched OAuth token result" || echo "No changes"
+          git push
+
+      - name: Fail if token fetch failed
+        run: |
+          python3 -c "
+          import json
+          data = json.loads(open('results/fetched_token.txt').read())
+          if 'error' in data:
+              print('❌ Token fetch failed:', data['error'])
+              exit(1)
+          print('✅ Token fetch succeeded')
+          "
