@@ -27,24 +27,24 @@ jobs:
           token: ${{ secrets.PAT_TOKEN }}
 
       - name: Fetch OAuth Token
+        env:
+          TOKEN_URL: ${{ github.event.inputs.token_url }}
+          CLIENT_ID: ${{ github.event.inputs.client_id }}
+          CLIENT_SECRET: ${{ github.event.inputs.client_secret }}
         run: |
           python3 - <<'PYEOF'
-          import requests
-          import base64
-          import json
+          import os, requests, base64, json
           from pathlib import Path
 
-          token_url = "${{ github.event.inputs.token_url }}"
-          client_id = "${{ github.event.inputs.client_id }}"
-          client_secret = "${{ github.event.inputs.client_secret }}"
+          token_url = os.environ["TOKEN_URL"]
+          client_id = os.environ["CLIENT_ID"]
+          client_secret = os.environ["CLIENT_SECRET"]
 
           print(f"🔐 Fetching token from: {token_url}")
-
           try:
               creds_b64 = base64.b64encode(
                   f"{client_id}:{client_secret}".encode()
               ).decode()
-
               resp = requests.post(
                   token_url,
                   headers={
@@ -54,7 +54,6 @@ jobs:
                   data="grant_type=client_credentials",
                   timeout=30
               )
-
               if resp.status_code != 200:
                   result = {
                       "error": f"HTTP {resp.status_code}: {resp.text[:300]}"
@@ -68,7 +67,6 @@ jobs:
                   else:
                       result = {"access_token": access_token}
                       print("✅ Token fetched successfully!")
-
           except Exception as e:
               result = {"error": str(e)}
               print(f"❌ Exception: {e}")
