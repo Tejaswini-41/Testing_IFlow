@@ -1,80 +1,41 @@
 {
-  "Data": {
-    "TrackingID": "000003972",
-    "SenderBusinessSystem": "Magento",
-    "Customer1": {
-      "Identification": {
-        "item": [
-          {
-            "SourceSystemID": "001bh00000Oy7goAAB",
-            "SourceSystem": "SFDC"
-          }
-        ]
+  "order_partners": {
+    "item": [
+      {
+        "partn_role": "AG",
+        "partn_numb": "4717357",
+        "country": "UK",
+        "city": "London"
       },
-      "BPID": "",
-      "LegalName": "MDS POLAND SP. Z O.O.",
-      "Country": "PL",
-      "City": "Golub-Dobrzyń",
-      "Region": "",
-      "Street": "Ceglana",
-      "HouseNumber": "3/362",
-      "PostalCode": "87-400",
-      "Language": "PL",
-      "PhoneNumber":"ishwari",
-      "Email": "testing",
-      "IsAcctLinkageSource": false,
-      "TargetSourceSystem": "S4",
+      {
+        "partn_role": "WE"
       
-      "BusinessUnit": "BU01",
-      "SalesArea": {
-        "item": [
-          {
-            "SalesOrg": "7060",
-            "DistributionChannel": "02",
-            "Division": "02"
-          }
-        ]
-      },
-      "PersonaType": "ZZPT003",
-      "NaturalPersonFlag": false,
-      "TransportationZone": "PL05",
-      "CompanyCodeData": {
-        "item": [
-          {
-            "CompanyCode": "7060"
-          }
-        ]
-      },
-      "GlobalRelationshipData": {
-        "item": [
-          {
-            "GlobalRelationshipType": "ZG",
-            "GlobalRelationship_BPID": "EP86002535"
-          }
-        ]
-      },
-      "ControlForm": {
-        "IsOrderingAccount": "True",
-        "IsGoodsDelivered": "True",
-        "IsInvoiceFormReceived": "True",
-        "IsPayerAccount": "True",
-        "DomesticOrExport": "DOMESTIC",
-        "IsPrevalidated": "X",
-        "IsPartyReceivingFinance": "False"
-      },
-      "TaxNumber": {
-        "item": [
-            {
-                "TaxType": "0",
-                "TaxID": "changed"
-            },
-            {
-                "TaxType": "1",
-                "TaxID": "changed"
-            }
-        ]
       }
-    },
-    "Customer2PresentFlag": false
+    ]
+  },
+  "order_items": {
+    "item": [
+      {
+        "custom_item_id": "0a99O000000iezRQAQ",
+        "target_qty": "2",
+        "sales_unit": "IGB",
+        "material": "230951"
+      },
+    ]
+  },
+  "order_header": {
+    "currency": "GBP",
+    "cd_value_promo": "0",
+    "cd_type_promo": "ZDR3",
+    "cd_value_freight": "0",
+    "cd_type_freight": "",
+    "custom_header_id": "0a69O000000F3yTQAS",
+    "customer_tax": "1",
+    "sales_org": "0135",
+    "pmnttrms": "0600",
+    "purch_no": "UK Cart",
+    "doc_type": "ZDPP",
+    "division": "02",
+    "distr_chan": "02"
   }
 }
