@@ -2,21 +2,21 @@
   "test_type": "load",
   "iflow_url": "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest",
   "http_method": "POST",
-  "timestamp": "2026-03-10T07:17:15.473280Z",
+  "timestamp": "2026-03-10T07:27:58.922760Z",
   "total_requests": 5,
   "successful": 5,
   "failed": 0,
   "error_rate_pct": 0.0,
-  "min_ms": 654,
-  "max_ms": 772,
-  "avg_ms": 693,
-  "p95_ms": 682,
+  "min_ms": 498,
+  "max_ms": 591,
+  "avg_ms": 526,
+  "p95_ms": 539,
   "results": [
     {
       "request": 1,
       "label": "LOAD",
       "status": 200,
-      "time_ms": 772,
+      "time_ms": 539,
       "success": true,
       "error": null
     },
@@ -24,7 +24,7 @@
       "request": 2,
       "label": "LOAD",
       "status": 200,
-      "time_ms": 677,
+      "time_ms": 501,
       "success": true,
       "error": null
     },
@@ -32,7 +32,7 @@
       "request": 3,
       "label": "LOAD",
       "status": 200,
-      "time_ms": 654,
+      "time_ms": 591,
       "success": true,
       "error": null
     },
@@ -40,7 +40,7 @@
       "request": 4,
       "label": "LOAD",
       "status": 200,
-      "time_ms": 679,
+      "time_ms": 500,
       "success": true,
       "error": null
     },
@@ -48,7 +48,7 @@
       "request": 5,
       "label": "LOAD",
       "status": 200,
-      "time_ms": 682,
+      "time_ms": 498,
       "success": true,
       "error": null
     }
