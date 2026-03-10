@@ -1,56 +1,170 @@
 {
-  "test_type": "load",
+  "test_type": "spike",
   "iflow_url": "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest",
   "http_method": "POST",
-  "timestamp": "2026-03-10T07:27:58.922760Z",
-  "total_requests": 5,
-  "successful": 5,
+  "timestamp": "2026-03-10T07:29:48.860158Z",
+  "total_requests": 16,
+  "successful": 16,
   "failed": 0,
   "error_rate_pct": 0.0,
-  "min_ms": 498,
-  "max_ms": 591,
-  "avg_ms": 526,
-  "p95_ms": 539,
+  "min_ms": 659,
+  "max_ms": 819,
+  "avg_ms": 754,
+  "p95_ms": 819,
   "results": [
     {
       "request": 1,
-      "label": "LOAD",
+      "label": "BASELINE_BEFORE",
       "status": 200,
-      "time_ms": 539,
+      "time_ms": 725,
       "success": true,
       "error": null
     },
     {
       "request": 2,
-      "label": "LOAD",
+      "label": "BASELINE_BEFORE",
       "status": 200,
-      "time_ms": 501,
+      "time_ms": 667,
       "success": true,
       "error": null
     },
     {
       "request": 3,
-      "label": "LOAD",
+      "label": "BASELINE_BEFORE",
       "status": 200,
-      "time_ms": 591,
+      "time_ms": 689,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 1,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 812,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 2,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 802,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 3,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 710,
       "success": true,
       "error": null
     },
     {
       "request": 4,
-      "label": "LOAD",
+      "label": "SPIKE",
       "status": 200,
-      "time_ms": 500,
+      "time_ms": 770,
       "success": true,
       "error": null
     },
     {
       "request": 5,
-      "label": "LOAD",
+      "label": "SPIKE",
       "status": 200,
-      "time_ms": 498,
+      "time_ms": 796,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 6,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 801,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 7,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 798,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 8,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 819,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 9,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 808,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 10,
+      "label": "SPIKE",
+      "status": 200,
+      "time_ms": 819,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 1,
+      "label": "BASELINE_AFTER",
+      "status": 200,
+      "time_ms": 696,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 2,
+      "label": "BASELINE_AFTER",
+      "status": 200,
+      "time_ms": 659,
+      "success": true,
+      "error": null
+    },
+    {
+      "request": 3,
+      "label": "BASELINE_AFTER",
+      "status": 200,
+      "time_ms": 686,
       "success": true,
       "error": null
     }
-  ]
+  ],
+  "spike_breakdown": {
+    "baseline_before": {
+      "min_ms": 667,
+      "max_ms": 725,
+      "avg_ms": 694,
+      "p95_ms": 689,
+      "count": 3,
+      "failed": 0
+    },
+    "spike_phase": {
+      "min_ms": 710,
+      "max_ms": 819,
+      "avg_ms": 794,
+      "p95_ms": 819,
+      "count": 10,
+      "failed": 0
+    },
+    "baseline_after": {
+      "min_ms": 659,
+      "max_ms": 696,
+      "avg_ms": 680,
+      "p95_ms": 686,
+      "count": 3,
+      "failed": 0
+    }
+  }
 }
