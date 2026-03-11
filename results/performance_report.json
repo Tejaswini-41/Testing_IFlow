@@ -2,21 +2,21 @@
   "test_type": "load",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-11T18:00:56.616076Z",
-  "total_requests": 15,
+  "timestamp": "2026-03-11T18:17:32.907314Z",
+  "total_requests": 10,
   "successful": 0,
-  "failed": 15,
+  "failed": 10,
   "error_rate_pct": 100.0,
-  "min_ms": 258,
-  "max_ms": 904,
-  "avg_ms": 460,
-  "p95_ms": 630,
+  "min_ms": 248,
+  "max_ms": 839,
+  "avg_ms": 486,
+  "p95_ms": 830,
   "results": [
     {
       "request": 1,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 467,
+      "time_ms": 465,
       "success": false,
       "error": null
     },
@@ -24,7 +24,7 @@
       "request": 2,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 487,
+      "time_ms": 434,
       "success": false,
       "error": null
     },
@@ -32,7 +32,7 @@
       "request": 3,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 450,
+      "time_ms": 400,
       "success": false,
       "error": null
     },
@@ -40,7 +40,7 @@
       "request": 4,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 366,
+      "time_ms": 248,
       "success": false,
       "error": null
     },
@@ -48,7 +48,7 @@
       "request": 5,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 428,
+      "time_ms": 830,
       "success": false,
       "error": null
     },
@@ -56,7 +56,7 @@
       "request": 6,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 435,
+      "time_ms": 392,
       "success": false,
       "error": null
     },
@@ -64,7 +64,7 @@
       "request": 7,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 630,
+      "time_ms": 432,
       "success": false,
       "error": null
     },
@@ -72,7 +72,7 @@
       "request": 8,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 394,
+      "time_ms": 403,
       "success": false,
       "error": null
     },
@@ -80,7 +80,7 @@
       "request": 9,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 501,
+      "time_ms": 839,
       "success": false,
       "error": null
     },
@@ -88,47 +88,7 @@
       "request": 10,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 402,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 11,
-      "label": "LOAD",
-      "status": 429,
-      "time_ms": 275,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 12,
-      "label": "LOAD",
-      "status": 429,
-      "time_ms": 258,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 13,
-      "label": "LOAD",
-      "status": 429,
-      "time_ms": 422,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 14,
-      "label": "LOAD",
-      "status": 429,
-      "time_ms": 485,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 15,
-      "label": "LOAD",
-      "status": 429,
-      "time_ms": 904,
+      "time_ms": 415,
       "success": false,
       "error": null
     }
