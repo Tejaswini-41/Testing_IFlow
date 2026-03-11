@@ -1,159 +1,49 @@
 {
-
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-
-  "title": "Order Schema",
-
-  "type": "object",
-
-  "properties": {
-
-    "order_partners": {
-
-      "type": "object",
-
-      "properties": {
-
-        "item": {
-
-          "type": "array",
-
-          "items": {
-
-            "type": "object",
-
-            "properties": {
-
-              "partn_role": { "type": "string" },
-
-              "partn_numb": { "type": "string" },
-
-              "country": { "type": "string" },
-
-              "city": { "type": "string" }
-
-            },
-
-            "required": ["partn_role", "partn_numb", "country", "city"]
-
-          }
-
-        }
-
+  "order_partners": {
+    "item": [
+      {
+        "partn_role": "AG",
+        "partn_numb": "4717357",
+        "country": "UK",
+        "city": "London"
       },
-
-      "required": ["item"]
-
-    },
-
-    "order_items": {
-
-      "type": "object",
-
-      "properties": {
-
-        "item": {
-
-          "type": "array",
-
-          "items": {
-
-            "type": "object",
-
-            "properties": {
-
-              "custom_item_id": { "type": "string" },
-
-              "target_qty": { "type": "string" },
-
-              "sales_unit": { "type": "string" },
-
-              "material": { "type": "string" }
-
-            },
-
-            "required": ["custom_item_id", "target_qty", "sales_unit", "material"]
-
-          }
-
-        }
-
-      },
-
-      "required": ["item"]
-
-    },
-
-    "order_header": {
-
-      "type": "object",
-
-      "properties": {
-
-        "currency": { "type": "string" },
-
-        "cd_value_promo": { "type": "string" },
-
-        "cd_type_promo": { "type": "string" },
-
-        "cd_value_freight": { "type": "string" },
-
-        "cd_type_freight": { "type": "string" },
-
-        "custom_header_id": { "type": "string" },
-
-        "customer_tax": { "type": "string" },
-
-        "sales_org": { "type": "string" },
-
-        "pmnttrms": { "type": "string" },
-
-        "purch_no": { "type": "string" },
-
-        "doc_type": { "type": "string" },
-
-        "division": { "type": "string" },
-
-        "distr_chan": { "type": "string" }
-
-      },
-
-      "required": [
-
-        "currency",
-
-        "cd_value_promo",
-
-        "cd_type_promo",
-
-        "cd_value_freight",
-
-        "cd_type_freight",
-
-        "custom_header_id",
-
-        "customer_tax",
-
-        "sales_org",
-
-        "pmnttrms",
-
-        "purch_no",
-
-        "doc_type",
-
-        "division",
-
-        "distr_chan"
-
-      ]
-
-    }
-
+      {
+        "partn_role": "WE",
+        "partn_numb": "4717357",
+        "country": "UK",
+        "city": "London"
+      }
+    ]
   },
-
-  "required": ["order_partners", "order_items", "order_header"]
-
+  "order_items": {
+    "item": [
+      {
+        "custom_item_id": "0a99O000000iezRQAQ",
+        "target_qty": "2",
+        "sales_unit": "IGB",
+        "material": "230951"
+      },
+      {
+        "custom_item_id": "0a99O000000if13QAA",
+        "target_qty": "3",
+        "sales_unit": "IGB",
+        "material": "230952"
+      }
+    ]
+  },
+  "order_header": {
+    "currency": "GBP",
+    "cd_value_promo": "0",
+    "cd_type_promo": "ZDR3",
+    "cd_value_freight": "0",
+    "cd_type_freight": "",
+    "custom_header_id": "0a69O000000F3yTQAS",
+    "customer_tax": "1",
+    "sales_org": "0135",
+    "pmnttrms": "0600",
+    "purch_no": "UK Cart",
+    "doc_type": "ZDPP",
+    "division": "02",
+    "distr_chan": "02"
+  }
 }
-
- 
