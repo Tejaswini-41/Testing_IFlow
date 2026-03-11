@@ -143,12 +143,10 @@ jobs:
           # ─────────────────────────────────────────
           def send_request(req_number, label=""):
               result = {
-                  "request_num": req_number,
+                  "request": req_number,
                   "label": label,
-                  "status": "Failed",
-                  "status_code": None,
-                  "response_time_ms": None,
-                  "response_size": 0,
+                  "status": None,
+                  "time_ms": None,
                   "success": False,
                   "error": None
               }
@@ -161,13 +159,10 @@ jobs:
                   resp = requests.request(method, url, **kwargs)
                   elapsed = round((time.time() - start) * 1000)
 
-                  result["status_code"]       = resp.status_code
-                  result["response_time_ms"]  = elapsed
-                  result["response_size"]     = len(resp.content) if resp.content else 0
-                  result["success"]           = resp.status_code < 400
-                  result["status"]            = "Success" if result["success"] else "Failed"
-                  
-                  print(f"  {'✅' if result['success'] else '❌'} [{label}] Request {req_number} → {resp.status_code} in {elapsed}ms ({result['response_size']}B)")
+                  result["status"]  = resp.status_code
+                  result["time_ms"] = elapsed
+                  result["success"] = resp.status_code < 400
+                  print(f"  {'✅' if result['success'] else '❌'} [{label}] Request {req_number} → {resp.status_code} in {elapsed}ms")
 
               except Exception as e:
                   result["error"] = str(e)
@@ -213,11 +208,9 @@ jobs:
 
               # Phase 1: Baseline before spike (sequential)
               print("📋 Phase 1: Baseline (before spike)")
-              req_counter = 1
-              for i in range(baseline_requests):
-                  result = send_request(req_counter, label="BASELINE_BEFORE")
+              for i in range(1, baseline_requests + 1):
+                  result = send_request(i, label="BASELINE_BEFORE")
                   all_results.append(result)
-                  req_counter += 1
 
               # Phase 2: Spike (parallel using threads)
               print(f"\n⚡ Phase 2: Spike — firing {spike_requests} requests simultaneously!")
@@ -225,7 +218,7 @@ jobs:
               lock = threading.Lock()
 
               def spike_worker(idx):
-                  r = send_request(req_counter + idx, label="SPIKE")
+                  r = send_request(idx + 1, label="SPIKE")
                   with lock:
                       spike_results[idx] = r
 
@@ -239,33 +232,20 @@ jobs:
                   t.join()
 
               all_results.extend(spike_results)
-              req_counter += spike_requests
 
               # Phase 3: Baseline after spike (sequential)
               print(f"\n📋 Phase 3: Baseline (after spike) — checking recovery")
-              for i in range(baseline_requests):
-                  result = send_request(req_counter, label="BASELINE_AFTER")
+              for i in range(1, baseline_requests + 1):
+                  result = send_request(i, label="BASELINE_AFTER")
                   all_results.append(result)
-                  req_counter += 1
 
           # ─────────────────────────────────────────
           # Build final report
           # ─────────────────────────────────────────
           successful   = [r for r in all_results if r["success"]]
           failed       = [r for r in all_results if not r["success"]]
-          valid_times  = [r["response_time_ms"] for r in all_results if r["response_time_ms"] is not None]
+          valid_times  = [r["time_ms"] for r in all_results if r["time_ms"] is not None]
           stats        = calc_stats(valid_times)
-
-          # Create simplified requests array for frontend
-          requests_for_frontend = []
-          for r in all_results:
-              requests_for_frontend.append({
-                  "request_num": r["request_num"],
-                  "status": r["status"],
-                  "status_code": r["status_code"],
-                  "response_time_ms": r["response_time_ms"],
-                  "response_size": r["response_size"]
-              })
 
           report = {
               "test_type":        test_type,
@@ -277,8 +257,7 @@ jobs:
               "failed":           len(failed),
               "error_rate_pct":   round((len(failed) / len(all_results)) * 100, 1) if all_results else 0,
               **stats,
-              "requests":         requests_for_frontend,
-              "results":          all_results  # Keep detailed results for debugging
+              "results":          all_results
           }
 
           # Add spike-specific breakdown
@@ -287,9 +266,9 @@ jobs:
               spike_phase     = [r for r in all_results if r["label"] == "SPIKE"]
               baseline_after  = [r for r in all_results if r["label"] == "BASELINE_AFTER"]
 
-              bb_times = [r["response_time_ms"] for r in baseline_before if r["response_time_ms"]]
-              sp_times = [r["response_time_ms"] for r in spike_phase     if r["response_time_ms"]]
-              ba_times = [r["response_time_ms"] for r in baseline_after  if r["response_time_ms"]]
+              bb_times = [r["time_ms"] for r in baseline_before if r["time_ms"]]
+              sp_times = [r["time_ms"] for r in spike_phase     if r["time_ms"]]
+              ba_times = [r["time_ms"] for r in baseline_after  if r["time_ms"]]
 
               report["spike_breakdown"] = {
                   "baseline_before": {**calc_stats(bb_times), "count": len(baseline_before),
