@@ -2,21 +2,21 @@
   "test_type": "load",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-11T18:17:32.907314Z",
+  "timestamp": "2026-03-11T18:24:04.386611Z",
   "total_requests": 10,
   "successful": 0,
   "failed": 10,
   "error_rate_pct": 100.0,
-  "min_ms": 248,
-  "max_ms": 839,
-  "avg_ms": 486,
-  "p95_ms": 830,
+  "min_ms": 450,
+  "max_ms": 870,
+  "avg_ms": 742,
+  "p95_ms": 841,
   "results": [
     {
       "request": 1,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 465,
+      "time_ms": 870,
       "success": false,
       "error": null
     },
@@ -24,7 +24,7 @@
       "request": 2,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 434,
+      "time_ms": 841,
       "success": false,
       "error": null
     },
@@ -32,7 +32,7 @@
       "request": 3,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 400,
+      "time_ms": 796,
       "success": false,
       "error": null
     },
@@ -40,7 +40,7 @@
       "request": 4,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 248,
+      "time_ms": 450,
       "success": false,
       "error": null
     },
@@ -48,7 +48,7 @@
       "request": 5,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 830,
+      "time_ms": 793,
       "success": false,
       "error": null
     },
@@ -56,7 +56,7 @@
       "request": 6,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 392,
+      "time_ms": 643,
       "success": false,
       "error": null
     },
@@ -64,7 +64,7 @@
       "request": 7,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 432,
+      "time_ms": 752,
       "success": false,
       "error": null
     },
@@ -72,7 +72,7 @@
       "request": 8,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 403,
+      "time_ms": 762,
       "success": false,
       "error": null
     },
@@ -80,7 +80,7 @@
       "request": 9,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 839,
+      "time_ms": 721,
       "success": false,
       "error": null
     },
@@ -88,7 +88,7 @@
       "request": 10,
       "label": "LOAD",
       "status": 429,
-      "time_ms": 415,
+      "time_ms": 794,
       "success": false,
       "error": null
     }
