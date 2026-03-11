@@ -2,21 +2,35 @@
   "test_type": "load",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-11T18:40:51.365391Z",
-  "total_requests": 1,
+  "timestamp": "2026-03-11T18:48:52.401684Z",
+  "total_requests": 3,
   "successful": 0,
-  "failed": 1,
+  "failed": 3,
   "error_rate_pct": 100.0,
-  "min_ms": 360,
-  "max_ms": 360,
-  "avg_ms": 360,
-  "p95_ms": 360,
+  "min_ms": 464,
+  "max_ms": 834,
+  "avg_ms": 679,
+  "p95_ms": 740,
   "requests": [
     {
       "request_num": 1,
       "status": "Failed",
       "status_code": 429,
-      "response_time_ms": 360,
+      "response_time_ms": 834,
+      "response_size": 159
+    },
+    {
+      "request_num": 2,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 464,
+      "response_size": 159
+    },
+    {
+      "request_num": 3,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 740,
       "response_size": 159
     }
   ],
@@ -26,7 +40,27 @@
       "label": "LOAD",
       "status": "Failed",
       "status_code": 429,
-      "response_time_ms": 360,
+      "response_time_ms": 834,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 2,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 464,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 3,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 740,
       "response_size": 159,
       "success": false,
       "error": null
