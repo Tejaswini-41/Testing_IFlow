@@ -2,134 +2,94 @@
   "test_type": "load",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-11T17:32:01.182550Z",
-  "total_requests": 15,
-  "successful": 0,
-  "failed": 15,
-  "error_rate_pct": 100.0,
+  "timestamp": "2026-03-11T17:35:31.685527Z",
+  "total_requests": 10,
+  "successful": 10,
+  "failed": 0,
+  "error_rate_pct": 0.0,
   "min_ms": 256,
-  "max_ms": 731,
-  "avg_ms": 454,
-  "p95_ms": 679,
+  "max_ms": 496,
+  "avg_ms": 373,
+  "p95_ms": 467,
   "results": [
     {
       "request": 1,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 491,
-      "success": false,
+      "status": 200,
+      "time_ms": 467,
+      "success": true,
       "error": null
     },
     {
       "request": 2,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 469,
-      "success": false,
+      "status": 200,
+      "time_ms": 367,
+      "success": true,
       "error": null
     },
     {
       "request": 3,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 679,
-      "success": false,
+      "status": 200,
+      "time_ms": 394,
+      "success": true,
       "error": null
     },
     {
       "request": 4,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 512,
-      "success": false,
+      "status": 200,
+      "time_ms": 496,
+      "success": true,
       "error": null
     },
     {
       "request": 5,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 400,
-      "success": false,
+      "status": 200,
+      "time_ms": 359,
+      "success": true,
       "error": null
     },
     {
       "request": 6,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 439,
-      "success": false,
+      "status": 200,
+      "time_ms": 377,
+      "success": true,
       "error": null
     },
     {
       "request": 7,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 499,
-      "success": false,
+      "status": 200,
+      "time_ms": 369,
+      "success": true,
       "error": null
     },
     {
       "request": 8,
       "label": "LOAD",
-      "status": 500,
+      "status": 200,
       "time_ms": 256,
-      "success": false,
+      "success": true,
       "error": null
     },
     {
       "request": 9,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 359,
-      "success": false,
+      "status": 200,
+      "time_ms": 318,
+      "success": true,
       "error": null
     },
     {
       "request": 10,
       "label": "LOAD",
-      "status": 500,
-      "time_ms": 731,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 11,
-      "label": "LOAD",
-      "status": 500,
-      "time_ms": 436,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 12,
-      "label": "LOAD",
-      "status": 500,
-      "time_ms": 458,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 13,
-      "label": "LOAD",
-      "status": 500,
-      "time_ms": 306,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 14,
-      "label": "LOAD",
-      "status": 500,
-      "time_ms": 387,
-      "success": false,
-      "error": null
-    },
-    {
-      "request": 15,
-      "label": "LOAD",
-      "status": 500,
-      "time_ms": 385,
-      "success": false,
+      "status": 200,
+      "time_ms": 328,
+      "success": true,
       "error": null
     }
   ]
