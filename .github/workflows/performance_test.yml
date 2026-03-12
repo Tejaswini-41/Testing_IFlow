@@ -258,14 +258,26 @@ jobs:
 
           # Create simplified requests array for frontend
           requests_for_frontend = []
+          errors_for_frontend = []
+          
           for r in all_results:
               requests_for_frontend.append({
                   "request_num": r["request_num"],
+                  "label": r["label"],
                   "status": r["status"],
                   "status_code": r["status_code"],
                   "response_time_ms": r["response_time_ms"],
                   "response_size": r["response_size"]
               })
+              # Pull out failed requests into dedicated errors array
+              if not r["success"]:
+                  errors_for_frontend.append({
+                      "request_num": r["request_num"],
+                      "label": r["label"],
+                      "status_code": r["status_code"],
+                      "response_time_ms": r["response_time_ms"],
+                      "error": r["error"] or f"HTTP {r['status_code']}"
+                  })
 
           report = {
               "test_type":        test_type,
@@ -278,7 +290,8 @@ jobs:
               "error_rate_pct":   round((len(failed) / len(all_results)) * 100, 1) if all_results else 0,
               **stats,
               "requests":         requests_for_frontend,
-              "results":          all_results  # Keep detailed results for debugging
+              "errors":           errors_for_frontend,   # ← new clean errors array
+              "results":          all_results            # keep for debugging
           }
 
           # Add spike-specific breakdown
