@@ -2,197 +2,393 @@
   "test_type": "load",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-12T06:39:51.607691Z",
-  "total_requests": 10,
-  "successful": 10,
-  "failed": 0,
-  "error_rate_pct": 0.0,
-  "min_ms": 264,
-  "max_ms": 808,
-  "avg_ms": 486,
-  "p95_ms": 796,
+  "timestamp": "2026-03-12T06:42:31.894771Z",
+  "total_requests": 15,
+  "successful": 0,
+  "failed": 15,
+  "error_rate_pct": 100.0,
+  "min_ms": 231,
+  "max_ms": 762,
+  "avg_ms": 464,
+  "p95_ms": 706,
   "requests": [
     {
       "request_num": 1,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 448,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 380,
+      "response_size": 159
     },
     {
       "request_num": 2,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 808,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 516,
+      "response_size": 159
     },
     {
       "request_num": 3,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 417,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 504,
+      "response_size": 159
     },
     {
       "request_num": 4,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 458,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 459,
+      "response_size": 159
     },
     {
       "request_num": 5,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 383,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 482,
+      "response_size": 159
     },
     {
       "request_num": 6,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 466,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 762,
+      "response_size": 159
     },
     {
       "request_num": 7,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 796,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 378,
+      "response_size": 159
     },
     {
       "request_num": 8,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 264,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 404,
+      "response_size": 159
     },
     {
       "request_num": 9,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 392,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 359,
+      "response_size": 159
     },
     {
       "request_num": 10,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 424,
-      "response_size": 813
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 341,
+      "response_size": 159
+    },
+    {
+      "request_num": 11,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 706,
+      "response_size": 159
+    },
+    {
+      "request_num": 12,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 379,
+      "response_size": 159
+    },
+    {
+      "request_num": 13,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 231,
+      "response_size": 159
+    },
+    {
+      "request_num": 14,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 382,
+      "response_size": 159
+    },
+    {
+      "request_num": 15,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 673,
+      "response_size": 159
     }
   ],
-  "errors": [],
+  "errors": [
+    {
+      "request_num": 1,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 380,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 2,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 516,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 3,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 504,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 4,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 459,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 5,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 482,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 6,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 762,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 7,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 378,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 8,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 404,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 9,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 359,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 10,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 341,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 11,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 706,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 12,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 379,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 13,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 231,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 14,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 382,
+      "error": "HTTP 429"
+    },
+    {
+      "request_num": 15,
+      "label": "LOAD",
+      "status_code": 429,
+      "response_time_ms": 673,
+      "error": "HTTP 429"
+    }
+  ],
   "results": [
     {
       "request_num": 1,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 448,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 380,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 2,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 808,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 516,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 3,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 417,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 504,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 4,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 458,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 459,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 5,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 383,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 482,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 6,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 466,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 762,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 7,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 796,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 378,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 8,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 264,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 404,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 9,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 392,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 359,
+      "response_size": 159,
+      "success": false,
       "error": null
     },
     {
       "request_num": 10,
       "label": "LOAD",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 424,
-      "response_size": 813,
-      "success": true,
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 341,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 11,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 706,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 12,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 379,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 13,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 231,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 14,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 382,
+      "response_size": 159,
+      "success": false,
+      "error": null
+    },
+    {
+      "request_num": 15,
+      "label": "LOAD",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 673,
+      "response_size": 159,
+      "success": false,
       "error": null
     }
   ]
