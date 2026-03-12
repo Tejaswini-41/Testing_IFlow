@@ -2,67 +2,107 @@
   "test_type": "load",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-11T18:48:52.401684Z",
-  "total_requests": 3,
-  "successful": 0,
-  "failed": 3,
-  "error_rate_pct": 100.0,
-  "min_ms": 464,
-  "max_ms": 834,
-  "avg_ms": 679,
-  "p95_ms": 740,
+  "timestamp": "2026-03-12T06:30:25.109976Z",
+  "total_requests": 5,
+  "successful": 5,
+  "failed": 0,
+  "error_rate_pct": 0.0,
+  "min_ms": 429,
+  "max_ms": 888,
+  "avg_ms": 570,
+  "p95_ms": 591,
   "requests": [
     {
       "request_num": 1,
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 834,
-      "response_size": 159
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 591,
+      "response_size": 813
     },
     {
       "request_num": 2,
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 464,
-      "response_size": 159
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 429,
+      "response_size": 813
     },
     {
       "request_num": 3,
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 740,
-      "response_size": 159
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 445,
+      "response_size": 813
+    },
+    {
+      "request_num": 4,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 498,
+      "response_size": 813
+    },
+    {
+      "request_num": 5,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 888,
+      "response_size": 813
     }
   ],
+  "errors": [],
   "results": [
     {
       "request_num": 1,
       "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 834,
-      "response_size": 159,
-      "success": false,
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 591,
+      "response_size": 813,
+      "success": true,
       "error": null
     },
     {
       "request_num": 2,
       "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 464,
-      "response_size": 159,
-      "success": false,
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 429,
+      "response_size": 813,
+      "success": true,
       "error": null
     },
     {
       "request_num": 3,
       "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 740,
-      "response_size": 159,
-      "success": false,
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 445,
+      "response_size": 813,
+      "success": true,
+      "error": null
+    },
+    {
+      "request_num": 4,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 498,
+      "response_size": 813,
+      "success": true,
+      "error": null
+    },
+    {
+      "request_num": 5,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 888,
+      "response_size": 813,
+      "success": true,
       "error": null
     }
   ]
