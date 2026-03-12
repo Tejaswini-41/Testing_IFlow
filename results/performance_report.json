@@ -1,96 +1,96 @@
 {
   "test_type": "load",
-  "iflow_url": "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest",
+  "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-12T06:36:09.254808Z",
+  "timestamp": "2026-03-12T06:39:51.607691Z",
   "total_requests": 10,
   "successful": 10,
   "failed": 0,
   "error_rate_pct": 0.0,
-  "min_ms": 472,
-  "max_ms": 749,
-  "avg_ms": 529,
-  "p95_ms": 534,
+  "min_ms": 264,
+  "max_ms": 808,
+  "avg_ms": 486,
+  "p95_ms": 796,
   "requests": [
     {
       "request_num": 1,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 749,
-      "response_size": 797
+      "response_time_ms": 448,
+      "response_size": 813
     },
     {
       "request_num": 2,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 519,
-      "response_size": 797
+      "response_time_ms": 808,
+      "response_size": 813
     },
     {
       "request_num": 3,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 493,
-      "response_size": 797
+      "response_time_ms": 417,
+      "response_size": 813
     },
     {
       "request_num": 4,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 476,
-      "response_size": 797
+      "response_time_ms": 458,
+      "response_size": 813
     },
     {
       "request_num": 5,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 520,
-      "response_size": 797
+      "response_time_ms": 383,
+      "response_size": 813
     },
     {
       "request_num": 6,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 517,
-      "response_size": 797
+      "response_time_ms": 466,
+      "response_size": 813
     },
     {
       "request_num": 7,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 472,
-      "response_size": 797
+      "response_time_ms": 796,
+      "response_size": 813
     },
     {
       "request_num": 8,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 483,
-      "response_size": 797
+      "response_time_ms": 264,
+      "response_size": 813
     },
     {
       "request_num": 9,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 525,
-      "response_size": 797
+      "response_time_ms": 392,
+      "response_size": 813
     },
     {
       "request_num": 10,
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 534,
-      "response_size": 797
+      "response_time_ms": 424,
+      "response_size": 813
     }
   ],
   "errors": [],
@@ -100,8 +100,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 749,
-      "response_size": 797,
+      "response_time_ms": 448,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -110,8 +110,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 519,
-      "response_size": 797,
+      "response_time_ms": 808,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -120,8 +120,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 493,
-      "response_size": 797,
+      "response_time_ms": 417,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -130,8 +130,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 476,
-      "response_size": 797,
+      "response_time_ms": 458,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -140,8 +140,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 520,
-      "response_size": 797,
+      "response_time_ms": 383,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -150,8 +150,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 517,
-      "response_size": 797,
+      "response_time_ms": 466,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -160,8 +160,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 472,
-      "response_size": 797,
+      "response_time_ms": 796,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -170,8 +170,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 483,
-      "response_size": 797,
+      "response_time_ms": 264,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -180,8 +180,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 525,
-      "response_size": 797,
+      "response_time_ms": 392,
+      "response_size": 813,
       "success": true,
       "error": null
     },
@@ -190,8 +190,8 @@
       "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 534,
-      "response_size": 797,
+      "response_time_ms": 424,
+      "response_size": 813,
       "success": true,
       "error": null
     }
