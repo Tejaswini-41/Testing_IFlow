@@ -150,7 +150,8 @@ jobs:
                   "response_time_ms": None,
                   "response_size": 0,
                   "success": False,
-                  "error": None
+                  "error": None,
+                  "error_message": None
               }
               try:
                   kwargs = {"headers": user_headers, "timeout": 60}
@@ -165,12 +166,46 @@ jobs:
                   result["response_time_ms"]  = elapsed
                   result["response_size"]     = len(resp.content) if resp.content else 0
                   result["success"]           = resp.status_code < 400
-                  result["status"]            = "Success" if result["success"] else "Failed"
                   
-                  print(f"  {'✅' if result['success'] else '❌'} [{label}] Request {req_number} → {resp.status_code} in {elapsed}ms ({result['response_size']}B)")
+                  # Extract error message from backend response
+                  if result["success"]:
+                      result["status"] = "Success"
+                      result["error_message"] = "Success"
+                  else:
+                      result["status"] = "Failed"
+                      # Try to extract error message from response body
+                      error_msg = None
+                      try:
+                          resp_json = resp.json()
+                          # Try common error message keys
+                          error_msg = (resp_json.get("error") or 
+                                     resp_json.get("message") or 
+                                     resp_json.get("error_description") or
+                                     resp_json.get("detail"))
+                      except:
+                          pass
+                      
+                      # Fallback to HTTP reason if no JSON error message found
+                      if not error_msg:
+                          error_msg = resp.reason if resp.reason else f"HTTP Error {resp.status_code}"
+                      
+                      # Set specific messages for common status codes
+                      if resp.status_code == 401:
+                          result["error_message"] = error_msg if "401" not in str(error_msg) else "Unauthorized - " + error_msg
+                      elif resp.status_code == 403:
+                          result["error_message"] = error_msg if "403" not in str(error_msg) else "Forbidden - " + error_msg
+                      elif resp.status_code == 404:
+                          result["error_message"] = error_msg if "404" not in str(error_msg) else "Not Found - " + error_msg
+                      elif resp.status_code == 500:
+                          result["error_message"] = error_msg if "500" not in str(error_msg) else "Internal Server Error - " + error_msg
+                      else:
+                          result["error_message"] = error_msg
+                  
+                  print(f"  {'✅' if result['success'] else '❌'} [{label}] Request {req_number} → {resp.status_code} ({result['error_message']}) in {elapsed}ms ({result['response_size']}B)")
 
               except Exception as e:
                   result["error"] = str(e)
+                  result["error_message"] = str(e)
                   print(f"  ❌ [{label}] Request {req_number} → Exception: {e}")
 
               return result
@@ -267,7 +302,8 @@ jobs:
                   "status": r["status"],
                   "status_code": r["status_code"],
                   "response_time_ms": r["response_time_ms"],
-                  "response_size": r["response_size"]
+                  "response_size": r["response_size"],
+                  "error_message": r.get("error_message", "Success" if r["success"] else "Failed")
               })
               # Pull out failed requests into dedicated errors array
               if not r["success"]:
@@ -276,7 +312,8 @@ jobs:
                       "label": r["label"],
                       "status_code": r["status_code"],
                       "response_time_ms": r["response_time_ms"],
-                      "error": r["error"] or f"HTTP {r['status_code']}"
+                      "error": r["error"] or r.get("error_message") or f"HTTP {r['status_code']}",
+                      "error_message": r.get("error_message", f"HTTP {r['status_code']}")
                   })
 
           report = {
