@@ -1,236 +1,20 @@
 {
-  "test_type": "spike",
+  "test_type": "load",
   "iflow_url": "https://syn-int-suite-ent-qgjsk2hi.it-cpi024-rt.cfapps.eu10-002.hana.ondemand.com/http/ordersimulationtest",
   "http_method": "POST",
-  "timestamp": "2026-03-13T08:27:29.518387Z",
-  "total_requests": 26,
-  "successful": 26,
+  "timestamp": "2026-03-13T08:28:51.206685Z",
+  "total_requests": 21,
+  "successful": 21,
   "failed": 0,
   "error_rate_pct": 0.0,
-  "min_ms": 625,
-  "max_ms": 984,
-  "avg_ms": 867,
-  "p95_ms": 959,
+  "min_ms": 628,
+  "max_ms": 722,
+  "avg_ms": 672,
+  "p95_ms": 704,
   "requests": [
     {
       "request_num": 1,
-      "label": "BASELINE_BEFORE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 748,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 2,
-      "label": "BASELINE_BEFORE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 658,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 3,
-      "label": "BASELINE_BEFORE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 703,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 4,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 895,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 5,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 954,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 6,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 956,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 7,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 937,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 8,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 849,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 9,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 949,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 10,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 813,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 11,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 981,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 12,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 942,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 13,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 888,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 14,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 883,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 15,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 877,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 16,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 984,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 17,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 955,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 18,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 939,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 19,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 948,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 20,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 916,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 21,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 942,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 22,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 959,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 23,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 902,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 24,
-      "label": "BASELINE_AFTER",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 625,
-      "response_size": 813,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 25,
-      "label": "BASELINE_AFTER",
+      "label": "LOAD",
       "status": "Success",
       "status_code": 200,
       "response_time_ms": 686,
@@ -238,11 +22,182 @@
       "error_message": "Success"
     },
     {
-      "request_num": 26,
-      "label": "BASELINE_AFTER",
+      "request_num": 2,
+      "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 660,
+      "response_time_ms": 667,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 3,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 650,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 4,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 640,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 5,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 666,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 6,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 722,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 7,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 658,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 8,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 693,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 9,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 663,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 10,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 701,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 11,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 661,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 12,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 651,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 13,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 668,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 14,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 628,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 15,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 673,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 16,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 701,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 17,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 707,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 18,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 645,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 19,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 659,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 20,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 677,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 21,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 704,
       "response_size": 813,
       "error_message": "Success"
     }
@@ -251,271 +206,7 @@
   "results": [
     {
       "request_num": 1,
-      "label": "BASELINE_BEFORE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 748,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 2,
-      "label": "BASELINE_BEFORE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 658,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 3,
-      "label": "BASELINE_BEFORE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 703,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 4,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 895,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 5,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 954,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 6,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 956,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 7,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 937,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 8,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 849,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 9,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 949,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 10,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 813,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 11,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 981,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 12,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 942,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 13,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 888,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 14,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 883,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 15,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 877,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 16,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 984,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 17,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 955,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 18,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 939,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 19,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 948,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 20,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 916,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 21,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 942,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 22,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 959,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 23,
-      "label": "SPIKE",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 902,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 24,
-      "label": "BASELINE_AFTER",
-      "status": "Success",
-      "status_code": 200,
-      "response_time_ms": 625,
-      "response_size": 813,
-      "success": true,
-      "error": null,
-      "error_message": "Success"
-    },
-    {
-      "request_num": 25,
-      "label": "BASELINE_AFTER",
+      "label": "LOAD",
       "status": "Success",
       "status_code": 200,
       "response_time_ms": 686,
@@ -525,41 +216,224 @@
       "error_message": "Success"
     },
     {
-      "request_num": 26,
-      "label": "BASELINE_AFTER",
+      "request_num": 2,
+      "label": "LOAD",
       "status": "Success",
       "status_code": 200,
-      "response_time_ms": 660,
+      "response_time_ms": 667,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 3,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 650,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 4,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 640,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 5,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 666,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 6,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 722,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 7,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 658,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 8,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 693,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 9,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 663,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 10,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 701,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 11,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 661,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 12,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 651,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 13,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 668,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 14,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 628,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 15,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 673,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 16,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 701,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 17,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 707,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 18,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 645,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 19,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 659,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 20,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 677,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 21,
+      "label": "LOAD",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 704,
       "response_size": 813,
       "success": true,
       "error": null,
       "error_message": "Success"
     }
-  ],
-  "spike_breakdown": {
-    "baseline_before": {
-      "min_ms": 658,
-      "max_ms": 748,
-      "avg_ms": 703,
-      "p95_ms": 703,
-      "count": 3,
-      "failed": 0
-    },
-    "spike_phase": {
-      "min_ms": 813,
-      "max_ms": 984,
-      "avg_ms": 923,
-      "p95_ms": 981,
-      "count": 20,
-      "failed": 0
-    },
-    "baseline_after": {
-      "min_ms": 625,
-      "max_ms": 686,
-      "avg_ms": 657,
-      "p95_ms": 660,
-      "count": 3,
-      "failed": 0
-    }
-  }
+  ]
 }
