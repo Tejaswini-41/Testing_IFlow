@@ -1,186 +1,184 @@
 {
-  "test_type": "load",
+  "test_type": "spike",
   "iflow_url": "https://synapimgt-dev.syngentadigitalapps.com/syng-ordersimulation-tejaswini-poc",
   "http_method": "POST",
-  "timestamp": "2026-03-12T07:33:10.491678Z",
-  "total_requests": 10,
-  "successful": 0,
-  "failed": 10,
-  "error_rate_pct": 100.0,
-  "min_ms": 347,
-  "max_ms": 683,
-  "avg_ms": 468,
-  "p95_ms": 671,
+  "timestamp": "2026-03-13T04:48:12.607174Z",
+  "total_requests": 16,
+  "successful": 13,
+  "failed": 3,
+  "error_rate_pct": 18.8,
+  "min_ms": 598,
+  "max_ms": 1086,
+  "avg_ms": 948,
+  "p95_ms": 1044,
   "requests": [
     {
       "request_num": 1,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 516,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "BASELINE_BEFORE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1011,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 2,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 349,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "BASELINE_BEFORE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 984,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 3,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 683,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "BASELINE_BEFORE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 857,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 4,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 378,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1040,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 5,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 347,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1044,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 6,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 495,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 885,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 7,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 671,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1020,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 8,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 464,
-      "response_size": 159,
-      "error_message": "Too Many Requests"
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1020,
+      "response_size": 813,
+      "error_message": "Success"
     },
     {
       "request_num": 9,
-      "label": "LOAD",
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 963,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 10,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1086,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 11,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 598,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 12,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 979,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 13,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1012,
+      "response_size": 813,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 14,
+      "label": "BASELINE_AFTER",
       "status": "Failed",
       "status_code": 429,
-      "response_time_ms": 427,
+      "response_time_ms": 948,
       "response_size": 159,
       "error_message": "Too Many Requests"
     },
     {
-      "request_num": 10,
-      "label": "LOAD",
+      "request_num": 15,
+      "label": "BASELINE_AFTER",
       "status": "Failed",
       "status_code": 429,
-      "response_time_ms": 353,
+      "response_time_ms": 920,
+      "response_size": 159,
+      "error_message": "Too Many Requests"
+    },
+    {
+      "request_num": 16,
+      "label": "BASELINE_AFTER",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 806,
       "response_size": 159,
       "error_message": "Too Many Requests"
     }
   ],
   "errors": [
     {
-      "request_num": 1,
-      "label": "LOAD",
+      "request_num": 14,
+      "label": "BASELINE_AFTER",
       "status_code": 429,
-      "response_time_ms": 516,
+      "response_time_ms": 948,
       "error": "Too Many Requests",
       "error_message": "Too Many Requests"
     },
     {
-      "request_num": 2,
-      "label": "LOAD",
+      "request_num": 15,
+      "label": "BASELINE_AFTER",
       "status_code": 429,
-      "response_time_ms": 349,
+      "response_time_ms": 920,
       "error": "Too Many Requests",
       "error_message": "Too Many Requests"
     },
     {
-      "request_num": 3,
-      "label": "LOAD",
+      "request_num": 16,
+      "label": "BASELINE_AFTER",
       "status_code": 429,
-      "response_time_ms": 683,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 4,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 378,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 5,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 347,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 6,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 495,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 7,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 671,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 8,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 464,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 9,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 427,
-      "error": "Too Many Requests",
-      "error_message": "Too Many Requests"
-    },
-    {
-      "request_num": 10,
-      "label": "LOAD",
-      "status_code": 429,
-      "response_time_ms": 353,
+      "response_time_ms": 806,
       "error": "Too Many Requests",
       "error_message": "Too Many Requests"
     }
@@ -188,113 +186,205 @@
   "results": [
     {
       "request_num": 1,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 516,
-      "response_size": 159,
-      "success": false,
+      "label": "BASELINE_BEFORE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1011,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 2,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 349,
-      "response_size": 159,
-      "success": false,
+      "label": "BASELINE_BEFORE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 984,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 3,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 683,
-      "response_size": 159,
-      "success": false,
+      "label": "BASELINE_BEFORE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 857,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 4,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 378,
-      "response_size": 159,
-      "success": false,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1040,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 5,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 347,
-      "response_size": 159,
-      "success": false,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1044,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 6,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 495,
-      "response_size": 159,
-      "success": false,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 885,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 7,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 671,
-      "response_size": 159,
-      "success": false,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1020,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 8,
-      "label": "LOAD",
-      "status": "Failed",
-      "status_code": 429,
-      "response_time_ms": 464,
-      "response_size": 159,
-      "success": false,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1020,
+      "response_size": 813,
+      "success": true,
       "error": null,
-      "error_message": "Too Many Requests"
+      "error_message": "Success"
     },
     {
       "request_num": 9,
-      "label": "LOAD",
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 963,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 10,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1086,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 11,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 598,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 12,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 979,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 13,
+      "label": "SPIKE",
+      "status": "Success",
+      "status_code": 200,
+      "response_time_ms": 1012,
+      "response_size": 813,
+      "success": true,
+      "error": null,
+      "error_message": "Success"
+    },
+    {
+      "request_num": 14,
+      "label": "BASELINE_AFTER",
       "status": "Failed",
       "status_code": 429,
-      "response_time_ms": 427,
+      "response_time_ms": 948,
       "response_size": 159,
       "success": false,
       "error": null,
       "error_message": "Too Many Requests"
     },
     {
-      "request_num": 10,
-      "label": "LOAD",
+      "request_num": 15,
+      "label": "BASELINE_AFTER",
       "status": "Failed",
       "status_code": 429,
-      "response_time_ms": 353,
+      "response_time_ms": 920,
+      "response_size": 159,
+      "success": false,
+      "error": null,
+      "error_message": "Too Many Requests"
+    },
+    {
+      "request_num": 16,
+      "label": "BASELINE_AFTER",
+      "status": "Failed",
+      "status_code": 429,
+      "response_time_ms": 806,
       "response_size": 159,
       "success": false,
       "error": null,
       "error_message": "Too Many Requests"
     }
-  ]
+  ],
+  "spike_breakdown": {
+    "baseline_before": {
+      "min_ms": 857,
+      "max_ms": 1011,
+      "avg_ms": 951,
+      "p95_ms": 984,
+      "count": 3,
+      "failed": 0
+    },
+    "spike_phase": {
+      "min_ms": 598,
+      "max_ms": 1086,
+      "avg_ms": 965,
+      "p95_ms": 1044,
+      "count": 10,
+      "failed": 0
+    },
+    "baseline_after": {
+      "min_ms": 806,
+      "max_ms": 948,
+      "avg_ms": 891,
+      "p95_ms": 920,
+      "count": 3,
+      "failed": 3
+    }
+  }
 }
