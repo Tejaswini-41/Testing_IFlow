@@ -2201,7 +2201,7 @@ def render_json_side_by_side_diff(base_obj, current_obj, diff_data):
     
     # Main HTML table
     out = []
-    out.append('<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #fee2e9 !important; border-left: 4px solid #eea236 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style>')
+    out.append('<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #dbeafe !important; border-left: 4px solid #3b82f6 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style>')
     out.append('<table class="diff-table-json" style="width:100%;table-layout:fixed"><tr>')
     out.append('<td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">'+left+'</pre></td>')
     out.append('<td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">'+right+'</pre></td>')
@@ -2226,7 +2226,7 @@ html_content += """
                                 <span>Removed</span>
                             </div>
                             <div class="legend-item" style="display:flex; align-items:center; gap:6px;">
-                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#fee2e9; border-left:4px solid #eea236; border-radius:3px;"></span>
+                                <span class="swatch" style="display:inline-block; width:14px; height:14px; background:#dbeafe; border-left:4px solid #3b82f6; border-radius:3px;"></span>
                                 <span>Modified</span>
                             </div>
                         </div>
@@ -2526,7 +2526,7 @@ html_content += """
           '    .diff-table-json td { vertical-align: top; background: white; padding: 8px; }\\n' +
           '    .diff-add { background: #d1fae5; }\\n' +
           '    .diff-del { background: #fee2e2; }\\n' +
-          '    .diff-mod { background: #ffeeba !important; border-left: 4px solid #eea236 !important; }\\n' +
+          '    .diff-mod { background: #dbeafe !important; border-left: 4px solid #3b82f6 !important; }\\n' +
           '    pre { font-family: \\'Courier New\\', monospace; margin: 0; overflow-x: auto; font-size: 0.99em; padding: 0; }\\n' +
           '  </style>\\n' +
           '</head>\\n' +
