@@ -1,5 +1,0 @@
-{
-  "status_code": 401,
-  "timestamp": "results",
-  "error_message": "No response body"
-}
