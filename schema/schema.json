@@ -1,159 +1,295 @@
 {
-
-  "$schema": "https://json-schema.org/draft/2020-12/schema",
-
-  "title": "Order Schema",
-
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Order Payload Schema",
   "type": "object",
-
+  "required": ["order_partners", "order_items", "order_header"],
   "properties": {
 
     "order_partners": {
-
       "type": "object",
-
+      "required": ["item"],
       "properties": {
-
         "item": {
-
           "type": "array",
-
+          "minItems": 1,
           "items": {
-
             "type": "object",
-
+            "required": ["partn_role", "partn_numb", "country", "city"],
             "properties": {
-
-              "partn_role": { "type": "string" },
-
-              "partn_numb": { "type": "string" },
-
-              "country": { "type": "string" },
-
-              "city": { "type": "string" }
-
+              "partn_role": {
+                "type": "string",
+                "description": "Partner role code (e.g., AG, WE, RE, RG)",
+                "enum": ["AG", "WE", "RE", "RG", "SP", "BP"],
+                "examples": ["AG", "WE"]
+              },
+              "partn_numb": {
+                "type": "string",
+                "description": "Partner number",
+                "pattern": "^[0-9]{7,10}$",
+                "examples": ["4717357"]
+              },
+              "country": {
+                "type": "string",
+                "description": "ISO 2-letter country code",
+                "minLength": 2,
+                "maxLength": 2,
+                "examples": ["UK", "DE", "US"]
+              },
+              "city": {
+                "type": "string",
+                "description": "City name",
+                "maxLength": 100,
+                "examples": ["London", "Manchester"]
+              },
+              "name": {
+                "type": "string",
+                "description": "Partner name",
+                "maxLength": 200
+              },
+              "street": {
+                "type": "string",
+                "description": "Street address",
+                "maxLength": 200
+              },
+              "postal_code": {
+                "type": "string",
+                "description": "Postal/ZIP code",
+                "maxLength": 20
+              },
+              "phone": {
+                "type": "string",
+                "description": "Phone number with country code",
+                "pattern": "^\\+?[0-9\\s\\-]{7,20}$"
+              },
+              "email": {
+                "type": "string",
+                "format": "email",
+                "description": "Partner email address"
+              },
+              "region": {
+                "type": "string",
+                "description": "Region or state code",
+                "maxLength": 10
+              }
             },
-
-            "required": ["partn_role", "partn_numb", "country", "city"]
-
+            "additionalProperties": false
           }
-
         }
-
       },
-
-      "required": ["item"]
-
+      "additionalProperties": false
     },
 
     "order_items": {
-
       "type": "object",
-
+      "required": ["item"],
       "properties": {
-
         "item": {
-
           "type": "array",
-
+          "minItems": 1,
           "items": {
-
             "type": "object",
-
+            "required": ["custom_item_id", "target_qty", "sales_unit", "material"],
             "properties": {
-
-              "custom_item_id": { "type": "string" },
-
-              "target_qty": { "type": "string" },
-
-              "sales_unit": { "type": "string" },
-
-              "material": { "type": "string" }
-
+              "custom_item_id": {
+                "type": "string",
+                "description": "Salesforce custom item ID",
+                "pattern": "^[a-zA-Z0-9]{18}$",
+                "examples": ["0a99O000000iezRQAQ"]
+              },
+              "target_qty": {
+                "type": "string",
+                "description": "Target quantity as string",
+                "pattern": "^[0-9]+(\\.[0-9]+)?$",
+                "examples": ["2", "3"]
+              },
+              "sales_unit": {
+                "type": "string",
+                "description": "Unit of measure for sales",
+                "enum": ["IGB", "KG", "LT", "MT", "BAG"],
+                "examples": ["IGB"]
+              },
+              "material": {
+                "type": "string",
+                "description": "SAP material number",
+                "pattern": "^[0-9]{6,18}$",
+                "examples": ["230951", "230952"]
+              },
+              "item_description": {
+                "type": "string",
+                "description": "Human-readable product description",
+                "maxLength": 500
+              },
+              "plant": {
+                "type": "string",
+                "description": "SAP plant code",
+                "pattern": "^[0-9]{4}$"
+              },
+              "storage_location": {
+                "type": "string",
+                "description": "SAP storage location code",
+                "maxLength": 4
+              },
+              "batch": {
+                "type": "string",
+                "description": "Batch number",
+                "maxLength": 20
+              },
+              "net_price": {
+                "type": "number",
+                "description": "Net price of the item",
+                "minimum": 0,
+                "examples": [199.99]
+              },
+              "currency": {
+                "type": "string",
+                "description": "ISO 3-letter currency code",
+                "minLength": 3,
+                "maxLength": 3,
+                "examples": ["GBP", "USD", "EUR"]
+              },
+              "discount_pct": {
+                "type": "number",
+                "description": "Discount percentage",
+                "minimum": 0,
+                "maximum": 100
+              },
+              "delivery_date": {
+                "type": "string",
+                "format": "date",
+                "description": "Expected delivery date (YYYY-MM-DD)",
+                "examples": ["2026-06-15"]
+              },
+              "profit_center": {
+                "type": "string",
+                "description": "SAP profit center",
+                "maxLength": 10
+              },
+              "cost_center": {
+                "type": "string",
+                "description": "SAP cost center",
+                "maxLength": 10
+              },
+              "notes": {
+                "type": "string",
+                "description": "Free-text notes for the item",
+                "maxLength": 500
+              }
             },
-
-            "required": ["custom_item_id", "target_qty", "sales_unit", "material"]
-
+            "additionalProperties": false
           }
-
         }
-
       },
-
-      "required": ["item"]
-
+      "additionalProperties": false
     },
 
     "order_header": {
-
       "type": "object",
-
-      "properties": {
-
-        "currency": { "type": "string" },
-
-        "cd_value_promo": { "type": "string" },
-
-        "cd_type_promo": { "type": "string" },
-
-        "cd_value_freight": { "type": "string" },
-
-        "cd_type_freight": { "type": "string" },
-
-        "custom_header_id": { "type": "string" },
-
-        "customer_tax": { "type": "string" },
-
-        "sales_org": { "type": "string" },
-
-        "pmnttrms": { "type": "string" },
-
-        "purch_no": { "type": "string" },
-
-        "doc_type": { "type": "string" },
-
-        "division": { "type": "string" },
-
-        "distr_chan": { "type": "string" }
-
-      },
-
       "required": [
-
-        "currency",
-
-        "cd_value_promo",
-
-        "cd_type_promo",
-
-        "cd_value_freight",
-
-        "cd_type_freight",
-
-        "custom_header_id",
-
-        "customer_tax",
-
-        "sales_org",
-
-        "pmnttrms",
-
-        "purch_no",
-
-        "doc_type",
-
-        "division",
-
-        "distr_chan"
-
-      ]
-
+        "currency", "cd_value_promo", "cd_type_promo",
+        "cd_value_freight", "custom_header_id",
+        "sales_org", "pmnttrms", "purch_no",
+        "doc_type", "order_reason", "division", "distr_chan"
+      ],
+      "properties": {
+        "currency": {
+          "type": "string",
+          "description": "ISO 3-letter currency code",
+          "minLength": 3,
+          "maxLength": 3,
+          "examples": ["GBP"]
+        },
+        "cd_value_promo": {
+          "type": "string",
+          "description": "Promotional condition value",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$",
+          "examples": ["0", "10.5"]
+        },
+        "cd_type_promo": {
+          "type": "string",
+          "description": "Promotional condition type code",
+          "maxLength": 4,
+          "examples": ["ZDR3"]
+        },
+        "cd_value_freight": {
+          "type": "string",
+          "description": "Freight condition value",
+          "pattern": "^[0-9]+(\\.[0-9]+)?$",
+          "examples": ["0", "25.00"]
+        },
+        "cd_type_freight": {
+          "type": "string",
+          "description": "Freight condition type code",
+          "maxLength": 4,
+          "examples": ["ZFR1", ""]
+        },
+        "custom_header_id": {
+          "type": "string",
+          "description": "Salesforce custom header ID",
+          "pattern": "^[a-zA-Z0-9]{18}$",
+          "examples": ["0a69O000000F3yTQAS"]
+        },
+        "sales_org": {
+          "type": "string",
+          "description": "SAP sales organization code",
+          "pattern": "^[0-9]{4}$",
+          "examples": ["0135"]
+        },
+        "pmnttrms": {
+          "type": "string",
+          "description": "Payment terms code",
+          "maxLength": 4,
+          "examples": ["0600"]
+        },
+        "purch_no": {
+          "type": "string",
+          "description": "Purchase order number or reference",
+          "maxLength": 35,
+          "examples": ["UK Cart"]
+        },
+        "doc_type": {
+          "type": "string",
+          "description": "SAP document type",
+          "maxLength": 4,
+          "examples": ["ZDPP"]
+        },
+        "order_reason": {
+          "type": "string",
+          "description": "Reason for the order",
+          "maxLength": 200,
+          "examples": ["Test Order Simulation"]
+        },
+        "division": {
+          "type": "string",
+          "description": "SAP division code",
+          "pattern": "^[0-9]{2}$",
+          "examples": ["02"]
+        },
+        "distr_chan": {
+          "type": "string",
+          "description": "SAP distribution channel code",
+          "pattern": "^[0-9]{2}$",
+          "examples": ["02"]
+        },
+        "header_notes": {
+          "type": "string",
+          "description": "Free-text header level notes",
+          "maxLength": 500
+        },
+        "created_by": {
+          "type": "string",
+          "description": "User or system that created the order",
+          "maxLength": 50
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Order creation timestamp (ISO 8601)",
+          "examples": ["2026-03-16T10:00:00Z"]
+        }
+      },
+      "additionalProperties": false
     }
 
   },
-
-  "required": ["order_partners", "order_items", "order_header"]
-
+  "additionalProperties": false
 }
-
- 
