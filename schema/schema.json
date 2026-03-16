@@ -1,350 +1,159 @@
 {
-  "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Order Payload Schema",
+
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+
+  "title": "Order Schema",
+
   "type": "object",
-  "required": [
-    "order_partners",
-    "order_items",
-    "order_header"
-  ],
+
   "properties": {
+
     "order_partners": {
+
       "type": "object",
-      "required": [
-        "item"
-      ],
+
       "properties": {
+
         "item": {
+
           "type": "array",
-          "minItems": 1,
+
           "items": {
+
             "type": "object",
-            "required": [
-              "partn_role",
-              "partn_numb",
-              "country",
-              "city",
-              "name",
-              "street",
-              "postal_code",
-              "phone",
-              "email",
-              "region"
-            ],
+
             "properties": {
-              "partn_role": {
-                "type": "string",
-                "examples": [
-                  "RE"
-                ]
-              },
-              "partn_numb": {
-                "type": "string",
-                "examples": [
-                  "7256772"
-                ]
-              },
-              "country": {
-                "type": "string",
-                "examples": [
-                  "UK"
-                ]
-              },
-              "city": {
-                "type": "string",
-                "examples": [
-                  "Bristol"
-                ]
-              },
-              "name": {
-                "type": "string",
-                "examples": [
-                  "Partner Name 0 WD70LZTEVX"
-                ]
-              },
-              "street": {
-                "type": "string",
-                "examples": [
-                  "556 11UJAXYE Street"
-                ]
-              },
-              "postal_code": {
-                "type": "string",
-                "examples": [
-                  "7YQ 4DO"
-                ]
-              },
-              "phone": {
-                "type": "string",
-                "examples": [
-                  "+444311073838"
-                ]
-              },
-              "email": {
-                "type": "string",
-                "examples": [
-                  "partner0@DKMIRT.co.uk"
-                ]
-              },
-              "region": {
-                "type": "string",
-                "examples": [
-                  "E13K"
-                ]
-              }
+
+              "partn_role": { "type": "string" },
+
+              "partn_numb": { "type": "string" },
+
+              "country": { "type": "string" },
+
+              "city": { "type": "string" }
+
             },
-            "additionalProperties": false
+
+            "required": ["partn_role", "partn_numb", "country", "city"]
+
           }
+
         }
+
       },
-      "additionalProperties": false
+
+      "required": ["item"]
+
     },
+
     "order_items": {
+
       "type": "object",
-      "required": [
-        "item"
-      ],
+
       "properties": {
+
         "item": {
+
           "type": "array",
-          "minItems": 1,
+
           "items": {
+
             "type": "object",
-            "required": [
-              "custom_item_id",
-              "target_qty",
-              "sales_unit",
-              "material",
-              "item_description",
-              "plant",
-              "storage_location",
-              "batch",
-              "net_price",
-              "currency",
-              "discount_pct",
-              "delivery_date",
-              "profit_center",
-              "cost_center",
-              "notes"
-            ],
+
             "properties": {
-              "custom_item_id": {
-                "type": "string",
-                "examples": [
-                  "0a99O000000J607UF16Y"
-                ]
-              },
-              "target_qty": {
-                "type": "string",
-                "examples": [
-                  "16"
-                ]
-              },
-              "sales_unit": {
-                "type": "string",
-                "examples": [
-                  "LT"
-                ]
-              },
-              "material": {
-                "type": "string",
-                "examples": [
-                  "747048"
-                ]
-              },
-              "item_description": {
-                "type": "string",
-                "examples": [
-                  "Product description for item 0 - GSP722KMXFKT6T61V1B3"
-                ]
-              },
-              "plant": {
-                "type": "string",
-                "examples": [
-                  "5128"
-                ]
-              },
-              "storage_location": {
-                "type": "string",
-                "examples": [
-                  "3NEI"
-                ]
-              },
-              "batch": {
-                "type": "string",
-                "examples": [
-                  "EVDO84XR"
-                ]
-              },
-              "net_price": {
-                "type": "number",
-                "examples": [
-                  6247.0
-                ]
-              },
-              "currency": {
-                "type": "string",
-                "examples": [
-                  "GBP"
-                ]
-              },
-              "discount_pct": {
-                "type": "number",
-                "examples": [
-                  21.59
-                ]
-              },
-              "delivery_date": {
-                "type": "string",
-                "examples": [
-                  "2026-05-28"
-                ]
-              },
-              "profit_center": {
-                "type": "string",
-                "examples": [
-                  "FNJ0M4"
-                ]
-              },
-              "cost_center": {
-                "type": "string",
-                "examples": [
-                  "LH4D10"
-                ]
-              },
-              "notes": {
-                "type": "string",
-                "examples": [
-                  "Additional notes for item 0: X3ZH9ZZCPMQHI25ACHXAW2DXXOC58TGWUBJ0XU7704KPUUE3F6"
-                ]
-              }
+
+              "custom_item_id": { "type": "string" },
+
+              "target_qty": { "type": "string" },
+
+              "sales_unit": { "type": "string" },
+
+              "material": { "type": "string" }
+
             },
-            "additionalProperties": false
+
+            "required": ["custom_item_id", "target_qty", "sales_unit", "material"]
+
           }
+
         }
+
       },
-      "additionalProperties": false
+
+      "required": ["item"]
+
     },
+
     "order_header": {
+
       "type": "object",
-      "required": [
-        "currency",
-        "cd_value_promo",
-        "cd_type_promo",
-        "cd_value_freight",
-        "cd_type_freight",
-        "custom_header_id",
-        "sales_org",
-        "pmnttrms",
-        "purch_no",
-        "doc_type",
-        "order_reason",
-        "division",
-        "distr_chan",
-        "header_notes",
-        "created_by",
-        "created_at"
-      ],
+
       "properties": {
-        "currency": {
-          "type": "string",
-          "examples": [
-            "GBP"
-          ]
-        },
-        "cd_value_promo": {
-          "type": "string",
-          "examples": [
-            "0"
-          ]
-        },
-        "cd_type_promo": {
-          "type": "string",
-          "examples": [
-            "ZDR3"
-          ]
-        },
-        "cd_value_freight": {
-          "type": "string",
-          "examples": [
-            "0"
-          ]
-        },
-        "cd_type_freight": {
-          "type": "string",
-          "examples": [
-            ""
-          ]
-        },
-        "custom_header_id": {
-          "type": "string",
-          "examples": [
-            "0a69O000000F3yTQAS"
-          ]
-        },
-        "sales_org": {
-          "type": "string",
-          "examples": [
-            "0135"
-          ]
-        },
-        "pmnttrms": {
-          "type": "string",
-          "examples": [
-            "0600"
-          ]
-        },
-        "purch_no": {
-          "type": "string",
-          "examples": [
-            "UK Cart"
-          ]
-        },
-        "doc_type": {
-          "type": "string",
-          "examples": [
-            "ZDPP"
-          ]
-        },
-        "order_reason": {
-          "type": "string",
-          "examples": [
-            "Test Order Simulation"
-          ]
-        },
-        "division": {
-          "type": "string",
-          "examples": [
-            "02"
-          ]
-        },
-        "distr_chan": {
-          "type": "string",
-          "examples": [
-            "02"
-          ]
-        },
-        "header_notes": {
-          "type": "string",
-          "examples": [
-            "8CPE9R1X9HL1YLBJF5ESEUQOGT3PL4NOKFF6AXF15UM9KTD2M6YKT2V8T9PP2VMMD31MITUIIX4TQ930U9O44CEMR5SK7XE7KPWGI1EWK0STUKURLL9333ZR2LTCQGU85QSSJWERXIH7VISWYFHOJE74XVOT481RU7XQZH1P05TT5N8C70JYZJ6KTUBCJKE02TT8D6ZN"
-          ]
-        },
-        "created_by": {
-          "type": "string",
-          "examples": [
-            "SynGPT_TEST"
-          ]
-        },
-        "created_at": {
-          "type": "string",
-          "examples": [
-            "2026-03-16T10:00:00Z"
-          ]
-        }
+
+        "currency": { "type": "string" },
+
+        "cd_value_promo": { "type": "string" },
+
+        "cd_type_promo": { "type": "string" },
+
+        "cd_value_freight": { "type": "string" },
+
+        "cd_type_freight": { "type": "string" },
+
+        "custom_header_id": { "type": "string" },
+
+        "customer_tax": { "type": "string" },
+
+        "sales_org": { "type": "string" },
+
+        "pmnttrms": { "type": "string" },
+
+        "purch_no": { "type": "string" },
+
+        "doc_type": { "type": "string" },
+
+        "division": { "type": "string" },
+
+        "distr_chan": { "type": "string" }
+
       },
-      "additionalProperties": false
+
+      "required": [
+
+        "currency",
+
+        "cd_value_promo",
+
+        "cd_type_promo",
+
+        "cd_value_freight",
+
+        "cd_type_freight",
+
+        "custom_header_id",
+
+        "customer_tax",
+
+        "sales_org",
+
+        "pmnttrms",
+
+        "purch_no",
+
+        "doc_type",
+
+        "division",
+
+        "distr_chan"
+
+      ]
+
     }
+
   },
-  "additionalProperties": false
+
+  "required": ["order_partners", "order_items", "order_header"]
+
 }
+
+ 
