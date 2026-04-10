@@ -38,11 +38,11 @@
     "cd_value_freight": "0",
     "cd_type_freight": "",
     "custom_header_id": "0a69O000000F3yTQAS",
-    "customer_tax": "1",
     "sales_org": "0135",
     "pmnttrms": "0600",
     "purch_no": "UK Cart",
     "doc_type": "ZDPP",
+    "order_reason": "Test Order Simulation",
     "division": "02",
     "distr_chan": "02"
   }
