@@ -2,19 +2,16 @@
   "order_partners": {
     "item": [
       {
-        "partn_role": "AGGGG",
-        "partn_numb": "2135778",
-        "country": "Mexico",
-        "city": "Pune"
+        "partn_role": "AG",
+        "partn_numb": "4717357",
+        "country": "UK",
+        "city": "London"
       },
       {
-        "partn_role": "Tejaswini durge",
-        "partn_numb": "123",
-        "country": "India",
-        "country2": "USA",
-        "city": "Mumbai",
-        "street": "Test Street",
-        "postal_code": "400001"
+        "partn_role": "WE",
+        "partn_numb": "4717357",
+        "country": "UK",
+        "city": "London"
       }
     ]
   },
@@ -30,20 +27,21 @@
         "custom_item_id": "0a99O000000if13QAA",
         "target_qty": "3",
         "sales_unit": "IGB",
-        "material": "230952",
-        "name": "Test Material"
+        "material": "230952"
       }
     ]
   },
   "order_header": {
-    "currency": "GBOP",
+    "currency": "GBP",
     "cd_value_promo": "0",
     "cd_type_promo": "ZDR3",
-    "cd_value_freight": "09",
-    "cd_type_freight1": "",
-    "cd_type_freight_4": "",
+    "cd_value_freight": "0",
+    "cd_type_freight": "",
     "custom_header_id": "0a69O000000F3yTQAS",
     "customer_tax": "1",
+    "sales_org": "0135",
+    "pmnttrms": "0600",
+    "purch_no": "UK Cart",
     "doc_type": "ZDPP",
     "division": "02",
     "distr_chan": "02"
