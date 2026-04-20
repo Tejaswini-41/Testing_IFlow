@@ -110,45 +110,45 @@ jobs:
 
           # Parse headers JSON
           try:
-              user_headers = json.loads(headers_input) if headers_input.strip() else {}
+            user_headers = json.loads(headers_input) if headers_input.strip() else {}
           except json.JSONDecodeError:
-              print("❌ Invalid headers JSON. Using empty headers.")
-              user_headers = {}
+            print("❌ Invalid headers JSON. Using empty headers.")
+            user_headers = {}
 
-            # Ensure Content-Type default if not present
-            if not any(k.lower() == "content-type" for k in user_headers):
-              user_headers["Content-Type"] = "application/xml" if payload_type == "xml" else "application/json"
+          # Ensure Content-Type default if not present
+          if not any(k.lower() == "content-type" for k in user_headers):
+            user_headers["Content-Type"] = "application/xml" if payload_type == "xml" else "application/json"
 
           # Add Authorization header based on auth_type
           if auth_type == "basic":
-              # token expected as "username:password"
-              basic_b64 = base64.b64encode(token.encode("utf-8")).decode("utf-8")
-              user_headers["Authorization"] = f"Basic {basic_b64}"
-              print("✅ Using Basic Auth")
+            # token expected as "username:password"
+            basic_b64 = base64.b64encode(token.encode("utf-8")).decode("utf-8")
+            user_headers["Authorization"] = f"Basic {basic_b64}"
+            print("✅ Using Basic Auth")
           else:
-              user_headers["Authorization"] = f"Bearer {token}"
-              print("✅ Using Bearer (OAuth) Auth")
+            user_headers["Authorization"] = f"Bearer {token}"
+            print("✅ Using Bearer (OAuth) Auth")
 
           print(f"🔹 Final headers keys: {list(user_headers.keys())}")
 
-            # Load payload if present (IGNORED for GET)
-            payload = None
-            if method != "GET" and payload_file.exists():
-              try:
-                if payload_type == "xml":
-                  payload = payload_file.read_text(encoding="utf-8")
-                  print("✅ Payload loaded from Payload.xml")
-                else:
-                  payload = json.loads(payload_file.read_text())
-                  print("✅ Payload loaded from Payload.json")
-              except Exception as e:
-                print(f"⚠️ {payload_file.name} exists but could not be loaded. Error:", e)
-                payload = None
-            else:
-              if method == "GET":
-                print("ℹ️ GET method selected – ignoring any existing payload file (no request body will be sent).")
+          # Load payload if present (IGNORED for GET)
+          payload = None
+          if method != "GET" and payload_file.exists():
+            try:
+              if payload_type == "xml":
+                payload = payload_file.read_text(encoding="utf-8")
+                print("✅ Payload loaded from Payload.xml")
               else:
-                print(f"ℹ️ No {payload_file.name} found in repo (it's optional).")
+                payload = json.loads(payload_file.read_text())
+                print("✅ Payload loaded from Payload.json")
+            except Exception as e:
+              print(f"⚠️ {payload_file.name} exists but could not be loaded. Error:", e)
+              payload = None
+          else:
+            if method == "GET":
+              print("ℹ️ GET method selected – ignoring any existing payload file (no request body will be sent).")
+            else:
+              print(f"ℹ️ No {payload_file.name} found in repo (it's optional).")
 
           # Decide whether method supports a body
           methods_with_body = {"POST", "PUT", "PATCH"}
@@ -156,24 +156,24 @@ jobs:
 
           # Prepare request kwargs
           request_kwargs = {
-              "headers": user_headers,
-              "timeout": 60
+            "headers": user_headers,
+            "timeout": 60
           }
-            if send_body and payload is not None:
-              if payload_type == "xml":
-                request_kwargs["data"] = payload
-              else:
-                request_kwargs["json"] = payload
+          if send_body and payload is not None:
+            if payload_type == "xml":
+              request_kwargs["data"] = payload
+            else:
+              request_kwargs["json"] = payload
 
           # API call wrapper
           def call_cpi():
-              try:
-                  resp = requests.request(method, url, **request_kwargs)
-                  print(f"📥 Response Status: {resp.status_code}")
-                  return resp
-              except requests.exceptions.RequestException as e:
-                  print(f"❌ API call failed: {e}")
-                  sys.exit(1)
+            try:
+              resp = requests.request(method, url, **request_kwargs)
+              print(f"📥 Response Status: {resp.status_code}")
+              return resp
+            except requests.exceptions.RequestException as e:
+              print(f"❌ API call failed: {e}")
+              sys.exit(1)
                   
           # ✅ Check if this is simple mode (non-comparison)
           comparison_mode = "${{ github.event.inputs.comparison_mode }}" == "true"
