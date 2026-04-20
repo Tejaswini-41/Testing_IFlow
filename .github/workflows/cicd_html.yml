@@ -28,6 +28,10 @@ on:
         description: 'Authorization type (oauth or basic)'
         required: true
         default: 'oauth'
+      payload_type:
+        description: 'Payload type (json or xml)'
+        required: false
+        default: 'json'
       comparison_mode:
         description: 'Whether to do base/current comparison or just return response'
         required: false
@@ -94,8 +98,9 @@ jobs:
           method = "${{ github.event.inputs.http_method }}".upper() or "POST"
           target_filename = "${{ github.event.inputs.target_file_name }}"
           auth_type = "${{ github.event.inputs.auth_type }}".lower()
+          payload_type = "${{ github.event.inputs.payload_type }}".lower() or "json"
 
-          payload_file = Path("Payload.json")
+          payload_file = Path("Payload.xml") if payload_type == "xml" else Path("Payload.json")
           base_response_file = Path("results/response_base.txt")
           current_response_file = Path(f"results/{target_filename}")
           base_headers_file = Path("results/request_headers_base.txt")
@@ -110,9 +115,9 @@ jobs:
               print("❌ Invalid headers JSON. Using empty headers.")
               user_headers = {}
 
-          # Ensure Content-Type default if not present
-          if not any(k.lower() == "content-type" for k in user_headers):
-              user_headers["Content-Type"] = "application/json"
+            # Ensure Content-Type default if not present
+            if not any(k.lower() == "content-type" for k in user_headers):
+              user_headers["Content-Type"] = "application/xml" if payload_type == "xml" else "application/json"
 
           # Add Authorization header based on auth_type
           if auth_type == "basic":
@@ -126,20 +131,24 @@ jobs:
 
           print(f"🔹 Final headers keys: {list(user_headers.keys())}")
 
-          # Load payload if present and valid JSON (IGNORED for GET)
-          payload = None
-          if method != "GET" and payload_file.exists():
+            # Load payload if present (IGNORED for GET)
+            payload = None
+            if method != "GET" and payload_file.exists():
               try:
+                if payload_type == "xml":
+                  payload = payload_file.read_text(encoding="utf-8")
+                  print("✅ Payload loaded from Payload.xml")
+                else:
                   payload = json.loads(payload_file.read_text())
                   print("✅ Payload loaded from Payload.json")
               except Exception as e:
-                  print("⚠️ Payload.json exists but is not valid JSON. Ignoring payload. Error:", e)
-                  payload = None
-          else:
+                print(f"⚠️ {payload_file.name} exists but could not be loaded. Error:", e)
+                payload = None
+            else:
               if method == "GET":
-                  print("ℹ️ GET method selected – ignoring any existing Payload.json (no request body will be sent).")
+                print("ℹ️ GET method selected – ignoring any existing payload file (no request body will be sent).")
               else:
-                  print("ℹ️ No Payload.json found in repo (it's optional).")
+                print(f"ℹ️ No {payload_file.name} found in repo (it's optional).")
 
           # Decide whether method supports a body
           methods_with_body = {"POST", "PUT", "PATCH"}
@@ -150,8 +159,11 @@ jobs:
               "headers": user_headers,
               "timeout": 60
           }
-          if send_body and payload is not None:
-              request_kwargs["json"] = payload
+            if send_body and payload is not None:
+              if payload_type == "xml":
+                request_kwargs["data"] = payload
+              else:
+                request_kwargs["json"] = payload
 
           # API call wrapper
           def call_cpi():
