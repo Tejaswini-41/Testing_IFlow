@@ -308,21 +308,21 @@ jobs:
           headers_current_path = Path("results/request_headers_current.txt")
           headers_diff_path = Path("results/diff_headers.txt")
 
-            # -------------------- Helpers --------------------
-            def build_text_diff(a_path: Path, b_path: Path) -> str:
+          # -------------------- Helpers --------------------
+          def build_text_diff(a_path: Path, b_path: Path) -> str:
               with a_path.open('r', encoding='utf-8', errors='ignore') as f1, \
-                 b_path.open('r', encoding='utf-8', errors='ignore') as f2:
-                a_lines = f1.readlines()
-                b_lines = f2.readlines()
+                   b_path.open('r', encoding='utf-8', errors='ignore') as f2:
+                  a_lines = f1.readlines()
+                  b_lines = f2.readlines()
 
               diff = list(
-                difflib.unified_diff(
-                  a_lines,
-                  b_lines,
-                  fromfile=str(a_path),
-                  tofile=str(b_path),
-                  lineterm=""
-                )
+                  difflib.unified_diff(
+                      a_lines,
+                      b_lines,
+                      fromfile=str(a_path),
+                      tofile=str(b_path),
+                      lineterm=""
+                  )
               )
               return "".join(diff)
 
@@ -370,48 +370,52 @@ jobs:
                   base_obj = current_obj = None
 
           # -------------------- Compute diff based on detected mode --------------------
-            diff_payload = {}
-            if mode in ("json", "xml"):
+          diff_payload = {}
+          if mode in ("json", "xml"):
               diff = DeepDiff(base_obj, current_obj, ignore_order=True, verbose_level=2)
               diff_payload = {"mode": mode, "diff": diff}
               print(f"✅ {mode.upper()} diff computed")
-            else:
+          else:
               # fallback: pure text diff
               print("⚠️ Neither JSON nor XML reliably detected/parsed; using text diff.")
               text_diff = build_text_diff(base_path, current_path)
               diff_payload = {"mode": "text", "diff": text_diff}
 
-            diff_path.parent.mkdir(parents=True, exist_ok=True)
-            diff_path.write_text(
+          diff_path.parent.mkdir(parents=True, exist_ok=True)
+          diff_path.write_text(
               json.dumps(diff_payload, indent=2, ensure_ascii=False),
               encoding='utf-8'
-            )
-            print(f"✅ Diff saved to {diff_path}")
+          )
+          print(f"✅ Diff saved to {diff_path}")
 
           # -------------------- Compare Request Headers (JSON) --------------------
+          # -------------------- Headers Diff --------------------
           try:
               with headers_base_path.open('r', encoding='utf-8') as f:
                   base_h = json.load(f)
               with headers_current_path.open('r', encoding='utf-8') as f:
                   current_h = json.load(f)
 
-                headers_diff = DeepDiff(base_h, current_h, ignore_order=True, verbose_level=2)
-                headers_payload = {"mode": "json", "diff": headers_diff}
-                headers_diff_path.parent.mkdir(parents=True, exist_ok=True)
-                headers_diff_path.write_text(
+              headers_diff = DeepDiff(base_h, current_h, ignore_order=True, verbose_level=2)
+              headers_payload = {"mode": "json", "diff": headers_diff}
+
+              headers_diff_path.parent.mkdir(parents=True, exist_ok=True)
+              headers_diff_path.write_text(
                   json.dumps(headers_payload, indent=2, ensure_ascii=False),
                   encoding='utf-8'
-                )
-                print(f"✅ Request headers diff saved to {headers_diff_path}")
+              )
+              print(f"✅ Request headers diff saved to {headers_diff_path}")
+
           except Exception as e:
-                print(f"⚠️ Header JSON diff failed, using text fallback: {e}")
-                text_diff = build_text_diff(headers_base_path, headers_current_path)
-                headers_payload = {"mode": "text", "diff": text_diff}
-                headers_diff_path.parent.mkdir(parents=True, exist_ok=True)
-                headers_diff_path.write_text(
+              print(f"⚠️ Header JSON diff failed, using text fallback: {e}")
+              text_diff = build_text_diff(headers_base_path, headers_current_path)
+
+              headers_payload = {"mode": "text", "diff": text_diff}
+              headers_diff_path.parent.mkdir(parents=True, exist_ok=True)
+              headers_diff_path.write_text(
                   json.dumps(headers_payload, indent=2, ensure_ascii=False),
                   encoding='utf-8'
-                )
+              )
 
           PYEOF
 
