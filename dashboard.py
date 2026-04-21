@@ -4,6 +4,7 @@ import json
 import html
 import re
 import plotly.graph_objects as go
+import xml.dom.minidom as minidom
 from pathlib import Path
 from collections import defaultdict
 import logging
@@ -90,6 +91,15 @@ def build_diff_table(diff):
     html_rows.append('</tbody></table>')
     return '\n'.join(html_rows)
 
+  def pretty_print_xml(xml_text: str) -> str:
+    try:
+      parsed = minidom.parseString(xml_text)
+      pretty = parsed.toprettyxml(indent="  ")
+      # Remove blank lines from minidom output
+      return "\n".join(line for line in pretty.splitlines() if line.strip())
+    except Exception:
+      return xml_text
+
 diff_file = sys.argv[1] if len(sys.argv) > 1 else "results/diff.txt"
 output_dir = Path("results")
 output_dir.mkdir(exist_ok=True)
@@ -133,8 +143,8 @@ try:
             base_payload = json.dumps(base_payload_obj, indent=2, sort_keys=True)
             logger.info("Base payload parsed as JSON")
         except json.JSONDecodeError:
-            base_payload = base_payload_raw
-            logger.info("Base payload loaded as plain text")
+          base_payload = pretty_print_xml(base_payload_raw)
+          logger.info("Base payload loaded as XML/plain text")
 except FileNotFoundError:
     logger.warning(f"Base payload file not found: {base_payload_file}")
     base_payload = "# Base payload file not found\n# Expected location: results/response_base.txt"
@@ -151,8 +161,8 @@ try:
             current_payload = json.dumps(current_payload_obj, indent=2, sort_keys=True)
             logger.info("Current payload parsed as JSON")
         except json.JSONDecodeError:
-            current_payload = current_payload_raw
-            logger.info("Current payload loaded as plain text")
+          current_payload = pretty_print_xml(current_payload_raw)
+          logger.info("Current payload loaded as XML/plain text")
 except FileNotFoundError:
     logger.warning(f"Current payload file not found: {current_payload_file}")
     current_payload = "# Current payload file not found\n# Expected location: results/response_current.txt"
@@ -166,13 +176,28 @@ escaped_current_payload = html.escape(current_payload, quote=True)
 # Check if it's JSON format (DeepDiff) or unified diff format
 is_json_format = False
 diff_data = {}
+diff_mode = None
 try:
-    diff_data = json.loads(diff_content)
+  diff_data = json.loads(diff_content)
+  # Support wrapped diff format: {"mode": "json|xml|text", "diff": ...}
+  if isinstance(diff_data, dict) and "mode" in diff_data and "diff" in diff_data:
+    diff_mode = diff_data.get("mode")
+    diff_payload = diff_data.get("diff")
+    if diff_mode == "text" and isinstance(diff_payload, str):
+      diff_content = diff_payload
+      is_json_format = False
+      diff_data = {}
+      logger.info("Diff format detected: Wrapped text diff")
+    else:
+      diff_data = diff_payload if isinstance(diff_payload, dict) else {}
+      is_json_format = True
+      logger.info("Diff format detected: Wrapped JSON diff")
+  else:
     is_json_format = True
     logger.info("Diff format detected: JSON (DeepDiff)")
 except json.JSONDecodeError:
-    logger.info("Diff format detected: Unified diff")
-    pass
+  logger.info("Diff format detected: Unified diff")
+  pass
 
 # Parse diff intelligently
 # Store by FULL PATH to avoid collisions between identical leaf names in different branches
@@ -2237,11 +2262,16 @@ html_content += """
 """
 # Call the new renderer with parsed objects and diff:
 try:
-    base_json_obj = json.loads(base_payload)
-    current_json_obj = json.loads(current_payload)
-    html_content += render_json_side_by_side_diff(base_json_obj, current_json_obj, diff_data)
+  base_json_obj = json.loads(base_payload)
+  current_json_obj = json.loads(current_payload)
+  html_content += render_json_side_by_side_diff(base_json_obj, current_json_obj, diff_data)
 except Exception as e:
-    html_content += f'<div class="empty-state"><b>Could not render JSON diff:</b> {html.escape(str(e))}</div>'
+    # Fallback for XML/text: show side-by-side text diff, plus path-based field changes
+    html_content += """
+      <div style=\"margin-bottom:16px;\">"""
+    html_content += build_diff_table(diff)
+    html_content += """</div>"""
+    html_content += render_side_by_side_field_diff_table(new_fields, modified_fields, removed_fields)
 html_content += """
                 </div>
             </div>
