@@ -91,14 +91,14 @@ def build_diff_table(diff):
     html_rows.append('</tbody></table>')
     return '\n'.join(html_rows)
 
-  def pretty_print_xml(xml_text: str) -> str:
+def pretty_print_xml(xml_text: str) -> str:
     try:
-      parsed = minidom.parseString(xml_text)
-      pretty = parsed.toprettyxml(indent="  ")
-      # Remove blank lines from minidom output
-      return "\n".join(line for line in pretty.splitlines() if line.strip())
+        parsed = minidom.parseString(xml_text)
+        pretty = parsed.toprettyxml(indent="  ")
+        # Remove blank lines from minidom output
+        return "\n".join(line for line in pretty.splitlines() if line.strip())
     except Exception:
-      return xml_text
+        return xml_text
 
 diff_file = sys.argv[1] if len(sys.argv) > 1 else "results/diff.txt"
 output_dir = Path("results")
