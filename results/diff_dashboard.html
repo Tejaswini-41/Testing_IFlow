@@ -217,10 +217,29 @@
         <div class="card full-width">
             <div class="card-header">
                 <h2 class="card-title">Modified Headers</h2>
-                <span class="badge badge-modified">0 items</span>
+                <span class="badge badge-modified">1 items</span>
             </div>
 
-            <div class="empty-state"><p>No modified headers detected</p></div>
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Header</th>
+                        <th style="width: 32%;">Previous Value</th>
+                        <th style="width: 33%;">New Value</th>
+                    </tr>
+                </thead>
+                <tbody>
+
+            <tr class="modified-row" data-row-id="mod-0" style='cursor:pointer;'>
+                <td class="field-path-cell"><div class="field-name field-name-clickable">Authorization</div></td>
+                <td><span class="value old-value">Bearer eyJ0eXAiOiJKV1QiLCJqaWQiOiJwdjF2eHEvT05KQzhFc29yNWhqR...</span></td>
+                <td><span class="value new-value">Bearer eyJ0eXAiOiJKV1QiLCJqaWQiOiI3T1RDVjU4dHpTMjVQNEYybXhBQ...</span></td>
+            </tr>
+        
+        <tr id='row-path-mod-0' class="field-path-row" style="display:none;background:#faf6f7;"><td colspan='100'><span class='full-path-label'>Full Path:</span> <span class='full-path-mono'>Authorization</span></td></tr>
+        
+                </tbody>
+            </table>
 
         </div>
         </section>
