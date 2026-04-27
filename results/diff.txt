@@ -1,22 +1,4 @@
 {
-  "mode": "xml",
-  "diff": {
-    "dictionary_item_removed": {
-      "root['ZSIDATZ1']['IDOC']['ZZZSID9']['ZRIDINF']": "()"
-    },
-    "values_changed": {
-      "root['ZSIDATZ1']['IDOC']['Z1ZSID9']['ZIMPSN']": {
-        "new_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.",
-        "old_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S."
-      },
-      "root['ZSIDATZ1']['IDOC']['Z1ZSID3']['KORROSIV']": {
-        "new_value": "60 - 85(1 %w/v;in water)",
-        "old_value": "6,0 - 8,5(1 %w/v;in water)"
-      },
-      "root['ZSIDATZ1']['IDOC']['ZZZSID9']['ZIMPSN']": {
-        "new_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.",
-        "old_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S."
-      }
-    }
-  }
+  "mode": "json",
+  "diff": {}
 }
