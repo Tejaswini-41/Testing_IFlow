@@ -244,147 +244,435 @@
                     <button id="downloadDiffBtn" class="download-btn"><i class="fa fa-download"></i></button>
                 </div>
                 <div style='overflow-x:auto;padding:0 5px 15px 5px;'>
-<style>.diff-table-json td {vertical-align:top; background:white;} .diff-add {background: #d1fae5;} .diff-del {background: #fee2e2;} .diff-mod {background: #dbeafe !important; border-left: 4px solid #3b82f6 !important;} .full-path-label { color: #b91c1c; font-size: 0.95em; font-weight: bold; font-family: monospace; margin-right: 6px; } .full-path-mono { font-family: monospace; color: #374151; font-size: 0.97em; }</style><table class="diff-table-json" style="width:100%;table-layout:fixed"><tr><td style="width:50%;border-right:1.5px solid #dddddd;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">Old Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">{
-  "root": {
-  "OrderHeader": {
-  "CardHeaderID": "0a69O000001CdD7QAK",
-  "NetCommercialSum": "200",
-  "TotalFreight": "0.0000",
-  "TotalGrossAmount": "246",
-  "TotalNetAmount": "200",
-  "TotalTaxAmount": "46"
-},
-  "OrderItem": {
-  "Item": [
-  {
-  "CardItemID": "0a99O000002khbtQAA",
-  "Currency": "PLN",
-  "NetCommercialValue": "200.0000",
-  "Prices": {
-  "PriceItem": [
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "ZDGP",
-  "CondValue": "200.000000000",
-  "CondValueRate": "200.000000000"
-},
-  {
-  "CondBaseVal": "20.000000000",
-  "CondType": "ZDIF",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-},
-  {
-  "CondBaseVal": "20.000000000",
-  "CondType": "ZF00",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-},
-  {
-  "CondBaseVal": "200.000000000",
-  "CondType": "MWST",
-  "CondValue": "46.000000000",
-  "CondValueRate": "23.000000000"
-},
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "VPRS",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.010000000"
-},
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "ZPVH",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-},
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "ZPVS",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-}
-]
-},
-  "Product": "Cropwise Operations PREMIUM ext",
-  "Qty": "1.000",
-  "SubTotalNet": "200.0000",
-  "TotalTaxAmount": "46.0000"
-}
-]
-}
-}
-}</pre></td><td style="width:50%;padding:0 6px"><div style="font-weight:bold;padding-bottom:4px;">New Response</div><pre style="padding:0;margin:0;overflow-x:auto;font-size:1em;">{
-  "root": {
-  "OrderHeader": {
-  "CardHeaderID": "0a69O000001CdD7QAK",
-  "NetCommercialSum": "200",
-  "TotalFreight": "0.0000",
-  "TotalGrossAmount": "246",
-  "TotalNetAmount": "200",
-  "TotalTaxAmount": "46"
-},
-  "OrderItem": {
-  "Item": [
-  {
-  "CardItemID": "0a99O000002khbtQAA",
-  "Currency": "PLN",
-  "NetCommercialValue": "200.0000",
-  "Prices": {
-  "PriceItem": [
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "ZDGP",
-  "CondValue": "200.000000000",
-  "CondValueRate": "200.000000000"
-},
-  {
-  "CondBaseVal": "20.000000000",
-  "CondType": "ZDIF",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-},
-  {
-  "CondBaseVal": "20.000000000",
-  "CondType": "ZF00",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-},
-  {
-  "CondBaseVal": "200.000000000",
-  "CondType": "MWST",
-  "CondValue": "46.000000000",
-  "CondValueRate": "23.000000000"
-},
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "VPRS",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.010000000"
-},
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "ZPVH",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-},
-  {
-  "CondBaseVal": "1.000000000",
-  "CondType": "ZPVS",
-  "CondValue": "0.000000000",
-  "CondValueRate": "0.000000000"
-}
-]
-},
-  "Product": "Cropwise Operations PREMIUM ext",
-  "Qty": "1.000",
-  "SubTotalNet": "200.0000",
-  "TotalTaxAmount": "46.0000"
-}
-]
-}
-}
-}</pre></td></tr></table>
+
+      <div style="margin-bottom:16px;"><table class="diff-table"><thead><tr><th>Old Response</th><th>New Response</th></tr></thead><tbody>
+<tr><td class="diff-empty"></td><td class="diff-add">{</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">  "root": {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">    "OrderHeader": {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "CardHeaderID": "0a69O000001CdD7QAK",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "NetCommercialSum": "200",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "TotalFreight": "0.0000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "TotalGrossAmount": "246",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "TotalNetAmount": "200",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "TotalTaxAmount": "46"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">    },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">    "OrderItem": {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      "Item": [</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">        {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "CardItemID": "0a99O000002khbtQAA",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "Currency": "PLN",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "NetCommercialValue": "200.0000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "Prices": {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">            "PriceItem": [</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "1.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "ZDGP",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "200.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "200.000000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "20.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "ZDIF",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "0.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "0.000000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "20.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "ZF00",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "0.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "0.000000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "200.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "MWST",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "46.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "23.000000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "1.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "VPRS",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "0.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "0.010000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "1.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "ZPVH",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "0.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "0.000000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              {</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondBaseVal": "1.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondType": "ZPVS",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValue": "0.000000000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">                "CondValueRate": "0.000000000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">              }</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">            ]</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          },</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "Product": "Cropwise Operations PREMIUM ext",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "Qty": "1.000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "SubTotalNet": "200.0000",</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">          "TotalTaxAmount": "46.0000"</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">        }</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">      ]</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">    }</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">  }</td></tr>
+<tr><td class="diff-empty"></td><td class="diff-add">}</td></tr>
+<tr><td class="diff-del">&lt;?xml version="1.0" ?&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">&lt;ZSIDATZ1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">  &lt;IDOC BEGIN="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;EDI_DC40 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;TABNAM/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;DIRECT/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;IDOCTYP/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;MESTYP/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SNDPOR/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SNDPRT/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SNDPRN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;RCVPOR/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;RCVPRN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/EDI_DC40&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID1 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZAGRO&gt;A24403C&lt;/ZAGRO&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZDATUM&gt;27.04.2026&lt;/ZDATUM&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZEUCODE/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZEUCDTXT/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZAGGCD&gt;10&lt;/ZAGGCD&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZAGGCDTXTE&gt;liquid&lt;/ZAGGCDTXTE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDGKZ&gt;90&lt;/ZRIDGKZ&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDGFETK1&gt;9&lt;/ZRIDGFETK1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDKLA&gt;9&lt;/ZRIDKLA&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDUNR&gt;3082&lt;/ZRIDUNR&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPG&gt;III&lt;/ZRIDPG&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZMARINEPOL&gt;Y&lt;/ZMARINEPOL&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1HAZARD SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZHPHRASE&gt;CUST-N15.00930530&lt;/ZHPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1HAZARD&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1HAZARD SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZHPHRASE&gt;CUST-N15.00930571&lt;/ZHPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1HAZARD&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1HAZARD SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZHPHRASE&gt;CUST-N15.00930680&lt;/ZHPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1HAZARD&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1PRECAUTION SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZPPHRASE&gt;CUST-N15.00950730&lt;/ZPPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1PRECAUTION&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1PRECAUTION SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZPPHRASE&gt;CUST-N15.00950170&lt;/ZPPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1PRECAUTION&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1PRECAUTION SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZPPHRASE&gt;CUST-Y15.00000851&lt;/ZPPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1PRECAUTION&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1PRECAUTION SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZPPHRASE&gt;CUST-N15.00950300&lt;/ZPPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1PRECAUTION&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1PRECAUTION SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZPPHRASE&gt;CUST-N15.00950080&lt;/ZPPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1PRECAUTION&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;Z1PRECAUTION SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">        &lt;ZPPHRASE&gt;CUST-N15.00950089&lt;/ZPPHRASE&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;/Z1PRECAUTION&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID2 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMGETK1&gt;9&lt;/ZIMGETK1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMGETK3&gt;M&lt;/ZIMGETK3&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPG&gt;III&lt;/ZIMPG&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMKLA&gt;9&lt;/ZIMKLA&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMUN&gt;3082&lt;/ZIMUN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAGFETK1&gt;9&lt;/ZIAGFETK1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAGWLI1&gt;450.0&lt;/ZIAGWLI1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAGWLI1U&gt;l&lt;/ZIAGWLI1U&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAGWLI2&gt;450.0&lt;/ZIAGWLI2&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAGWLI2U&gt;l&lt;/ZIAGWLI2U&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPG&gt;III&lt;/ZIAPG&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPI1&gt;964&lt;/ZIAPI1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPI2&gt;964&lt;/ZIAPI2&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAUN&gt;3082&lt;/ZIAUN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAGEKL1&gt;9&lt;/ZIAGEKL1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZDICHWT&gt;116&lt;/ZDICHWT&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZDIMEN&gt;g/cm3&lt;/ZDIMEN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID2&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZRIDINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZIMPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS&gt;Environmentally hazardous substance liquid n.o.s.&lt;/ZIAPS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID3 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;TEXTIDASP&gt;beige, liquid&lt;/TEXTIDASP&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;TEXTIDGER&gt;No data available&lt;/TEXTIDGER&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;KORROSIV&gt;64(100 %w/v;in water)&lt;/KORROSIV&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;LOESLINH2O&gt;No data available&lt;/LOESLINH2O&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID3&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID7 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZNSYMB1_1&gt;GHS08&lt;/ZNSYMB1_1&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZNSYMB1_2&gt;GHS09&lt;/ZNSYMB1_2&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZNSYMBTXT11&gt;Health Hazard&lt;/ZNSYMBTXT11&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZNSYMBTXT12&gt;Environment&lt;/ZNSYMBTXT12&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID7&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID4 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID4&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID5 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID5&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;Z1ZSID8 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/Z1ZSID8&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;W&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;ВЕЩЕСТВО ОПАСНО ЗА ОКОЛНАТА СРЕДА ТЕЧНО Н.У.К.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZRIDINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;C&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;LÁTKA OHROŽUJÍCÍ ŽIVOTNÍ PROSTŘEDÍ KAPALNÁ J.N.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;K&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MILJØFARLIG VÆSKE N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;D&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;UMWELTGEFÄHRDENDER STOFF FLÜSSIG N.A.G.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;G&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;ΠΕΡΙΒΑΛΛΟΝΤΙΚΑ ΕΠΙΚΙΝΔΥΝΕΣ ΟΥΣΙΕΣ ΥΓΡΕΣ Ε. Α. Ο.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;E&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZIMPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS&gt;Environmentally hazardous substance liquid n.o.s.&lt;/ZIAPS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;S&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;SUSTANCIA LIQUIDA PELIGROSA PARA EL MEDIO AMBIENTE N.E.P.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS&gt;Sustancia líquida peligrosa para el medio ambiente n.e.p.&lt;/ZIAPS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;9&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;KESKKONNAOHTLIK AINE VEDEL N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;U&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;YMPÄRISTÖLLE VAARALLINEN AINE NESTEMÄINEN N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;F&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MATIÈRE DANGEREUSE DU POINT DE VUE DE L'ENVIRONNEMENT LIQUIDE N.S.A.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;6&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;TVARI OPASNE PO OKOLIŠ TEKUĆINE N.D.N.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;H&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;KÖRNYEZETRE VESZÉLYES FOLYÉKONY ANYAG M.N.N.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;I&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MATERIA PERICOLOSA PER L'AMBIENTE LIQUIDA N.A.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;X&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;APLINKAI PAVOJINGA MEDŽIAGA SKYSTA K.N.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;Y&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;VIDEI BĪSTAMAS VIELAS ŠĶIDRAS C.N.P.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;N&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MILIEUGEVAARLIJKE VLOEISTOF N.E.G.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;O&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MILJØFARLIG STOFF FLYTENDE N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;L&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MATERIAŁ ZAGRAŻAJĄCY ŚRODOWISKU CIEKŁY I.N.O.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;P&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MATÉRIA PERIGOSA DO PONTO DE VISTA DO AMBIENTE LÍQUIDA N.S.A.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;4&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;SUBSTANŢA PERICULOASA DIN PUNCT DE VEDERE AL MEDIULUI LICHIDA N.S.A.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;R&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;ВЕЩЕСТВО ЖИДКОЕ ОПАСНОЕ ДЛЯ ОКРУЖАЮЩЕЙ СРЕДЫ Н.У.К.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;d&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MATERIJA OPASNA PO ŽIVOTNU SREDINU TEČNA N.D.N.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;Q&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;LÁTKA NEBEZPEČNÁ PRE ŽIVOTNÉ PROSTREDIE KVAPALNÁ I N&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;5&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;OKOLJU NEVARNA SNOV TEKOČA N.D.N.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;V&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;MILJÖFARLIGT ÄMNE FLYTANDE N.O.S.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID9 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;SPRAS&gt;T&lt;/SPRAS&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN&gt;ÇEVREYE ZARARLI MADDE SIVI B.B.B.&lt;/ZRIDPSN&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMPSN/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS/&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID9&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID7 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZIAPS_ES&gt;Sustancia líquida peligrosa para el medio ambiente n.e.p.&lt;/ZIAPS_ES&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID7&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;ZZZSID6 SEGMENT="1"&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">      &lt;ZRIDPSN_F&gt;MATIÈRE DANGEREUSE DU POINT DE VUE DE L'ENVIRONNEMENT LIQUIDE N.S.A.&lt;/ZRIDPSN_F&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">    &lt;/ZZZSID6&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">  &lt;/IDOC&gt;</td><td class="diff-empty"></td></tr>
+<tr><td class="diff-del">&lt;/ZSIDATZ1&gt;</td><td class="diff-empty"></td></tr>
+</tbody></table></div><table class="diff-table"><thead><tr><th>Field Name / Path</th><th>Old Value</th><th>New Value</th></tr></thead><tbody>
+<tr><td colspan="3" class="diff-ctx" style="text-align:center;color:#888;">No differences found.</td></tr>
+</tbody></table>
                 </div>
             </div>
         </section>
@@ -480,77 +768,359 @@
                 
                 <!-- Base Payload (hidden by default) -->
                 <div class="payload-box" id="basePayloadBox" style="display: none;">
-                    <pre class="payload-content">{
-  &quot;root&quot;: {
-    &quot;OrderHeader&quot;: {
-      &quot;CardHeaderID&quot;: &quot;0a69O000001CdD7QAK&quot;,
-      &quot;NetCommercialSum&quot;: &quot;200&quot;,
-      &quot;TotalFreight&quot;: &quot;0.0000&quot;,
-      &quot;TotalGrossAmount&quot;: &quot;246&quot;,
-      &quot;TotalNetAmount&quot;: &quot;200&quot;,
-      &quot;TotalTaxAmount&quot;: &quot;46&quot;
-    },
-    &quot;OrderItem&quot;: {
-      &quot;Item&quot;: [
-        {
-          &quot;CardItemID&quot;: &quot;0a99O000002khbtQAA&quot;,
-          &quot;Currency&quot;: &quot;PLN&quot;,
-          &quot;NetCommercialValue&quot;: &quot;200.0000&quot;,
-          &quot;Prices&quot;: {
-            &quot;PriceItem&quot;: [
-              {
-                &quot;CondBaseVal&quot;: &quot;1.000000000&quot;,
-                &quot;CondType&quot;: &quot;ZDGP&quot;,
-                &quot;CondValue&quot;: &quot;200.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;200.000000000&quot;
-              },
-              {
-                &quot;CondBaseVal&quot;: &quot;20.000000000&quot;,
-                &quot;CondType&quot;: &quot;ZDIF&quot;,
-                &quot;CondValue&quot;: &quot;0.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;0.000000000&quot;
-              },
-              {
-                &quot;CondBaseVal&quot;: &quot;20.000000000&quot;,
-                &quot;CondType&quot;: &quot;ZF00&quot;,
-                &quot;CondValue&quot;: &quot;0.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;0.000000000&quot;
-              },
-              {
-                &quot;CondBaseVal&quot;: &quot;200.000000000&quot;,
-                &quot;CondType&quot;: &quot;MWST&quot;,
-                &quot;CondValue&quot;: &quot;46.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;23.000000000&quot;
-              },
-              {
-                &quot;CondBaseVal&quot;: &quot;1.000000000&quot;,
-                &quot;CondType&quot;: &quot;VPRS&quot;,
-                &quot;CondValue&quot;: &quot;0.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;0.010000000&quot;
-              },
-              {
-                &quot;CondBaseVal&quot;: &quot;1.000000000&quot;,
-                &quot;CondType&quot;: &quot;ZPVH&quot;,
-                &quot;CondValue&quot;: &quot;0.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;0.000000000&quot;
-              },
-              {
-                &quot;CondBaseVal&quot;: &quot;1.000000000&quot;,
-                &quot;CondType&quot;: &quot;ZPVS&quot;,
-                &quot;CondValue&quot;: &quot;0.000000000&quot;,
-                &quot;CondValueRate&quot;: &quot;0.000000000&quot;
-              }
-            ]
-          },
-          &quot;Product&quot;: &quot;Cropwise Operations PREMIUM ext&quot;,
-          &quot;Qty&quot;: &quot;1.000&quot;,
-          &quot;SubTotalNet&quot;: &quot;200.0000&quot;,
-          &quot;TotalTaxAmount&quot;: &quot;46.0000&quot;
-        }
-      ]
-    }
-  }
-}</pre>
+                    <pre class="payload-content">&lt;?xml version=&quot;1.0&quot; ?&gt;
+&lt;ZSIDATZ1&gt;
+  &lt;IDOC BEGIN=&quot;1&quot;&gt;
+    &lt;EDI_DC40 SEGMENT=&quot;1&quot;&gt;
+      &lt;TABNAM/&gt;
+      &lt;DIRECT/&gt;
+      &lt;IDOCTYP/&gt;
+      &lt;MESTYP/&gt;
+      &lt;SNDPOR/&gt;
+      &lt;SNDPRT/&gt;
+      &lt;SNDPRN/&gt;
+      &lt;RCVPOR/&gt;
+      &lt;RCVPRN/&gt;
+    &lt;/EDI_DC40&gt;
+    &lt;Z1ZSID1 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;ZAGRO&gt;A24403C&lt;/ZAGRO&gt;
+      &lt;ZDATUM&gt;27.04.2026&lt;/ZDATUM&gt;
+      &lt;ZEUCODE/&gt;
+      &lt;ZEUCDTXT/&gt;
+      &lt;ZAGGCD&gt;10&lt;/ZAGGCD&gt;
+      &lt;ZAGGCDTXTE&gt;liquid&lt;/ZAGGCDTXTE&gt;
+      &lt;ZRIDGKZ&gt;90&lt;/ZRIDGKZ&gt;
+      &lt;ZRIDGFETK1&gt;9&lt;/ZRIDGFETK1&gt;
+      &lt;ZRIDKLA&gt;9&lt;/ZRIDKLA&gt;
+      &lt;ZRIDUNR&gt;3082&lt;/ZRIDUNR&gt;
+      &lt;ZRIDPG&gt;III&lt;/ZRIDPG&gt;
+      &lt;ZMARINEPOL&gt;Y&lt;/ZMARINEPOL&gt;
+      &lt;Z1HAZARD SEGMENT=&quot;1&quot;&gt;
+        &lt;ZHPHRASE&gt;CUST-N15.00930530&lt;/ZHPHRASE&gt;
+      &lt;/Z1HAZARD&gt;
+      &lt;Z1HAZARD SEGMENT=&quot;1&quot;&gt;
+        &lt;ZHPHRASE&gt;CUST-N15.00930571&lt;/ZHPHRASE&gt;
+      &lt;/Z1HAZARD&gt;
+      &lt;Z1HAZARD SEGMENT=&quot;1&quot;&gt;
+        &lt;ZHPHRASE&gt;CUST-N15.00930680&lt;/ZHPHRASE&gt;
+      &lt;/Z1HAZARD&gt;
+      &lt;Z1PRECAUTION SEGMENT=&quot;1&quot;&gt;
+        &lt;ZPPHRASE&gt;CUST-N15.00950730&lt;/ZPPHRASE&gt;
+      &lt;/Z1PRECAUTION&gt;
+      &lt;Z1PRECAUTION SEGMENT=&quot;1&quot;&gt;
+        &lt;ZPPHRASE&gt;CUST-N15.00950170&lt;/ZPPHRASE&gt;
+      &lt;/Z1PRECAUTION&gt;
+      &lt;Z1PRECAUTION SEGMENT=&quot;1&quot;&gt;
+        &lt;ZPPHRASE&gt;CUST-Y15.00000851&lt;/ZPPHRASE&gt;
+      &lt;/Z1PRECAUTION&gt;
+      &lt;Z1PRECAUTION SEGMENT=&quot;1&quot;&gt;
+        &lt;ZPPHRASE&gt;CUST-N15.00950300&lt;/ZPPHRASE&gt;
+      &lt;/Z1PRECAUTION&gt;
+      &lt;Z1PRECAUTION SEGMENT=&quot;1&quot;&gt;
+        &lt;ZPPHRASE&gt;CUST-N15.00950080&lt;/ZPPHRASE&gt;
+      &lt;/Z1PRECAUTION&gt;
+      &lt;Z1PRECAUTION SEGMENT=&quot;1&quot;&gt;
+        &lt;ZPPHRASE&gt;CUST-N15.00950089&lt;/ZPPHRASE&gt;
+      &lt;/Z1PRECAUTION&gt;
+    &lt;/Z1ZSID1&gt;
+    &lt;Z1ZSID2 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;ZIMGETK1&gt;9&lt;/ZIMGETK1&gt;
+      &lt;ZIMGETK3&gt;M&lt;/ZIMGETK3&gt;
+      &lt;ZIMPG&gt;III&lt;/ZIMPG&gt;
+      &lt;ZIMKLA&gt;9&lt;/ZIMKLA&gt;
+      &lt;ZIMUN&gt;3082&lt;/ZIMUN&gt;
+      &lt;ZIAGFETK1&gt;9&lt;/ZIAGFETK1&gt;
+      &lt;ZIAGWLI1&gt;450.0&lt;/ZIAGWLI1&gt;
+      &lt;ZIAGWLI1U&gt;l&lt;/ZIAGWLI1U&gt;
+      &lt;ZIAGWLI2&gt;450.0&lt;/ZIAGWLI2&gt;
+      &lt;ZIAGWLI2U&gt;l&lt;/ZIAGWLI2U&gt;
+      &lt;ZIAPG&gt;III&lt;/ZIAPG&gt;
+      &lt;ZIAPI1&gt;964&lt;/ZIAPI1&gt;
+      &lt;ZIAPI2&gt;964&lt;/ZIAPI2&gt;
+      &lt;ZIAUN&gt;3082&lt;/ZIAUN&gt;
+      &lt;ZIAGEKL1&gt;9&lt;/ZIAGEKL1&gt;
+      &lt;ZDICHWT&gt;116&lt;/ZDICHWT&gt;
+      &lt;ZDIMEN&gt;g/cm3&lt;/ZDIMEN&gt;
+    &lt;/Z1ZSID2&gt;
+    &lt;Z1ZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;ZRIDPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZRIDINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZRIDINF&gt;
+      &lt;ZIMPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZIMPSN&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS&gt;Environmentally hazardous substance liquid n.o.s.&lt;/ZIAPS&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/Z1ZSID9&gt;
+    &lt;Z1ZSID3 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;TEXTIDASP&gt;beige, liquid&lt;/TEXTIDASP&gt;
+      &lt;TEXTIDGER&gt;No data available&lt;/TEXTIDGER&gt;
+      &lt;KORROSIV&gt;64(100 %w/v;in water)&lt;/KORROSIV&gt;
+      &lt;LOESLINH2O&gt;No data available&lt;/LOESLINH2O&gt;
+    &lt;/Z1ZSID3&gt;
+    &lt;Z1ZSID7 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;ZNSYMB1_1&gt;GHS08&lt;/ZNSYMB1_1&gt;
+      &lt;ZNSYMB1_2&gt;GHS09&lt;/ZNSYMB1_2&gt;
+      &lt;ZNSYMBTXT11&gt;Health Hazard&lt;/ZNSYMBTXT11&gt;
+      &lt;ZNSYMBTXT12&gt;Environment&lt;/ZNSYMBTXT12&gt;
+    &lt;/Z1ZSID7&gt;
+    &lt;Z1ZSID4 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+    &lt;/Z1ZSID4&gt;
+    &lt;Z1ZSID5 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+    &lt;/Z1ZSID5&gt;
+    &lt;Z1ZSID8 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+    &lt;/Z1ZSID8&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;W&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;ВЕЩЕСТВО ОПАСНО ЗА ОКОЛНАТА СРЕДА ТЕЧНО Н.У.К.&lt;/ZRIDPSN&gt;
+      &lt;ZRIDINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZRIDINF&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;C&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;LÁTKA OHROŽUJÍCÍ ŽIVOTNÍ PROSTŘEDÍ KAPALNÁ J.N.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;K&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MILJØFARLIG VÆSKE N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;D&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;UMWELTGEFÄHRDENDER STOFF FLÜSSIG N.A.G.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;G&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;ΠΕΡΙΒΑΛΛΟΝΤΙΚΑ ΕΠΙΚΙΝΔΥΝΕΣ ΟΥΣΙΕΣ ΥΓΡΕΣ Ε. Α. Ο.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;E&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN&gt;ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.&lt;/ZIMPSN&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS&gt;Environmentally hazardous substance liquid n.o.s.&lt;/ZIAPS&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;S&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;SUSTANCIA LIQUIDA PELIGROSA PARA EL MEDIO AMBIENTE N.E.P.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS&gt;Sustancia líquida peligrosa para el medio ambiente n.e.p.&lt;/ZIAPS&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;9&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;KESKKONNAOHTLIK AINE VEDEL N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;U&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;YMPÄRISTÖLLE VAARALLINEN AINE NESTEMÄINEN N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;F&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MATIÈRE DANGEREUSE DU POINT DE VUE DE L&#x27;ENVIRONNEMENT LIQUIDE N.S.A.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;6&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;TVARI OPASNE PO OKOLIŠ TEKUĆINE N.D.N.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;H&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;KÖRNYEZETRE VESZÉLYES FOLYÉKONY ANYAG M.N.N.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;I&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MATERIA PERICOLOSA PER L&#x27;AMBIENTE LIQUIDA N.A.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;X&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;APLINKAI PAVOJINGA MEDŽIAGA SKYSTA K.N.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;Y&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;VIDEI BĪSTAMAS VIELAS ŠĶIDRAS C.N.P.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;N&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MILIEUGEVAARLIJKE VLOEISTOF N.E.G.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;O&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MILJØFARLIG STOFF FLYTENDE N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;L&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MATERIAŁ ZAGRAŻAJĄCY ŚRODOWISKU CIEKŁY I.N.O.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;P&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MATÉRIA PERIGOSA DO PONTO DE VISTA DO AMBIENTE LÍQUIDA N.S.A.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;4&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;SUBSTANŢA PERICULOASA DIN PUNCT DE VEDERE AL MEDIULUI LICHIDA N.S.A.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;R&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;ВЕЩЕСТВО ЖИДКОЕ ОПАСНОЕ ДЛЯ ОКРУЖАЮЩЕЙ СРЕДЫ Н.У.К.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;d&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MATERIJA OPASNA PO ŽIVOTNU SREDINU TEČNA N.D.N.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;Q&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;LÁTKA NEBEZPEČNÁ PRE ŽIVOTNÉ PROSTREDIE KVAPALNÁ I N&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;5&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;OKOLJU NEVARNA SNOV TEKOČA N.D.N.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;V&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;MILJÖFARLIGT ÄMNE FLYTANDE N.O.S.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID9 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;SPRAS&gt;T&lt;/SPRAS&gt;
+      &lt;ZRIDPSN&gt;ÇEVREYE ZARARLI MADDE SIVI B.B.B.&lt;/ZRIDPSN&gt;
+      &lt;ZIMPSN/&gt;
+      &lt;ZIMINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIMINF&gt;
+      &lt;ZIAPS/&gt;
+      &lt;ZIAINF&gt;(EPOXICONAZOLE , PYDIFLUMETOFEN)&lt;/ZIAINF&gt;
+    &lt;/ZZZSID9&gt;
+    &lt;ZZZSID7 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;ZIAPS_ES&gt;Sustancia líquida peligrosa para el medio ambiente n.e.p.&lt;/ZIAPS_ES&gt;
+    &lt;/ZZZSID7&gt;
+    &lt;ZZZSID6 SEGMENT=&quot;1&quot;&gt;
+      &lt;ZUCAGI&gt;4249193&lt;/ZUCAGI&gt;
+      &lt;ZRIDPSN_F&gt;MATIÈRE DANGEREUSE DU POINT DE VUE DE L&#x27;ENVIRONNEMENT LIQUIDE N.S.A.&lt;/ZRIDPSN_F&gt;
+    &lt;/ZZZSID6&gt;
+  &lt;/IDOC&gt;
+&lt;/ZSIDATZ1&gt;</pre>
                 </div>
                 <div style='padding-top:18px;text-align:right;'>
                     <button id='compareBtn' style="background:var(--gradient-warning);color:#fff;padding:10px 20px;border:none;border-radius:7px;cursor:pointer;font-weight:600;font-size:1em;box-shadow:0 2px 10px rgba(102,126,234,0.06);">Compare Responses</button>

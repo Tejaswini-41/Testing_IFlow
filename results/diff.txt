@@ -1,4 +1,4 @@
 {
-  "mode": "json",
+  "mode": "xml",
   "diff": {}
 }
