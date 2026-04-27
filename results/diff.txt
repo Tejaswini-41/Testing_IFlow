@@ -1,4 +1,15 @@
 {
   "mode": "json",
-  "diff": {}
+  "diff": {
+    "values_changed": {
+      "root['root']['OrderHeader']['CardHeaderID']": {
+        "new_value": "0a69O000001CdD7QAK",
+        "old_value": "0a69O000001CdEjQAK"
+      },
+      "root['root']['OrderItem']['Item'][0]['CardItemID']": {
+        "new_value": "0a99O000002khbtQAA",
+        "old_value": "0a99O000002khdVQAQ"
+      }
+    }
+  }
 }
