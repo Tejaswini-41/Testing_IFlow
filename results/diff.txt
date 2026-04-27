@@ -1,4 +1,634 @@
 {
   "mode": "xml",
-  "diff": {}
+  "diff": {
+    "values_changed": {
+      "root['ZSIDATZ1']['IDOC']['Z1ZSID2']['ZDICHWT']": {
+        "new_value": "1,16",
+        "old_value": "116"
+      },
+      "root['ZSIDATZ1']['IDOC']['Z1ZSID9']['ZRIDPSN']": {
+        "new_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S.",
+        "old_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S."
+      },
+      "root['ZSIDATZ1']['IDOC']['Z1ZSID9']['ZIMPSN']": {
+        "new_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S.",
+        "old_value": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S."
+      },
+      "root['ZSIDATZ1']['IDOC']['Z1ZSID9']['ZIAPS']": {
+        "new_value": "Environmentally hazardous substance, liquid, n.o.s.",
+        "old_value": "Environmentally hazardous substance liquid n.o.s."
+      },
+      "root['ZSIDATZ1']['IDOC']['Z1ZSID3']['KORROSIV']": {
+        "new_value": "6,4(100 %w/v;in water)",
+        "old_value": "64(100 %w/v;in water)"
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID7']['ZIAPS_ES']": {
+        "new_value": "Sustancia líquida peligrosa para el medio ambiente, n.e.p.",
+        "old_value": "Sustancia líquida peligrosa para el medio ambiente n.e.p."
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID6']['ZRIDPSN_F']": {
+        "new_value": "MATIÈRE DANGEREUSE DU POINT DE VUE DE L'ENVIRONNEMENT, LIQUIDE, N.S.A.",
+        "old_value": "MATIÈRE DANGEREUSE DU POINT DE VUE DE L'ENVIRONNEMENT LIQUIDE N.S.A."
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][2]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "K",
+          "ZRIDPSN": "MILJØFARLIG VÆSKE, N.O.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "K",
+          "ZRIDPSN": "MILJØFARLIG VÆSKE N.O.S.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][22]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "Q",
+          "ZRIDPSN": "LÁTKA NEBEZPEČNÁ PRE ŽIVOTNÉ PROSTREDIE, KVAPALNÁ, I N",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "Q",
+          "ZRIDPSN": "LÁTKA NEBEZPEČNÁ PRE ŽIVOTNÉ PROSTREDIE KVAPALNÁ I N",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][7]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "9",
+          "ZRIDPSN": "KESKKONNAOHTLIK AINE, VEDEL, N.O.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "9",
+          "ZRIDPSN": "KESKKONNAOHTLIK AINE VEDEL N.O.S.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][4]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "G",
+          "ZRIDPSN": "ΠΕΡΙΒΑΛΛΟΝΤΙΚΑ ΕΠΙΚΙΝΔΥΝΕΣ ΟΥΣΙΕΣ, ΥΓΡΕΣ, Ε. Α. Ο.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "G",
+          "ZRIDPSN": "ΠΕΡΙΒΑΛΛΟΝΤΙΚΑ ΕΠΙΚΙΝΔΥΝΕΣ ΟΥΣΙΕΣ ΥΓΡΕΣ Ε. Α. Ο.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][18]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "P",
+          "ZRIDPSN": "MATÉRIA PERIGOSA DO PONTO DE VISTA DO AMBIENTE, LÍQUIDA, N.S.A.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "P",
+          "ZRIDPSN": "MATÉRIA PERIGOSA DO PONTO DE VISTA DO AMBIENTE LÍQUIDA N.S.A.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][13]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "X",
+          "ZRIDPSN": "APLINKAI PAVOJINGA MEDŽIAGA, SKYSTA, K.N.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "X",
+          "ZRIDPSN": "APLINKAI PAVOJINGA MEDŽIAGA SKYSTA K.N.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][9]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "F",
+          "ZRIDPSN": "MATIÈRE DANGEREUSE DU POINT DE VUE DE L'ENVIRONNEMENT, LIQUIDE, N.S.A.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "F",
+          "ZRIDPSN": "MATIÈRE DANGEREUSE DU POINT DE VUE DE L'ENVIRONNEMENT LIQUIDE N.S.A.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][11]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "H",
+          "ZRIDPSN": "KÖRNYEZETRE VESZÉLYES FOLYÉKONY ANYAG, M.N.N.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "H",
+          "ZRIDPSN": "KÖRNYEZETRE VESZÉLYES FOLYÉKONY ANYAG M.N.N.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][21]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "d",
+          "ZRIDPSN": "MATERIJA OPASNA PO ŽIVOTNU SREDINU, TEČNA, N.D.N.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "d",
+          "ZRIDPSN": "MATERIJA OPASNA PO ŽIVOTNU SREDINU TEČNA N.D.N.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][20]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "R",
+          "ZRIDPSN": "ВЕЩЕСТВО ЖИДКОЕ, ОПАСНОЕ ДЛЯ ОКРУЖАЮЩЕЙ СРЕДЫ, Н.У.К.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "R",
+          "ZRIDPSN": "ВЕЩЕСТВО ЖИДКОЕ ОПАСНОЕ ДЛЯ ОКРУЖАЮЩЕЙ СРЕДЫ Н.У.К.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][14]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "Y",
+          "ZRIDPSN": "VIDEI BĪSTAMAS VIELAS, ŠĶIDRAS, C.N.P.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "Y",
+          "ZRIDPSN": "VIDEI BĪSTAMAS VIELAS ŠĶIDRAS C.N.P.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][24]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "V",
+          "ZRIDPSN": "MILJÖFARLIGT ÄMNE, FLYTANDE, N.O.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "V",
+          "ZRIDPSN": "MILJÖFARLIGT ÄMNE FLYTANDE N.O.S.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][15]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "N",
+          "ZRIDPSN": "MILIEUGEVAARLIJKE VLOEISTOF, N.E.G.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "N",
+          "ZRIDPSN": "MILIEUGEVAARLIJKE VLOEISTOF N.E.G.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][12]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "I",
+          "ZRIDPSN": "MATERIA PERICOLOSA PER L'AMBIENTE, LIQUIDA, N.A.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "I",
+          "ZRIDPSN": "MATERIA PERICOLOSA PER L'AMBIENTE LIQUIDA N.A.S.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][17]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "L",
+          "ZRIDPSN": "MATERIAŁ ZAGRAŻAJĄCY ŚRODOWISKU CIEKŁY I.N.O.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "L",
+          "ZRIDPSN": "MATERIAŁ ZAGRAŻAJĄCY ŚRODOWISKU CIEKŁY I.N.O.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][25]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "T",
+          "ZRIDPSN": "ÇEVREYE ZARARLI MADDE, SIVI, B.B.B.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "T",
+          "ZRIDPSN": "ÇEVREYE ZARARLI MADDE SIVI B.B.B.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][1]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "C",
+          "ZRIDPSN": "LÁTKA OHROŽUJÍCÍ ŽIVOTNÍ PROSTŘEDÍ, KAPALNÁ, J.N.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "C",
+          "ZRIDPSN": "LÁTKA OHROŽUJÍCÍ ŽIVOTNÍ PROSTŘEDÍ KAPALNÁ J.N.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][3]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "D",
+          "ZRIDPSN": "UMWELTGEFÄHRDENDER STOFF, FLÜSSIG, N.A.G.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "D",
+          "ZRIDPSN": "UMWELTGEFÄHRDENDER STOFF FLÜSSIG N.A.G.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][23]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "5",
+          "ZRIDPSN": "OKOLJU NEVARNA SNOV, TEKOČA, N.D.N.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "5",
+          "ZRIDPSN": "OKOLJU NEVARNA SNOV TEKOČA N.D.N.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][19]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "4",
+          "ZRIDPSN": "SUBSTANŢA PERICULOASA DIN PUNCT DE VEDERE AL MEDIULUI, LICHIDA, N.S.A.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "4",
+          "ZRIDPSN": "SUBSTANŢA PERICULOASA DIN PUNCT DE VEDERE AL MEDIULUI LICHIDA N.S.A.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][10]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "6",
+          "ZRIDPSN": "TVARI OPASNE PO OKOLIŠ, TEKUĆINE, N.D.N.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "6",
+          "ZRIDPSN": "TVARI OPASNE PO OKOLIŠ TEKUĆINE N.D.N.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][16]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "O",
+          "ZRIDPSN": "MILJØFARLIG STOFF, FLYTENDE, N.O.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "O",
+          "ZRIDPSN": "MILJØFARLIG STOFF FLYTENDE N.O.S.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][6]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "S",
+          "ZRIDPSN": "SUSTANCIA LIQUIDA PELIGROSA PARA EL MEDIO AMBIENTE, N.E.P.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": "Sustancia líquida peligrosa para el medio ambiente, n.e.p.",
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "S",
+          "ZRIDPSN": "SUSTANCIA LIQUIDA PELIGROSA PARA EL MEDIO AMBIENTE N.E.P.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": "Sustancia líquida peligrosa para el medio ambiente n.e.p.",
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][8]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "U",
+          "ZRIDPSN": "YMPÄRISTÖLLE VAARALLINEN AINE, NESTEMÄINEN, N.O.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "U",
+          "ZRIDPSN": "YMPÄRISTÖLLE VAARALLINEN AINE NESTEMÄINEN N.O.S.",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][5]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "E",
+          "ZRIDPSN": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE, LIQUID, N.O.S.",
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": "Environmentally hazardous substance, liquid, n.o.s.",
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "E",
+          "ZRIDPSN": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.",
+          "ZIMPSN": "ENVIRONMENTALLY HAZARDOUS SUBSTANCE LIQUID N.O.S.",
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": "Environmentally hazardous substance liquid n.o.s.",
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      },
+      "root['ZSIDATZ1']['IDOC']['ZZZSID9'][0]": {
+        "new_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "W",
+          "ZRIDPSN": "ВЕЩЕСТВО, ОПАСНО ЗА ОКОЛНАТА СРЕДА, ТЕЧНО, Н.У.К.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        },
+        "old_value": {
+          "@SEGMENT": "1",
+          "ZUCAGI": "4249193",
+          "SPRAS": "W",
+          "ZRIDPSN": "ВЕЩЕСТВО ОПАСНО ЗА ОКОЛНАТА СРЕДА ТЕЧНО Н.У.К.",
+          "ZRIDINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIMPSN": null,
+          "ZIMINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)",
+          "ZIAPS": null,
+          "ZIAINF": "(EPOXICONAZOLE , PYDIFLUMETOFEN)"
+        }
+      }
+    }
+  }
 }
