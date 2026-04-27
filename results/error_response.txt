@@ -1,0 +1,5 @@
+{
+  "status_code": 403,
+  "timestamp": "results",
+  "error_message": "<solace-error-response>\r\n<code>403</code>\r\n<reason><![CDATA[Unauthorized]]></reason>\r\n<detail><![CDATA[\r\nSMF ClientCtrl response error\r\n]]></detail>\r\n<internal-use>2:14191</internal-use>\r\n</solace-error-response>\r\n"
+}
